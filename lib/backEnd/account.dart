@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'database/user.dart';
 
 class AccountManager {
-  static final AccountManager _instance = AccountManager._internal();
-  factory AccountManager() => _instance;
-  AccountManager._internal();
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   User get currentUser => _auth.currentUser!;
@@ -26,7 +23,7 @@ class AccountManager {
     }
   }
 
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp(String name, String email, String password) async {
     try {
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -36,16 +33,23 @@ class AccountManager {
       // verify email
       try {
         await userCredential.user!.sendEmailVerification();
-      }
-      catch (e) {
+      } catch (e) {
         rethrow;
       }
-      
+
+      final UsersModel usersModel = UsersModel(
+        userCredential.user!.uid,
+        name,
+        email,
+        '',
+      );
+
+      UsersDatabase.addUser(usersModel);
+
       // if verification is successful then sign in
       try {
         await signIn(email, password);
-      }
-      catch (e) {
+      } catch (e) {
         rethrow;
       }
     } catch (e) {
@@ -55,5 +59,56 @@ class AccountManager {
 
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  Future<void> checkSmsCode(String smsCode, String verificationId) async {
+    // make a credential with smsCode
+    final AuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: smsCode,
+    );
+
+    // sign in with credential
+    try {
+      await _auth.signInWithCredential(credential);
+    } catch (e) {
+      rethrow;
+    }
+
+    // if sign in is successful then update user phone number
+    try {
+      await UsersDatabase.updateUser(
+        UsersModel(
+          currentUser.uid,
+          '',
+          '',
+          currentUser.phoneNumber!,
+        ),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> verifyPhone(String phone) async {
+    String returnVerificationId = '';
+
+    try {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: phone,
+        verificationCompleted: (PhoneAuthCredential credential) {},
+        verificationFailed: (FirebaseAuthException e) {
+          throw e;
+        },
+        codeSent: (String verificationId, int? resendToken) async {
+          returnVerificationId = verificationId;
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+    } catch (e) {
+      rethrow;
+    }
+
+    return returnVerificationId;
   }
 }
