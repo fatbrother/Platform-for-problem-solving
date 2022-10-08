@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'context/routes.dart';
 import 'backEnd/database.dart';
 
-void main() async {
+void main() {
   Database.initialize();
   runApp(const MyApp());
 }
