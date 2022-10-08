@@ -70,14 +70,18 @@ class AccountManager {
 
     // sign in with credential
     try {
-      await _auth.signInWithCredential(credential);
+      final userCredential = await _auth.signInWithCredential(credential);
+      final User? user = userCredential.user;
+      if (user == null) {
+        throw Exception('User is null');
+      }
     } catch (e) {
       rethrow;
     }
 
     // if sign in is successful then update user phone number
     try {
-      await UsersDatabase.updateUser(
+      UsersDatabase.updateUser(
         UsersModel(
           currentUser.uid,
           '',

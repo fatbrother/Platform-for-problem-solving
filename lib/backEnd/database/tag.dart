@@ -21,30 +21,30 @@ class TagsDatabase {
     return result;
   }
 
-  static Future<List> querySimilarTags(String tagTitle) async {
+  static Future<List> querySimilarTags(String tagName) async {
     final List result = querySnapshot.docs
-        .where((element) => element.data()['title'].toString().contains(tagTitle))
+        .where((element) => (element.data()['name'] as String).contains(tagName))
         .map((e) => TagsModel.fromMap(e.data()))
         .toList();
     return result;
   }
 
-  static updateTag(TagsModel tagsModel) async {
+  static void updateTag(TagsModel tagsModel) async {
     await FirebaseFirestore.instance
         .collection('tags')
-        .doc(tagsModel.id.toString())
+        .doc(tagsModel.id)
         .set(tagsModel.toMap());
 
     updateQuerySnapshot();
   }
 
-  static deleteTag(String tagId) async {
+  static void deleteTag(String tagId) async {
     await FirebaseFirestore.instance.collection('tags').doc(tagId).delete();
 
     updateQuerySnapshot();
   }
 
-  static addTag(TagsModel tagsModel) async {
+  static void addTag(TagsModel tagsModel) async {
     await FirebaseFirestore.instance.collection('tags').add(tagsModel.toMap());
 
     updateQuerySnapshot();
@@ -52,16 +52,16 @@ class TagsDatabase {
 }
 
 class TagsModel {
-  int id;
+  String id;
   String name;
-  List<int> problemsWithTag;
+  List<String> problemsWithTag;
 
   TagsModel(this.id, this.name, this.problemsWithTag);
 
   static fromMap(Map<String, dynamic> data) {
     return TagsModel(
       // if data have 'id' then use it, else set it to 0
-      data['id'] ?? 0,
+      data['id'] ?? '',
       data['name'] ?? '',
       data['problemsWithTag'] ?? [],
     );

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ProblemsDatabase {
   static QuerySnapshot<Map<String, dynamic>> querySnapshot = FirebaseFirestore.instance.collection('problems').get() as QuerySnapshot<Map<String, dynamic>>;
   
-  static queryAllProblems() async {
+  static Future<List> queryAllProblems() async {
     final List result = querySnapshot.docs
         .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
             ProblemsModel.fromMap(doc.data()))
@@ -11,23 +11,31 @@ class ProblemsDatabase {
     return result;
   }
 
-  static queryProblem(String problemId) async {
+  static Future<ProblemsModel> queryProblem(String problemId) async {
     final ProblemsModel result = ProblemsModel.fromMap(querySnapshot.docs
         .firstWhere((element) => element.id == problemId)
         .data());
     return result;
   }
 
-  static updateProblem(ProblemsModel problemsModel) async {
+  static Future<List> queryProblemsWithTags(String tagId) async {
+    final List result = querySnapshot.docs
+        .where((element) => (element.data()['tags'] as List<String>).contains(tagId))
+        .map((e) => ProblemsModel.fromMap(e.data()))
+        .toList();
+    return result;
+  }
+
+  static void updateProblem(ProblemsModel problemsModel) async {
     await FirebaseFirestore.instance
         .collection('problems')
-        .doc(problemsModel.id.toString())
+        .doc(problemsModel.id)
         .set(problemsModel.toMap());
 
     updateQuerySnapshot();
   }
 
-  static deleteProblem(String problemId) async {
+  static void deleteProblem(String problemId) async {
     await FirebaseFirestore.instance
         .collection('problems')
         .doc(problemId)
@@ -36,7 +44,7 @@ class ProblemsDatabase {
     updateQuerySnapshot();
   }
 
-  static addProblem(ProblemsModel problemsModel) async {
+  static void addProblem(ProblemsModel problemsModel) async {
     await FirebaseFirestore.instance
         .collection('problems')
         .add(problemsModel.toMap());
@@ -44,13 +52,13 @@ class ProblemsDatabase {
     updateQuerySnapshot();
   }
 
-  static updateQuerySnapshot() async {
+  static void updateQuerySnapshot() async {
     querySnapshot = await FirebaseFirestore.instance.collection('problems').get();
   }
 }
 
 class ProblemsModel {
-  int id;
+  String id;
   String title;
   List<int> tags;
 
@@ -59,7 +67,7 @@ class ProblemsModel {
   static fromMap(Map<String, dynamic> data) {
     return ProblemsModel(
       // if data have 'id' then use it, else set it to 0
-      data['id'] ?? 0,
+      data['id'] ?? '',
       data['title'] ?? '',
       data['tags'] ?? [],
     );

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UsersDatabase {
   static QuerySnapshot<Map<String, dynamic>> querySnapshot = FirebaseFirestore.instance.collection('users').get() as QuerySnapshot<Map<String, dynamic>>;
 
-  static queryAllUsers() async {
+  static Future<List> queryAllUsers() async {
     final List result = querySnapshot.docs
         .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
             UsersModel.fromMap(doc.data()))
@@ -11,14 +11,14 @@ class UsersDatabase {
     return result;
   }
 
-  static queryUser(String userId) async {
+  static Future<UsersModel> queryUser(String userId) async {
     final UsersModel result = UsersModel.fromMap(querySnapshot.docs
         .firstWhere((element) => element.id == userId)
         .data());
     return result;
   }
 
-  static updateUser(UsersModel usersModel) async {
+  static void updateUser(UsersModel usersModel) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(usersModel.id.toString())
@@ -27,7 +27,7 @@ class UsersDatabase {
     updateQuerySnapshot();
   }
 
-  static deleteUser(String userId) async {
+  static void deleteUser(String userId) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -36,7 +36,7 @@ class UsersDatabase {
     updateQuerySnapshot();
   }
 
-  static addUser(UsersModel usersModel) async {
+  static void addUser(UsersModel usersModel) async {
     await FirebaseFirestore.instance
         .collection('users')
         .add(usersModel.toMap());
@@ -44,7 +44,7 @@ class UsersDatabase {
     updateQuerySnapshot();
   }
 
-  static updateQuerySnapshot() async {
+  static void updateQuerySnapshot() async {
     querySnapshot = await FirebaseFirestore.instance.collection('users').get();
   }
 }
@@ -59,10 +59,10 @@ class UsersModel {
 
   static fromMap(Map<String, dynamic> data) {
     return UsersModel(
-      data['id'],
-      data['name'],
-      data['email'],
-      data['phone'],
+      data['id'] ?? '',
+      data['name'] ?? '',
+      data['email'] ?? '',
+      data['phone'] ?? '',
     );
   }
 
