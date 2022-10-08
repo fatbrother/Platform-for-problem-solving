@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'context/routes.dart';
-import 'backEnd/database/database.dart';
+import 'context/init.dart';
 
 void main() {
-  Database.initialize();
+  initialize();
   runApp(const MyApp());
 }
 
@@ -16,10 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'POPS',
       home: Routes.routes[Routes.home]!(context),
-      routes: {
-        for (final entry in Routes.routes.entries)
-          entry.key: entry.value,
-      },
+      routes: Routes.routes,
     );
   }
 }
