@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'context/routes.dart';
-import 'backEnd/database.dart';
+import 'backEnd/database/database.dart';
 
 void main() {
   Database.initialize();
