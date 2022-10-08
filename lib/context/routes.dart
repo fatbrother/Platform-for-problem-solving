@@ -4,15 +4,15 @@ import '../pages/home_page.dart';
 // import 'pages/[page file name].dart';
 
 class Routes {
-  static const String _home = '/index';
+  static const String home = '/index';
   // add routes here
   // static const String _[route name] = '/[route name]';
 
-  static Map<String, WidgetBuilder> get routes => {
-        _home: (context) => const HomePage(),
-        // add routes here
-        // '/[route name]': (context) => const [page name](),
-      };
+  final Map<String, WidgetBuilder> _routes = {
+    home: (context) => const HomePage(),
+    // add routes here
+    // _[route name]: (context) => const [page name](),
+  };
 
-  static String get home => _home;
+  static Map<String, WidgetBuilder> get routes => Routes()._routes;
 }
