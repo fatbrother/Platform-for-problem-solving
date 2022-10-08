@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProblemsDatabase {
+  static QuerySnapshot<Map<String, dynamic>> querySnapshot = FirebaseFirestore.instance.collection('problems').get() as QuerySnapshot<Map<String, dynamic>>;
+  
   static queryAllProblems() async {
-    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await FirebaseFirestore.instance.collection('problems').get();
-
-    // turn all problems into ProblemsModel
     final List result = querySnapshot.docs
         .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
             ProblemsModel.fromMap(doc.data()))
@@ -14,8 +12,6 @@ class ProblemsDatabase {
   }
 
   static queryProblem(String problemId) async {
-    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await FirebaseFirestore.instance.collection('problems').get();
     final ProblemsModel result = ProblemsModel.fromMap(querySnapshot.docs
         .firstWhere((element) => element.id == problemId)
         .data());
@@ -27,6 +23,8 @@ class ProblemsDatabase {
         .collection('problems')
         .doc(problemsModel.id.toString())
         .set(problemsModel.toMap());
+
+    updateQuerySnapshot();
   }
 
   static deleteProblem(String problemId) async {
@@ -34,12 +32,20 @@ class ProblemsDatabase {
         .collection('problems')
         .doc(problemId)
         .delete();
+
+    updateQuerySnapshot();
   }
 
   static addProblem(ProblemsModel problemsModel) async {
     await FirebaseFirestore.instance
         .collection('problems')
         .add(problemsModel.toMap());
+
+    updateQuerySnapshot();
+  }
+
+  static updateQuerySnapshot() async {
+    querySnapshot = await FirebaseFirestore.instance.collection('problems').get();
   }
 }
 
