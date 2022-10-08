@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1029240583657-sp3afpstbbeambe30nj5iebt9uihph36.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1029240583657-sp3afpstbbeambe30nj5iebt9uihph36</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD38hdyELn3Pt2_VIJMGfEn8sGzXPlYUJA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1029240583657</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.pops</string>
+	<key>PROJECT_ID</key>
+	<string>pops-226ca</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pops-226ca.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1029240583657:ios:5392d5fee797138b504778</string>
+	<key>DATABASE_URL</key>
+	<string>https://pops-226ca-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'context/routes.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var platform = DefaultFirebaseOptions.currentPlatform;
+  await Firebase.initializeApp(options: platform);
   runApp(const MyApp());
 }
 
