@@ -7,40 +7,50 @@ class AccountManager {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<User?> signIn(String email, String password) async {
-    try {
-      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
-    }
-    return null;
-  }
+  User get currentUser => _auth.currentUser!;
 
-  Future<User?> signUp(String email, String password) async {
+  Future<void> signIn(String email, String password) async {
     try {
-      final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      final UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+
+      final User? user = userCredential.user;
+      if (user == null) {
+        throw Exception('User is null');
       }
     } catch (e) {
-      print(e);
+      rethrow;
     }
-    return null;
+  }
+
+  Future<void> signUp(String email, String password) async {
+    try {
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // verify email
+      try {
+        await userCredential.user!.sendEmailVerification();
+      }
+      catch (e) {
+        rethrow;
+      }
+      
+      // if verification is successful then sign in
+      try {
+        await signIn(email, password);
+      }
+      catch (e) {
+        rethrow;
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> signOut() async {
