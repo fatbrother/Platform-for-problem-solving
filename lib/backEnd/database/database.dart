@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import '../context/firebase_options.dart';
+import '../../context/firebase_options.dart';
 
 class Database {
   static final Database _instance = Database._internal();
