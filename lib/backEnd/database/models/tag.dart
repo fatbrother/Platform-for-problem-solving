@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TagsDatabase {
-  static queryAllTags() async {
-    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await FirebaseFirestore.instance.collection('tags').get();
+  static QuerySnapshot<Map<String, dynamic>> querySnapshot = FirebaseFirestore.instance.collection('tags').get() as QuerySnapshot<Map<String, dynamic>>;
 
-    // turn all tags into TagsModel
+  static Future<void> updateQuerySnapshot() async {
+    querySnapshot = await FirebaseFirestore.instance.collection('tags').get();
+  }
+
+  static Future<List> queryAllTags() async {
     final List result = querySnapshot.docs
         .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
             TagsModel.fromMap(doc.data()))
@@ -13,11 +15,17 @@ class TagsDatabase {
     return result;
   }
 
-  static queryTag(String tagId) async {
-    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await FirebaseFirestore.instance.collection('tags').get();
+  static Future<TagsModel> queryTag(String tagId) async {
     final TagsModel result = TagsModel.fromMap(
         querySnapshot.docs.firstWhere((element) => element.id == tagId).data());
+    return result;
+  }
+
+  static Future<List> querySimilarTags(String tagTitle) async {
+    final List result = querySnapshot.docs
+        .where((element) => element.data()['title'].toString().contains(tagTitle))
+        .map((e) => TagsModel.fromMap(e.data()))
+        .toList();
     return result;
   }
 
@@ -26,14 +34,20 @@ class TagsDatabase {
         .collection('tags')
         .doc(tagsModel.id.toString())
         .set(tagsModel.toMap());
+
+    updateQuerySnapshot();
   }
 
   static deleteTag(String tagId) async {
     await FirebaseFirestore.instance.collection('tags').doc(tagId).delete();
+
+    updateQuerySnapshot();
   }
 
   static addTag(TagsModel tagsModel) async {
     await FirebaseFirestore.instance.collection('tags').add(tagsModel.toMap());
+
+    updateQuerySnapshot();
   }
 }
 
