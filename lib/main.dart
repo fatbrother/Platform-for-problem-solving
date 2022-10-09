@@ -3,7 +3,6 @@ import 'context/routes.dart';
 import 'context/init.dart';
 
 void main() {
-  initialize();
   runApp(const MyApp());
 }
 
@@ -12,11 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    initialize(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'POPS',
-      home: Routes.routes[Routes.home]!(context),
+      initialRoute: Routes.home,
       routes: Routes.routes,
+      home: Routes.routes[Routes.home]!(context),
     );
   }
 }
