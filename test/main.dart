@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'context/routes.dart';
-import 'context/init.dart';
+import 'package:pops/context/init.dart';
+import 'package:pops/context/routes.dart';
+import 'register.dart';
 
-Future<void> main() async {
-  await initialize();
+void main(){
+  initialize();
   runApp(const MyApp());
 }
 
@@ -15,7 +16,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'POPS',
-      initialRoute: Routes.home,
       routes: Routes.routes,
       home: Routes.routes[Routes.home]!(context),
     );

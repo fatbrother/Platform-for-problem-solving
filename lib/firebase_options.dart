@@ -44,39 +44,44 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCn7jOE5CoY86Wd4yUA9IKutUcGKZ0kLVc',
-    appId: '1:1071209726752:web:77d232326ca8a56cf54d45',
-    messagingSenderId: '1071209726752',
-    projectId: 'pops-d61a3',
-    authDomain: 'pops-d61a3.firebaseapp.com',
-    storageBucket: 'pops-d61a3.appspot.com',
+    apiKey: 'AIzaSyC3a6izOWDvpmVYLMv_VR9M_WYdN4LaGWc',
+    appId: '1:1029240583657:web:9d50f519bc885473504778',
+    messagingSenderId: '1029240583657',
+    projectId: 'pops-226ca',
+    authDomain: 'pops-226ca.firebaseapp.com',
+    databaseURL: 'https://pops-226ca-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'pops-226ca.appspot.com',
+    measurementId: 'G-02PN5QHG7N',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAGjtGwGo9nO-6YNFIRvhTrJCVTfi30LyY',
-    appId: '1:1071209726752:android:942c135bb28edc8bf54d45',
-    messagingSenderId: '1071209726752',
-    projectId: 'pops-d61a3',
-    storageBucket: 'pops-d61a3.appspot.com',
+    apiKey: 'AIzaSyA23Cb8onFML0u35q1QpzSB4Ye_-d-IKPg',
+    appId: '1:1029240583657:android:e063c8bdc42ca7c1504778',
+    messagingSenderId: '1029240583657',
+    projectId: 'pops-226ca',
+    databaseURL: 'https://pops-226ca-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'pops-226ca.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD33qRd0FwsUQ-TP2bfGAk1j588yguvhJc',
-    appId: '1:1071209726752:ios:1ff681ffbe6f01b7f54d45',
-    messagingSenderId: '1071209726752',
-    projectId: 'pops-d61a3',
-    storageBucket: 'pops-d61a3.appspot.com',
-    iosClientId: '1071209726752-kps4i928je8b6cv4hk98nl39uv4js2v1.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD38hdyELn3Pt2_VIJMGfEn8sGzXPlYUJA',
+    appId: '1:1029240583657:ios:5392d5fee797138b504778',
+    messagingSenderId: '1029240583657',
+    projectId: 'pops-226ca',
+    databaseURL: 'https://pops-226ca-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'pops-226ca.appspot.com',
+    iosClientId: '1029240583657-sp3afpstbbeambe30nj5iebt9uihph36.apps.googleusercontent.com',
     iosBundleId: 'com.example.pops',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD33qRd0FwsUQ-TP2bfGAk1j588yguvhJc',
-    appId: '1:1071209726752:ios:1ff681ffbe6f01b7f54d45',
-    messagingSenderId: '1071209726752',
-    projectId: 'pops-d61a3',
-    storageBucket: 'pops-d61a3.appspot.com',
-    iosClientId: '1071209726752-kps4i928je8b6cv4hk98nl39uv4js2v1.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD38hdyELn3Pt2_VIJMGfEn8sGzXPlYUJA',
+    appId: '1:1029240583657:ios:5392d5fee797138b504778',
+    messagingSenderId: '1029240583657',
+    projectId: 'pops-226ca',
+    databaseURL: 'https://pops-226ca-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'pops-226ca.appspot.com',
+    iosClientId: '1029240583657-sp3afpstbbeambe30nj5iebt9uihph36.apps.googleusercontent.com',
     iosBundleId: 'com.example.pops',
   );
 }

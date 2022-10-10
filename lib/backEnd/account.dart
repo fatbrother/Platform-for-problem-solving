@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'database/user.dart';
 
 class AccountManager {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   User get currentUser => _auth.currentUser!;
 
-  Future<void> signIn(String email, String password) async {
+  static Future<void> signIn(String email, String password) async {
     try {
       final UserCredential userCredential =
           await _auth.signInWithEmailAndPassword(
@@ -23,7 +23,7 @@ class AccountManager {
     }
   }
 
-  Future<void> signUp(String name, String email, String password) async {
+  static Future<void> signUp(String name, String email, String password) async {
     try {
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -57,11 +57,11 @@ class AccountManager {
     }
   }
 
-  Future<void> signOut() async {
+  static Future<void> signOut() async {
     await _auth.signOut();
   }
 
-  Future<void> checkSmsCode(String smsCode, String verificationId) async {
+  static Future<void> checkSmsCode(String smsCode, String verificationId) async {
     // make a credential with smsCode
     final AuthCredential credential = PhoneAuthProvider.credential(
       verificationId: verificationId,
@@ -81,14 +81,9 @@ class AccountManager {
 
     // if sign in is successful then update user phone number
     try {
-      UsersDatabase.updateUser(
-        UsersModel(
-          currentUser.uid,
-          '',
-          '',
-          currentUser.phoneNumber!,
-        ),
-      );
+      final usersModel = await UsersDatabase.queryUser(_auth.currentUser!.uid);
+      usersModel.phone = _auth.currentUser!.phoneNumber!;
+      UsersDatabase.updateUser(usersModel);
     } catch (e) {
       rethrow;
     }
