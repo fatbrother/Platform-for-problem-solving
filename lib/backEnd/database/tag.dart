@@ -8,9 +8,9 @@ class TagsDatabase {
     FirebaseFirestore.instance
         .collection('tags')
         .get()
-        .then((QuerySnapshot querySnapshot) {
+        .then((querySnapshot) {
       for (var doc in querySnapshot.docs) {
-        trieTree.insert(doc['name']);
+        trieTree.insert(doc.data()['name']);
       }
     });
   }
