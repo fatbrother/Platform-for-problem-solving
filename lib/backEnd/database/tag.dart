@@ -1,53 +1,57 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TagsDatabase {
-  static QuerySnapshot<Map<String, dynamic>> querySnapshot = FirebaseFirestore.instance.collection('tags').get() as QuerySnapshot<Map<String, dynamic>>;
+  static TrieTree trieTree = TrieTree();
 
-  static Future<void> updateQuerySnapshot() async {
-    querySnapshot = await FirebaseFirestore.instance.collection('tags').get();
+  static void init() async {
+    trieTree = TrieTree();
+    FirebaseFirestore.instance
+        .collection('tags')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        trieTree.insert(doc['name']);
+      }
+    });
   }
 
   static Future<List> queryAllTags() async {
-    final List result = querySnapshot.docs
-        .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-            TagsModel.fromMap(doc.data()))
-        .toList();
+    final List result = await trieTree.queryAll();
     return result;
   }
 
-  static Future<TagsModel> queryTag(String tagId) async {
-    final TagsModel result = TagsModel.fromMap(
-        querySnapshot.docs.firstWhere((element) => element.id == tagId).data());
+  static Future<bool> queryTag(TagsModel tag) async {
+    return trieTree.search(tag.name);
+  }
+
+  static Future<List> querySimilarTags(TagsModel tag) async {
+    final List result = trieTree.startsWith(tag.name);
     return result;
   }
 
-  static Future<List> querySimilarTags(String tagName) async {
-    final List result = querySnapshot.docs
-        .where((element) => (element.data()['name'] as String).contains(tagName))
-        .map((e) => TagsModel.fromMap(e.data()))
-        .toList();
-    return result;
-  }
+  static void updateTag(TagsModel tag) async {
+    String lastTag = await FirebaseFirestore.instance
+        .collection('tags')
+        .doc(tag.id)
+        .get()
+        .then((value) => value.data()!['name']);
+    trieTree.delete(lastTag);
 
-  static void updateTag(TagsModel tagsModel) async {
     await FirebaseFirestore.instance
         .collection('tags')
-        .doc(tagsModel.id)
-        .set(tagsModel.toMap());
-
-    updateQuerySnapshot();
+        .doc(tag.id)
+        .set(tag.toMap());
+    trieTree.insert(tag.name);
   }
 
-  static void deleteTag(String tagId) async {
-    await FirebaseFirestore.instance.collection('tags').doc(tagId).delete();
-
-    updateQuerySnapshot();
+  static void deleteTag(TagsModel tag) async {
+    await FirebaseFirestore.instance.collection('tags').doc(tag.id).delete();
+    trieTree.delete(tag.name);
   }
 
-  static void addTag(TagsModel tagsModel) async {
-    await FirebaseFirestore.instance.collection('tags').add(tagsModel.toMap());
-
-    updateQuerySnapshot();
+  static void addTag(TagsModel tag) async {
+    await FirebaseFirestore.instance.collection('tags').add(tag.toMap());
+    trieTree.insert(tag.name);
   }
 }
 
@@ -69,5 +73,77 @@ class TagsModel {
 
   Map<String, dynamic> toMap() {
     return {'id': id, 'name': name, 'problemsWithTag': problemsWithTag};
+  }
+}
+
+class TrieNode {
+  Map<String, TrieNode> children = {};
+  bool isEnd = false;
+  String word = '';
+}
+
+class TrieTree {
+  TrieNode root = TrieNode();
+
+  void insert(String word) {
+    TrieNode node = root;
+    for (int i = 0; i < word.length; i++) {
+      if (!node.children.containsKey(word[i])) {
+        node.children[word[i]] = TrieNode();
+      }
+      node = node.children[word[i]]!;
+    }
+    node.isEnd = true;
+  }
+
+  bool search(String word) {
+    TrieNode node = root;
+    for (int i = 0; i < word.length; i++) {
+      if (!node.children.containsKey(word[i])) {
+        return false;
+      }
+      node = node.children[word[i]]!;
+    }
+    return node.isEnd;
+  }
+
+  List<String> startsWith(String prefix) {
+    TrieNode node = root;
+    List<String> result = [];
+    for (int i = 0; i < prefix.length; i++) {
+      if (!node.children.containsKey(prefix[i])) {
+        return result;
+      }
+      node = node.children[prefix[i]]!;
+    }
+    _getAllWordsBelow(node, result);
+    return result;
+  }
+
+  Future<List<String>> queryAll() async {
+    List<String> result = [];
+    _getAllWordsBelow(root, result);
+    return result;
+  }
+
+  void _getAllWordsBelow(TrieNode root, List<String> result) {
+    if (root.isEnd) {
+      result.add(root.word);
+    }
+    for (var key in root.children.keys) {
+      root.children[key]!.word = root.word + key;
+      _getAllWordsBelow(root.children[key]!, result);
+    }
+  }
+
+  void delete(String word) {
+    TrieNode node = root;
+    for (int i = 0; i < word.length; i++) {
+      if (!node.children.containsKey(word[i])) {
+        return;
+      }
+      node = node.children[word[i]]!;
+    }
+    node.isEnd = false;
   }
 }
