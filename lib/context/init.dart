@@ -8,11 +8,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 Future<void> initialize(BuildContext context) async {
   double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(context).size.height;
-  BoxConstraints constraints = BoxConstraints(
-    maxWidth: screenWidth,
-    maxHeight: screenHeight,
-  );
-  Design.init(constraints, MediaQuery.of(context).orientation);
+  Design.init(screenWidth, screenHeight);
   TagsDatabase.init();
   WidgetsFlutterBinding.ensureInitialized();
   var platform = DefaultFirebaseOptions.currentPlatform;
