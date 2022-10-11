@@ -4,7 +4,11 @@ import 'database/user.dart';
 class AccountManager {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  User get currentUser => _auth.currentUser!;
+  UsersModel get currentUser =>
+      UsersModel.fromMap(UsersDatabase.querySnapshot.docs
+          .firstWhere((element) => element.id == _auth.currentUser!.uid,
+              orElse: () => throw Exception('Not logged in'))
+          .data());
 
   static Future<void> signIn(String email, String password) async {
     try {
@@ -38,10 +42,9 @@ class AccountManager {
       }
 
       final UsersModel usersModel = UsersModel(
-        userCredential.user!.uid,
-        name,
-        email,
-        '',
+        id: userCredential.user!.uid,
+        name: name,
+        email: email,
       );
 
       UsersDatabase.addUser(usersModel);
@@ -61,7 +64,8 @@ class AccountManager {
     await _auth.signOut();
   }
 
-  static Future<void> checkSmsCode(String smsCode, String verificationId) async {
+  static Future<void> checkSmsCode(
+      String smsCode, String verificationId) async {
     // make a credential with smsCode
     final AuthCredential credential = PhoneAuthProvider.credential(
       verificationId: verificationId,
