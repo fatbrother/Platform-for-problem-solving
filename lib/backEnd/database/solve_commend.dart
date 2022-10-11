@@ -1,54 +1,47 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'database.dart';
 
 class SolveCommendsDatabase {
-  static QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      FirebaseFirestore.instance.collection('solveCommends').get()
-          as QuerySnapshot<Map<String, dynamic>>;
-
   static Future<List> queryAllSolveCommends() async {
-    final List result = querySnapshot.docs
-        .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-            SolveCommendsModel.fromMap(doc.data()))
-        .toList();
-    return result;
+    try {
+      final List result = await DB.getTable('solveCommends');
+      return result;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static Future<SolveCommendsModel> querySolveCommend(String solveCommendId) async {
-    final SolveCommendsModel result = SolveCommendsModel.fromMap(querySnapshot.docs
-        .firstWhere((element) => element.id == solveCommendId)
-        .data());
-    return result;
+    try {
+      final Map<String, dynamic> result =
+          await DB.getRow('solveCommends', solveCommendId);
+      return SolveCommendsModel.fromMap(result);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static Future<void> updateSolveCommend(SolveCommendsModel solveCommend) async {
-    await FirebaseFirestore.instance
-        .collection('solveCommends')
-        .doc(solveCommend.id)
-        .set(solveCommend.toMap());
-
-    updateQuerySnapshot();
+    try {
+      await DB.updateRow('solveCommends', solveCommend.id, solveCommend.toMap());
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static Future<void> deleteSolveCommend(String solveCommendId) async {
-    await FirebaseFirestore.instance
-        .collection('solveCommends')
-        .doc(solveCommendId)
-        .delete();
-
-    updateQuerySnapshot();
+    try {
+      await DB.deleteRow('solveCommends', solveCommendId);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static Future<void> addSolveCommend(SolveCommendsModel solveCommend) async {
-    await FirebaseFirestore.instance
-        .collection('solveCommends')
-        .add(solveCommend.toMap());
-
-    updateQuerySnapshot();
-  }
-
-  static Future<void> updateQuerySnapshot() async {
-    querySnapshot =
-        await FirebaseFirestore.instance.collection('solveCommends').get();
+    try {
+      await DB.addRow('solveCommends', solveCommend.toMap());
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 

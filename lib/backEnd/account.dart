@@ -4,11 +4,16 @@ import 'database/user.dart';
 class AccountManager {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  UsersModel get currentUser =>
-      UsersModel.fromMap(UsersDatabase.querySnapshot.docs
-          .firstWhere((element) => element.id == _auth.currentUser!.uid,
-              orElse: () => throw Exception('Not logged in'))
-          .data());
+  Future<UsersModel?> get currentUser async {
+    try {
+      final User? user = _auth.currentUser;
+      return user == null
+          ? throw Exception('Not logged in')
+          : await UsersDatabase.queryUser(user.uid);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   static Future<void> signIn(String email, String password) async {
     try {

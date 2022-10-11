@@ -1,54 +1,51 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'database.dart';
 
 class ProblemsDatabase {
-  static QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      FirebaseFirestore.instance.collection('problems').get()
-          as QuerySnapshot<Map<String, dynamic>>;
-
   static Future<List> queryAllProblems() async {
-    final List result = querySnapshot.docs
-        .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-            ProblemsModel.fromMap(doc.data()))
-        .toList();
-    return result;
+    try {
+      final List result = await DB.getTable('problems');
+      return result;
+    }
+    catch (e) {
+      rethrow;
+    }
   }
 
   static Future<ProblemsModel> queryProblem(String problemId) async {
-    final ProblemsModel result = ProblemsModel.fromMap(querySnapshot.docs
-        .firstWhere((element) => element.id == problemId)
-        .data());
-    return result;
+    try {
+      final Map<String, dynamic> result = await DB.getRow('problems', problemId);
+      return ProblemsModel.fromMap(result);
+    }
+    catch (e) {
+      rethrow;
+    }
   }
 
   static void updateProblem(ProblemsModel problem) async {
-    await FirebaseFirestore.instance
-        .collection('problems')
-        .doc(problem.id)
-        .set(problem.toMap());
-
-    updateQuerySnapshot();
+    try {
+      await DB.updateRow('problems', problem.id, problem.toMap());
+    }
+    catch (e) {
+      rethrow;
+    }
   }
 
   static void deleteProblem(String problemId) async {
-    await FirebaseFirestore.instance
-        .collection('problems')
-        .doc(problemId)
-        .delete();
-
-    updateQuerySnapshot();
+    try {
+      await DB.deleteRow('problems', problemId);
+    }
+    catch (e) {
+      rethrow;
+    }
   }
 
   static void addProblem(ProblemsModel problem) async {
-    await FirebaseFirestore.instance
-        .collection('problems')
-        .add(problem.toMap());
-
-    updateQuerySnapshot();
-  }
-
-  static void updateQuerySnapshot() async {
-    querySnapshot =
-        await FirebaseFirestore.instance.collection('problems').get();
+    try {
+      await DB.addRow('problems', problem.toMap());
+    }
+    catch (e) {
+      rethrow;
+    }
   }
 }
 
@@ -64,6 +61,7 @@ class ProblemsModel {
   String chooseSolveCommendId;
   DateTime createdAt;
   int remainingDays;
+  int rewardToken;
 
   ProblemsModel({
     required this.id,
@@ -77,6 +75,7 @@ class ProblemsModel {
     required this.chooseSolveCommendId,
     required this.createdAt,
     required this.remainingDays,
+    required this.rewardToken,
   });
 
   static fromMap(Map<String, dynamic> data) {
@@ -92,6 +91,7 @@ class ProblemsModel {
       chooseSolveCommendId: data['chooseSolveCommendId'] ?? '',
       createdAt: data['createdAt'] ?? DateTime.now(),
       remainingDays: data['remainingDays'] ?? 3,
+      rewardToken: data['rewardToken'] ?? 0,
     );
   }
 
@@ -107,6 +107,7 @@ class ProblemsModel {
       'solveCommendIds': solveCommendIds,
       'createdAt': createdAt,
       'remainingDays': remainingDays,
+      'rewardToken': rewardToken,
     };
   }
 

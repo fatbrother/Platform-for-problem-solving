@@ -1,54 +1,47 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'database.dart';
 
 class ReportsDataBase {
-  static QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      FirebaseFirestore.instance.collection('reports').get()
-          as QuerySnapshot<Map<String, dynamic>>;
-
   static Future<List> queryAllReports() async {
-    final List result = querySnapshot.docs
-        .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-            ReportsModel.fromMap(doc.data()))
-        .toList();
-    return result;
+    try {
+      final List result = await DB.getTable('reports');
+      return result;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static Future<ReportsModel> queryReport(String reportId) async {
-    final ReportsModel result = ReportsModel.fromMap(querySnapshot.docs
-        .firstWhere((element) => element.id == reportId)
-        .data());
-    return result;
+    try {
+      final Map<String, dynamic> result =
+          await DB.getRow('reports', reportId);
+      return ReportsModel.fromMap(result);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static void updateReport(ReportsModel report) async {
-    await FirebaseFirestore.instance
-        .collection('reports')
-        .doc(report.id)
-        .set(report.toMap());
-
-    updateQuerySnapshot();
+    try {
+      await DB.updateRow('reports', report.id, report.toMap());
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static void deleteReport(String reportId) async {
-    await FirebaseFirestore.instance
-        .collection('reports')
-        .doc(reportId)
-        .delete();
-
-    updateQuerySnapshot();
+    try {
+      await DB.deleteRow('reports', reportId);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static void addReport(ReportsModel report) async {
-    await FirebaseFirestore.instance
-        .collection('reports')
-        .add(report.toMap());
-
-    updateQuerySnapshot();
-  }
-
-  static void updateQuerySnapshot() async {
-    querySnapshot =
-        await FirebaseFirestore.instance.collection('reports').get();
+    try {
+      await DB.addRow('reports', report.toMap());
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 

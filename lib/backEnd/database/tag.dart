@@ -1,18 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'database.dart';
 
 class TagsDatabase {
   static TrieTree trieTree = TrieTree();
 
   static void init() async {
     trieTree = TrieTree();
-    FirebaseFirestore.instance
-        .collection('tags')
-        .get()
-        .then((querySnapshot) {
-      for (var doc in querySnapshot.docs) {
-        trieTree.insert(doc.data()['name']);
-      }
-    });
+    try {
+      await DB.getTable('tags').then((value) {
+        for (final tag in value) {
+          trieTree.insert(tag['name']);
+        }
+      });
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static Future<List> queryAllTags() async {
@@ -30,27 +31,40 @@ class TagsDatabase {
   }
 
   static void updateTag(TagsModel tag) async {
-    String lastTag = await FirebaseFirestore.instance
-        .collection('tags')
-        .doc(tag.id)
-        .get()
-        .then((value) => value.data()!['name']);
-    trieTree.delete(lastTag);
+    try {
+      await DB.getRow('tags', tag.id).then((value) {
+        trieTree.delete(value['name']);
+      });
+    } catch (e) {
+      rethrow;
+    }
 
-    await FirebaseFirestore.instance
-        .collection('tags')
-        .doc(tag.id)
-        .set(tag.toMap());
+    try {
+      await DB.updateRow('tags', tag.id, tag.toMap());
+    } catch (e) {
+      rethrow;
+    }
+
     trieTree.insert(tag.name);
   }
 
   static void deleteTag(TagsModel tag) async {
-    await FirebaseFirestore.instance.collection('tags').doc(tag.id).delete();
+    try {
+      await DB.deleteRow('tags', tag.id);
+    } catch (e) {
+      rethrow;
+    }
+
     trieTree.delete(tag.name);
   }
 
   static void addTag(TagsModel tag) async {
-    await FirebaseFirestore.instance.collection('tags').add(tag.toMap());
+    try {
+      await DB.addRow('tags', tag.toMap());
+    } catch (e) {
+      rethrow;
+    }
+
     trieTree.insert(tag.name);
   }
 }
