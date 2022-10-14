@@ -1,5 +1,6 @@
 import 'database.dart';
 
+// control the database of the problem with problemsModels
 class ReportsDataBase {
   static Future<List> queryAllReports() async {
     try {

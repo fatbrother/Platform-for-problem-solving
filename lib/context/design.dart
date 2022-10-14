@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// this class is store the information of our design
+// use this class to define all the details of our design
+// for example, the color of the button, the color of the text, border radius, etc.
 class Design {
   static const Color _primaryColor = Colors.blue;
   static const Color _secondaryColor = Color(0xFF2E2E2E);

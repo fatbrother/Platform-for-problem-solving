@@ -1,3 +1,6 @@
+// Start of the app
+// We don't need to change anything here
+
 import 'package:flutter/material.dart';
 import 'context/routes.dart';
 import 'context/init.dart';

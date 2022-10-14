@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'database/database.dart';
 
+// use this class to control the account
+// for example, sign in, sign out, sign up
 class AccountManager {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 

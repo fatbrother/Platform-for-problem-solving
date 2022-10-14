@@ -5,10 +5,15 @@ export 'report.dart';
 export 'tag.dart';
 export 'solve_commend.dart';
 
+// we use this class to control the database
+// not suspect to use this class directly
+// to use other classes in this folder
+// just import this file
 class DB {
   static final db = FirebaseFirestore.instance;
-
-  static Future<List> getTable(String tableName) async {
+  
+  // get the table of the database
+  static Future<List> getTable(String tableName) async { 
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await db.collection(tableName).get();
@@ -23,6 +28,7 @@ class DB {
     }
   }
 
+  // get the row of the database
   static Future<Map<String, dynamic>> getRow(
       String tableName, String rowId) async {
     try {
@@ -36,9 +42,9 @@ class DB {
     } catch (e) {
       rethrow;
     }
-    // if not found
   }
 
+  // update the row of the database
   static Future<void> updateRow(
       String tableName, String rowId, Map<String, dynamic> row) async {
     try {
@@ -48,6 +54,7 @@ class DB {
     }
   }
 
+  // delete the row of the database
   static Future<void> deleteRow(String tableName, String rowId) async {
     try {
       await db.collection(tableName).doc(rowId).delete();
@@ -56,6 +63,7 @@ class DB {
     }
   }
 
+  // add the row of the databases
   static Future<void> addRow(String tableName, Map<String, dynamic> row) async {
     try {
       await db.collection(tableName).add(row);

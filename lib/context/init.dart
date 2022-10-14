@@ -4,6 +4,8 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import '../backEnd/database/database.dart';
 import 'firebase_options.dart';
 
+// intialize the firebase app
+// if there are any new initialization options, add them here
 Future<void> initialize() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
