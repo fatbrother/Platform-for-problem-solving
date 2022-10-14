@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'database/user.dart';
+import 'database/database.dart';
 
 class AccountManager {
   static final FirebaseAuth _auth = FirebaseAuth.instance;

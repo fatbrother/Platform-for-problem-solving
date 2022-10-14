@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
-import '../backEnd/database/tag.dart';
-import 'firebase_options.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import '../backEnd/database/database.dart';
+import 'firebase_options.dart';
 
 Future<void> initialize() async {
   WidgetsFlutterBinding.ensureInitialized();

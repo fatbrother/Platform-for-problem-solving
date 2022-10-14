@@ -1,4 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+export 'problem.dart';
+export 'user.dart';
+export 'report.dart';
+export 'tag.dart';
+export 'solve_commend.dart';
 
 class DB {
   static final db = FirebaseFirestore.instance;
