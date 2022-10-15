@@ -4,11 +4,9 @@ import 'database/database.dart';
 // use this class to control the account
 // for example, sign in, sign out, sign up
 class AccountManager {
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
-
   Future<UsersModel?> get currentUser async {
     try {
-      final User? user = _auth.currentUser;
+      final User? user = FirebaseAuth.instance.currentUser;
       return user == null
           ? throw Exception('Not logged in')
           : await UsersDatabase.queryUser(user.uid);
@@ -20,7 +18,7 @@ class AccountManager {
   static Future<void> signIn(String email, String password) async {
     try {
       final UserCredential userCredential =
-          await _auth.signInWithEmailAndPassword(
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -37,7 +35,7 @@ class AccountManager {
   static Future<void> signUp(String name, String email, String password) async {
     try {
       final UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -68,7 +66,7 @@ class AccountManager {
   }
 
   static Future<void> signOut() async {
-    await _auth.signOut();
+    await FirebaseAuth.instance.signOut();
   }
 
   static Future<void> checkSmsCode(
@@ -81,7 +79,8 @@ class AccountManager {
 
     // sign in with credential
     try {
-      final userCredential = await _auth.signInWithCredential(credential);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       final User? user = userCredential.user;
       if (user == null) {
         throw Exception('User is null');
@@ -92,8 +91,9 @@ class AccountManager {
 
     // if sign in is successful then update user phone number
     try {
-      final usersModel = await UsersDatabase.queryUser(_auth.currentUser!.uid);
-      usersModel.phone = _auth.currentUser!.phoneNumber!;
+      final usersModel =
+          await UsersDatabase.queryUser(FirebaseAuth.instance.currentUser!.uid);
+      usersModel.phone = FirebaseAuth.instance.currentUser!.phoneNumber!;
       UsersDatabase.updateUser(usersModel);
     } catch (e) {
       rethrow;
@@ -104,7 +104,7 @@ class AccountManager {
     String returnVerificationId = '';
 
     try {
-      await _auth.verifyPhoneNumber(
+      await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: phone,
         verificationCompleted: (PhoneAuthCredential credential) {},
         verificationFailed: (FirebaseAuthException e) {
