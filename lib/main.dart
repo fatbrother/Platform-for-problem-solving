@@ -6,6 +6,7 @@ import 'context/routes.dart';
 import 'context/init.dart';
 
 Future<void> main() async {
+  // debugPaintSizeEnabled = true;
   await initialize();
   runApp(const MyApp());
 }
@@ -18,9 +19,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'POPS',
-      initialRoute: Routes.home,
       routes: Routes.routes,
-      home: Routes.routes[Routes.home]!(context),
+      home: Routes.routes[Routes.login]!(context),
     );
   }
 }
