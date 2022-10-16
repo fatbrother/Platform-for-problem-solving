@@ -18,6 +18,6 @@ To run the app
 - run `flutter doctor` and solve problems
 - Clone the repository
 - Open the project in IDE
-- Open the terminal and `cd` to the folder
+- Open the terminal and `cd route/to/project/folder`
 - Run `flutter pub get`
 - Run `flutter run`
