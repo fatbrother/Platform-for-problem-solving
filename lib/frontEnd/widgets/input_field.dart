@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 
-import '../../context/design.dart';
+import '../../design.dart';
 
-class InputField extends StatelessWidget {
+class InputField extends StatefulWidget {
   final String hintText;
+  final TextEditingController controller;
+  final bool obscureText;
 
   const InputField({
-    Key? key,
+    super.key,
     required this.hintText,
-  }) : super(key: key);
-  
+    required this.controller,
+    this.obscureText = false,
+  });
+
+  @override
+  State<InputField> createState() => _InputFieldState();
+}
+
+class _InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,7 +26,7 @@ class InputField extends StatelessWidget {
         Row(
           children: [
             Text(
-              hintText,
+              widget.hintText,
               textScaleFactor: 1.5,
               style: const TextStyle(
                 color: Design.primaryColor,
@@ -25,16 +34,19 @@ class InputField extends StatelessWidget {
             ),
           ],
         ),
-        const TextField(
+        const SizedBox(height: 10.0),
+        TextField(
+          controller: widget.controller,
           decoration: InputDecoration(
-            labelText: 'Username',
-            labelStyle: TextStyle(
+            labelText: widget.hintText,
+            labelStyle: const TextStyle(
               color: Design.primaryColor,
             ),
-            border: OutlineInputBorder(
+            border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
             ),
           ),
+          obscureText: widget.obscureText,
         ),
       ],
     );

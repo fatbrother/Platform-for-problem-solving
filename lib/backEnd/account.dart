@@ -16,6 +16,13 @@ class AccountManager {
   }
 
   static Future<void> signIn(String email, String password) async {
+    if (email.isEmpty) {
+      throw Exception('Email is required');
+    }
+    if (password.isEmpty) {
+      throw Exception('Password is required');
+    }
+
     try {
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -25,14 +32,21 @@ class AccountManager {
 
       final User? user = userCredential.user;
       if (user == null) {
-        throw Exception('User is null');
+        throw Exception('User not found');
       }
     } catch (e) {
-      rethrow;
+      throw Exception('Invalid email or password');
     }
   }
 
   static Future<void> signUp(String name, String email, String password) async {
+    if (name.isEmpty) {
+      throw Exception('Name is required');
+    }
+    if (email.isEmpty) {
+      throw Exception('Email is required');
+    }
+
     try {
       final UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
