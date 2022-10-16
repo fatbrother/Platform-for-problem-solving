@@ -20,6 +20,3 @@ To run the app
 - Open the terminal in visual studio code
 - Run `flutter pub get`
 - Run `flutter run`
-
-## Contributing
-- [Fatbrother](https://github.com/fatbrother)
