@@ -15,8 +15,9 @@ To get started, you need to install the following:
 To run the app
 
 - Check you have installed the above
+- run `flutter doctor` and solve problems
 - Clone the repository
-- Open the project in visual studio code
-- Open the terminal in visual studio code
+- Open the project in IDE
+- Open the terminal and `cd route/to/project/folder`
 - Run `flutter pub get`
 - Run `flutter run`
