@@ -4,9 +4,11 @@ import 'database/database.dart';
 // use this class to control the account
 // for example, sign in, sign out, sign up
 class AccountManager {
-  Future<UsersModel?> get currentUser async {
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  static Future<UsersModel?> get currentUser async {
     try {
-      final User? user = FirebaseAuth.instance.currentUser;
+      final User? user = _auth.currentUser;
       return user == null
           ? throw Exception('Not logged in')
           : await UsersDatabase.queryUser(user.uid);
@@ -16,40 +18,26 @@ class AccountManager {
   }
 
   static Future<void> signIn(String email, String password) async {
-    if (email.isEmpty) {
-      throw Exception('Email is required');
-    }
-    if (password.isEmpty) {
-      throw Exception('Password is required');
-    }
-
     try {
       final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+          await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       final User? user = userCredential.user;
       if (user == null) {
-        throw Exception('User not found');
+        throw Exception('User is null');
       }
     } catch (e) {
-      throw Exception('Invalid email or password');
+      rethrow;
     }
   }
 
   static Future<void> signUp(String name, String email, String password) async {
-    if (name.isEmpty) {
-      throw Exception('Name is required');
-    }
-    if (email.isEmpty) {
-      throw Exception('Email is required');
-    }
-
     try {
       final UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -66,7 +54,11 @@ class AccountManager {
         email: email,
       );
 
-      UsersDatabase.addUser(usersModel);
+      try {
+        UsersDatabase.addUser(usersModel);
+      } catch (e) {
+        rethrow;
+      }
 
       // if verification is successful then sign in
       try {
@@ -80,45 +72,14 @@ class AccountManager {
   }
 
   static Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut();
+    await _auth.signOut();
   }
 
-  static Future<void> checkSmsCode(
-      String smsCode, String verificationId) async {
-    // make a credential with smsCode
-    final AuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: smsCode,
-    );
-
-    // sign in with credential
-    try {
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      final User? user = userCredential.user;
-      if (user == null) {
-        throw Exception('User is null');
-      }
-    } catch (e) {
-      rethrow;
-    }
-
-    // if sign in is successful then update user phone number
-    try {
-      final usersModel =
-          await UsersDatabase.queryUser(FirebaseAuth.instance.currentUser!.uid);
-      usersModel.phone = FirebaseAuth.instance.currentUser!.phoneNumber!;
-      UsersDatabase.updateUser(usersModel);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<String> verifyPhone(String phone) async {
+  Future<String> sendSms(String phone) async {
     String returnVerificationId = '';
 
     try {
-      await FirebaseAuth.instance.verifyPhoneNumber(
+      await _auth.verifyPhoneNumber(
         phoneNumber: phone,
         verificationCompleted: (PhoneAuthCredential credential) {},
         verificationFailed: (FirebaseAuthException e) {
@@ -134,5 +95,24 @@ class AccountManager {
     }
 
     return returnVerificationId;
+  }
+
+  static Future<void> verifyPhoneNumber(
+      String verificationId, String smsCode) async {
+    try {
+      _auth.currentUser!.updatePhoneNumber(PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsCode,
+      ));
+      UsersModel? usersModel = await currentUser;
+      usersModel!.phone = _auth.currentUser!.phoneNumber!;
+      try {
+        UsersDatabase.updateUser(usersModel);
+      } catch (e) {
+        rethrow;
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }
