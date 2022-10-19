@@ -16,13 +16,13 @@ class MainButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => onPressed(),
       style: ElevatedButton.styleFrom(
+        minimumSize: Size(0.8 * Design.getScreenWidth(context), 0.08 * Design.getScreenHeight(context)),
         backgroundColor: Design.primaryColor,
         padding: EdgeInsets.symmetric(
-          horizontal: 0.3 * Design.getScreenWidth(context),
-          vertical: 0.03 * Design.getScreenHeight(context),
+          vertical: 0.02 * Design.getScreenHeight(context),
         ),
         textStyle: const TextStyle(
-          fontSize: 20.0,
+          fontSize: 32.0,
           fontWeight: FontWeight.bold,
         ),
       ),

@@ -34,19 +34,21 @@ class AccountManager {
     }
   }
 
-  static Future<void> signUp(String name, String email, String password) async {
+  static Future<void> signUp(String name, String email, String password, String confirmPassword) async {
+    if (password != confirmPassword) {
+      throw Exception('Passwords do not match');
+    }
+    
     try {
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      // verify email
-      try {
-        await userCredential.user!.sendEmailVerification();
-      } catch (e) {
-        rethrow;
-      }
+
+      final User? user = userCredential.user;
+
+      user!.sendEmailVerification();
 
       final UsersModel usersModel = UsersModel(
         id: userCredential.user!.uid,
@@ -56,13 +58,6 @@ class AccountManager {
 
       try {
         UsersDatabase.addUser(usersModel);
-      } catch (e) {
-        rethrow;
-      }
-
-      // if verification is successful then sign in
-      try {
-        await signIn(email, password);
       } catch (e) {
         rethrow;
       }
@@ -126,5 +121,9 @@ class AccountManager {
 
   static bool isLoggedIn() {
     return _auth.currentUser != null;
+  }
+
+  static bool isEmailVerified() {
+    return _auth.currentUser!.emailVerified;
   }
 }

@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'POPS',
       routes: Routes.routes,
-      home: Routes.routes[Routes.login]!(context),
+      home: Routes.getHomeRoute()!(context),
     );
   }
 }

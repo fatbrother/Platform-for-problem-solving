@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:pops/frontEnd/widgets/input_field.dart';
-import 'package:pops/frontEnd/widgets/buttons.dart';
-import 'package:pops/backEnd/account.dart';
 import 'package:pops/design.dart';
-import 'package:pops/routes.dart';
+import 'package:pops/frontEnd/widgets/buttons.dart';
+import 'package:pops/frontEnd/widgets/input_field.dart';
+import 'package:pops/backEnd/account.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+import '../routes.dart';
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    if (AccountManager.isLoggedIn()) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacementNamed(Routes.home);
+      });
+    }
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -31,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
             fontWeight: FontWeight.bold,
           ),
           backgroundColor: Design.primaryColor,
-          title: const Text('Login Page'),
+          title: const Text('Register Page'),
         ),
         body: Container(
           margin: Design.outsideSpacing,
@@ -39,7 +47,6 @@ class _LoginPageState extends State<LoginPage> {
           height: double.infinity,
           child: Stack(children: [
             Container(
-              margin: const EdgeInsets.only(top: 100.0),
               padding: Design.outsideSpacing,
               decoration: const BoxDecoration(
                 color: Design.secondaryColor,
@@ -47,7 +54,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: Column(
                 children: [
-                  const SizedBox(height: 50.0),
+                  InputField(
+                    hintText: 'Username',
+                    controller: userNameController,
+                  ),
+                  const SizedBox(height: 20.0),
                   InputField(
                     hintText: 'Email',
                     controller: emailController,
@@ -59,35 +70,17 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                   ),
                   const SizedBox(height: 20.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SecondaryButton(
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, Routes.signUp);
-                          },
-                          text: 'Register'),
-                      const Text('/', textScaleFactor: 1.5),
-                      SecondaryButton(
-                        onPressed: () => forgotPassword(),
-                        text: 'Forgot Password',
-                      ),
-                    ],
+                  InputField(
+                    hintText: 'Confirm Password',
+                    controller: confirmPasswordController,
+                    obscureText: true,
                   ),
+                  const SizedBox(height: 20.0),
                   MainButton(
-                    onPressed: () => signIn(),
-                    text: 'Login',
+                    onPressed: () => signUp(),
+                    text: 'Register',
                   ),
                 ],
-              ),
-            ),
-            Center(
-              heightFactor: 1,
-              child: CircleAvatar(
-                radius: 0.2 * Design.getScreenWidth(context),
-                backgroundColor: Design.primaryColor,
-                backgroundImage: const AssetImage('assets/Logo.png'),
               ),
             ),
           ]),
@@ -96,12 +89,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> signIn() async {
-    String email = emailController.text;
-    String password = passwordController.text;
-
+  Future<void> signUp() async {
     try {
-      await AccountManager.signIn(email, password);
+      AccountManager.signUp(
+        userNameController.text,
+        emailController.text,
+        passwordController.text,
+        confirmPasswordController.text,
+      );
     } catch (e) {
       showDialog(
         context: context,
@@ -123,40 +118,16 @@ class _LoginPageState extends State<LoginPage> {
           );
         },
       );
-
-      passwordController.clear();
-      return;
     }
 
-    if (AccountManager.isLoggedIn()) {
+    while (!AccountManager.isEmailVerified()) {
+      await Future.delayed(const Duration(seconds: 1));
+    }
+
+    if (AccountManager.isEmailVerified()) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed(Routes.home);
+        Navigator.pushReplacementNamed(context, Routes.home);
       });
     }
-  }
-
-  Future<void> forgotPassword() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Forgot Password'),
-          content: TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              hintText: 'Enter your email',
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Send verification email'),
-            ),
-          ],
-        );
-      },
-    );
   }
 }
