@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Design.backgroundColor,
       appBar: AppBar(
         toolbarHeight: 0.1 * Design.getScreenHeight(context),
@@ -64,14 +64,13 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    signIn(context);
-                  },
+                  onPressed: () => signIn(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Design.primaryColor,
                     padding: EdgeInsets.symmetric(
-                        horizontal: 0.3 * Design.getScreenWidth(context),
-                        vertical: 0.03 * Design.getScreenHeight(context)),
+                      horizontal: 0.3 * Design.getScreenWidth(context),
+                      vertical: 0.03 * Design.getScreenHeight(context),
+                    ),
                     textStyle: const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
@@ -83,12 +82,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           Center(
-              heightFactor: 1,
-              child: CircleAvatar(
-                radius: 0.2 * Design.getScreenWidth(context),
-                backgroundColor: Design.primaryColor,
-                backgroundImage: const AssetImage('assets/Logo.png'),
-              )),
+            heightFactor: 1,
+            child: CircleAvatar(
+              radius: 0.2 * Design.getScreenWidth(context),
+              backgroundColor: Design.primaryColor,
+              backgroundImage: const AssetImage('assets/Logo.png'),
+            ),
+          ),
         ]),
       ),
     );

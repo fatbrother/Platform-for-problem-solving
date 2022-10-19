@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 // this class is store the information of our design
@@ -23,11 +25,19 @@ class Design {
   static const insideBorderRadius =
       BorderRadius.all(Radius.circular(10.0));
 
-  static getScreenWidth(BuildContext context) {
+  static double getScreenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
 
   static double getScreenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
+  }
+
+  static Alignment angleToAlignment(double angle) {
+    var radius = 1.0;
+    var x = radius * cos(angle);
+    var y = radius * sin(angle);
+
+    return Alignment(x, y);
   }
 }
