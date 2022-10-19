@@ -9,6 +9,9 @@ import 'frontEnd/login_page.dart';
 class Routes {
   static const String home = '/index';
   static const String login = '/login';
+  static const String signUp = '/signUp';
+  static const String forgotPassword = '/forgotPassword';
+  static const String verifyPhone = '/verifyPhone';
   // add routes here
   // static const String [route name] = '/[route name]';
 

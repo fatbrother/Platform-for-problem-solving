@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
+import 'package:pops/frontEnd/widgets/buttons.dart';
 import '../backEnd/account.dart';
 import '../design.dart';
+import '../routes.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,11 +13,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    if (AccountManager.isLoggedIn()) {
+      Navigator.pushReplacementNamed(context, Routes.verifyPhone);
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Design.backgroundColor,
@@ -45,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 50.0),
                 InputField(
                   hintText: 'Username',
-                  controller: usernameController,
+                  controller: emailController,
                 ),
                 const SizedBox(height: 20.0),
                 InputField(
@@ -54,29 +59,15 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                 ),
                 const SizedBox(height: 20.0),
-                TextButton(
-                  child: const Text(
-                    'Register',
-                    textScaleFactor: 1.5,
-                  ),
-                  onPressed: () {
-                    // TODO: Go to the register page
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: () => signIn(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Design.primaryColor,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 0.3 * Design.getScreenWidth(context),
-                      vertical: 0.03 * Design.getScreenHeight(context),
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: const Text('Login'),
+                SecondaryButton(onPressed: () {
+                  // TODO: go to the register page
+                }, text: 'Register'),
+                const SizedBox(height: 5.0),
+                SecondaryButton(
+                    onPressed: () => forgotPassword(), text: 'Forgot Password'),
+                MainButton(
+                  onPressed: () => signIn(),
+                  text: 'Login',
                 ),
               ],
             ),
@@ -94,8 +85,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> signIn(BuildContext context) async {
-    String email = usernameController.text;
+  Future<void> signIn() async {
+    String email = emailController.text;
     String password = passwordController.text;
 
     try {
@@ -123,6 +114,34 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       passwordController.clear();
+      return;
     }
+
+    // reload the page
+    setState(() {});
+  }
+
+  Future<void> forgotPassword() async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Forgot Password'),
+            content: TextField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                hintText: 'Enter your email',
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Send verification email'),
+              ),
+            ],
+          );
+        });
   }
 }

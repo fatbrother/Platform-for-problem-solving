@@ -104,9 +104,9 @@ class AccountManager {
         verificationId: verificationId,
         smsCode: smsCode,
       ));
-      UsersModel? usersModel = await currentUser;
-      usersModel!.phone = _auth.currentUser!.phoneNumber!;
       try {
+        UsersModel? usersModel = await currentUser;
+        usersModel!.phone = _auth.currentUser!.phoneNumber!;
         UsersDatabase.updateUser(usersModel);
       } catch (e) {
         rethrow;
@@ -114,5 +114,17 @@ class AccountManager {
     } catch (e) {
       rethrow;
     }
+  }
+
+  static Future<void> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static bool isLoggedIn() {
+    return _auth.currentUser != null;
   }
 }
