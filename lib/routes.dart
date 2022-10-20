@@ -12,7 +12,6 @@ class Routes {
   static const String home = '/index';
   static const String login = '/login';
   static const String signUp = '/signUp';
-  static const String forgotPassword = '/forgotPassword';
   static const String verifyPhone = '/verifyPhone';
   // add routes here
   // static const String [route name] = '/[route name]';
@@ -27,7 +26,8 @@ class Routes {
 
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
-  static WidgetBuilder? getHomeRoute() {
-    return AccountManager.isLoggedIn() ? Routes.routes[Routes.home] : Routes.routes[Routes.login];
-  }
+  static Widget Function(BuildContext context)? get homeRoute =>
+      AccountManager.isLoggedIn()
+          ? Routes.routes[Routes.home]
+          : Routes.routes[Routes.login];
 }
