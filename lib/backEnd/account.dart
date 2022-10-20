@@ -27,9 +27,17 @@ class AccountManager {
 
       final User? user = userCredential.user;
       if (user == null) {
+        signOut();
         throw Exception('User is null');
       }
+
+      if (!user.emailVerified) {
+        signOut();
+        throw Exception('Email is not verified');
+      }
+
     } catch (e) {
+      signOut();
       rethrow;
     }
   }
@@ -125,5 +133,9 @@ class AccountManager {
 
   static bool isEmailVerified() {
     return _auth.currentUser!.emailVerified;
+  }
+
+  static bool isPhoneVerified() {
+    return _auth.currentUser!.phoneNumber != null;
   }
 }

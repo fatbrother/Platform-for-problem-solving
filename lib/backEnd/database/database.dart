@@ -66,7 +66,12 @@ class DB {
   // add the row of the databases
   static Future<void> addRow(String tableName, Map<String, dynamic> row) async {
     try {
-      await db.collection(tableName).add(row);
+      // if the row has an id, use it
+      if (row.containsKey('id') && row['id'] != null) {
+        await db.collection(tableName).doc(row['id']).set(row);
+      } else {
+        await db.collection(tableName).add(row);
+      }
     } catch (e) {
       rethrow;
     }
