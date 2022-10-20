@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:pops/frontEnd/widgets/alert.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/backEnd/account.dart';
@@ -19,6 +20,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (AccountManager.isLoggedIn()) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacementNamed(Routes.home);
+      });
+    }
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -110,7 +116,6 @@ class _LoginPageState extends State<LoginPage> {
           message = message.substring(message.indexOf(':') + 2);
 
           return AlertDialog(
-            title: const Text('Error'),
             content: Text(message),
             actions: [
               TextButton(
@@ -139,22 +144,49 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Forgot Password'),
+        return Alert(
+          title: 'Forgot Password',
           content: TextField(
             controller: emailController,
             decoration: const InputDecoration(
               hintText: 'Enter your email',
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Send verification email'),
-            ),
-          ],
+          onPressed: () {
+            Navigator.of(context).pop();
+
+            try {
+              AccountManager.resetPassword(emailController.text);
+              emailController.clear();
+            } catch (e) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  String message = e.toString();
+                  message = message.substring(message.indexOf(':') + 2);
+                  return Alert(
+                      title: 'Error',
+                      content: Text(message),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      });
+                },
+              );
+            }
+          },
+        );
+      },
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Alert(
+          title: 'Email Sent',
+          content: const Text('Please check your email for a password reset link.'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         );
       },
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:pops/design.dart';
+import 'package:pops/frontEnd/widgets/alert.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
 import 'package:pops/backEnd/account.dart';
@@ -27,6 +28,11 @@ class _RegisterPageState extends State<RegisterPage> {
         Navigator.of(context).pushReplacementNamed(Routes.home);
       });
     }
+    if (AccountManager.isEmailVerified()) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacementNamed(context, Routes.home);
+      });
+    }
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -45,45 +51,43 @@ class _RegisterPageState extends State<RegisterPage> {
           margin: Design.outsideSpacing,
           width: double.infinity,
           height: double.infinity,
-          child: Stack(children: [
-            Container(
-              padding: Design.outsideSpacing,
-              decoration: const BoxDecoration(
-                color: Design.secondaryColor,
-                borderRadius: Design.outsideBorderRadius,
-              ),
-              child: Column(
-                children: [
-                  InputField(
-                    hintText: 'Username',
-                    controller: userNameController,
-                  ),
-                  const SizedBox(height: 20.0),
-                  InputField(
-                    hintText: 'Email',
-                    controller: emailController,
-                  ),
-                  const SizedBox(height: 20.0),
-                  InputField(
-                    hintText: 'Password',
-                    controller: passwordController,
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 20.0),
-                  InputField(
-                    hintText: 'Confirm Password',
-                    controller: confirmPasswordController,
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 20.0),
-                  MainButton(
-                    onPressed: () => signUp(),
-                    text: 'Register',
-                  ),
-                ],
-              ),
+          child: Container(
+            padding: Design.outsideSpacing,
+            decoration: const BoxDecoration(
+              color: Design.secondaryColor,
+              borderRadius: Design.outsideBorderRadius,
             ),
-          ]),
+            child: Column(
+              children: [
+                InputField(
+                  hintText: 'Username',
+                  controller: userNameController,
+                ),
+                const SizedBox(height: 20.0),
+                InputField(
+                  hintText: 'Email',
+                  controller: emailController,
+                ),
+                const SizedBox(height: 20.0),
+                InputField(
+                  hintText: 'Password',
+                  controller: passwordController,
+                  obscureText: true,
+                ),
+                const SizedBox(height: 20.0),
+                InputField(
+                  hintText: 'Confirm Password',
+                  controller: confirmPasswordController,
+                  obscureText: true,
+                ),
+                const SizedBox(height: 20.0),
+                MainButton(
+                  onPressed: () => signUp(),
+                  text: 'Register',
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -104,17 +108,11 @@ class _RegisterPageState extends State<RegisterPage> {
           String message = e.toString();
           message = message.substring(message.indexOf(':') + 2);
 
-          return AlertDialog(
-            title: const Text('Error'),
+          return Alert(
             content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           );
         },
       );
