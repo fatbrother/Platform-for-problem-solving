@@ -17,6 +17,7 @@ dependencies:
   firebase_auth: ^3.11.2
   cloud_firestore: ^3.5.1
   flutter_windowmanager: ^0.2.0
+  phonenumbers: ^1.1.0
 
 dev_dependencies:
   flutter_test:

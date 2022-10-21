@@ -78,7 +78,7 @@ class AccountManager {
     await _auth.signOut();
   }
 
-  Future<String> sendSms(String phone) async {
+  static Future<String> sendSms(String phone) async {
     String returnVerificationId = '';
 
     try {
@@ -122,6 +122,14 @@ class AccountManager {
   static Future<void> resetPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static deleteAccount() async {
+    try {
+      await _auth.currentUser!.delete();
     } catch (e) {
       rethrow;
     }

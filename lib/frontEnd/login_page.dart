@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:pops/frontEnd/widgets/alert.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/backEnd/account.dart';
@@ -109,26 +110,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await AccountManager.signIn(email, password);
     } catch (e) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          String message = e.toString();
-          message = message.substring(message.indexOf(':') + 2);
-
-          return AlertDialog(
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-
+      DialogManager.showError(e, context);
       passwordController.clear();
       return;
     }
@@ -159,36 +141,17 @@ class _LoginPageState extends State<LoginPage> {
               AccountManager.resetPassword(emailController.text);
               emailController.clear();
             } catch (e) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  String message = e.toString();
-                  message = message.substring(message.indexOf(':') + 2);
-                  return Alert(
-                      title: 'Error',
-                      content: Text(message),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      });
-                },
-              );
+              DialogManager.showError(e, context);
             }
           },
         );
       },
     );
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Alert(
-          title: 'Email Sent',
-          content: const Text('Please check your email for a password reset link.'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        );
-      },
+    DialogManager.showInfo(
+      'Email sent',
+      'Please check your email for a password reset link.',
+      context,
     );
   }
 }

@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:pops/design.dart';
-import 'package:pops/frontEnd/widgets/alert.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
 import 'package:pops/backEnd/account.dart';
 
@@ -102,27 +104,28 @@ class _RegisterPageState extends State<RegisterPage> {
         confirmPasswordController.text,
       );
     } catch (e) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          String message = e.toString();
-          message = message.substring(message.indexOf(':') + 2);
-
-          return Alert(
-            content: Text(message),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          );
-        },
-      );
+      DialogManager.showError(e, context);
+      return;
     }
 
+    // count for two minutes to verify email
+    int count = 0;
+    bool verified = true;
     while (!AccountManager.isEmailVerified()) {
+      if (count > 120) {
+        verified = false;
+        break;
+      }
       await Future.delayed(const Duration(seconds: 1));
+      count++;
     }
 
-    if (AccountManager.isEmailVerified()) {
+    if (!verified) {
+      AccountManager.signIn(emailController.text, passwordController.text);
+      AccountManager.deleteAccount();
+    }      
+
+    if (verified) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacementNamed(context, Routes.home);
       });
