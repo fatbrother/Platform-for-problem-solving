@@ -1,4 +1,4 @@
-import 'database.dart';
+import '../database.dart';
 
 // control the database of the problem with problemsModel
 class ProblemsDatabase {
@@ -54,7 +54,7 @@ class ProblemsModel {
   String id;
   String title;
   String description;
-  List<String> imgUrls;
+  List<String> imgIds;
   List<int> tags;
   int baseToken;
   bool isSolved;
@@ -68,7 +68,7 @@ class ProblemsModel {
     required this.id,
     required this.title,
     required this.description,
-    required this.imgUrls,
+    required this.imgIds,
     required this.tags,
     required this.isSolved,
     required this.baseToken,
@@ -85,7 +85,7 @@ class ProblemsModel {
       title: data['title'] ?? '',
       tags: data['tags'] ?? [],
       description: data['description'] ?? '',
-      imgUrls: data['imgUrls'] ?? [],
+      imgIds: data['imgIds'] ?? [],
       isSolved: data['isSolved'] ?? false,
       baseToken: data['baseToken'] ?? 10,
       solveCommendIds: data['solveCommendIds'] ?? [],
@@ -102,7 +102,7 @@ class ProblemsModel {
       'title': title,
       'tags': tags,
       'description': description,
-      'imgUrls': imgUrls,
+      'imgIds': imgIds,
       'isSolved': isSolved,
       'baseToken': baseToken,
       'solveCommendIds': solveCommendIds,
@@ -112,19 +112,11 @@ class ProblemsModel {
     };
   }
 
-  get isSolvedString {
-    return isSolved ? 'Solved' : 'Unsolved';
-  }
-
-  get remainingDaysString {
-    return '$remainingDays days';
-  }
-
-  get isOverdue {
+  bool get isOverdue {
     return createdAt.add(Duration(days: remainingDays)).isBefore(DateTime.now());
   }
 
-  get remainingTimeString {
+  Map<String, int> get remainingTimeString {
     final DateTime now = DateTime.now();
     final DateTime deadline = createdAt.add(Duration(days: remainingDays));
     final Duration remainingTime = deadline.difference(now);

@@ -1,7 +1,7 @@
 // When we are adding a new page, we need to add it to the routes map.
 
 import 'package:flutter/cupertino.dart';
-import 'backEnd/account.dart';
+import 'backEnd/user/account.dart';
 import 'frontEnd/home_page.dart';
 import 'frontEnd/login_page.dart';
 import 'frontEnd/register_page.dart';

@@ -4,7 +4,7 @@ import 'package:pops/frontEnd/widgets/alert.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
-import 'package:pops/backEnd/account.dart';
+import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/design.dart';
 import 'package:pops/routes.dart';
 

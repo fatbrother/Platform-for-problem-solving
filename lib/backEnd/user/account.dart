@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'database/database.dart';
+import '../database.dart';
 
 // use this class to control the account
 // for example, sign in, sign out, sign up

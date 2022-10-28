@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-export 'problem.dart';
-export 'user.dart';
-export 'report.dart';
-export 'tag.dart';
-export 'solve_commend.dart';
+export 'problem/problem.dart';
+export 'user/user.dart';
+export 'user/report.dart';
+export 'other/tag.dart';
+export 'problem/solve_commend.dart';
 
 // we use this class to control the database
 // not suspect to use this class directly
