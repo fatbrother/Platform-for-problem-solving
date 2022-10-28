@@ -5,8 +5,8 @@ import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/backEnd/user/account.dart';
-import 'package:pops/design.dart';
-import 'package:pops/routes.dart';
+import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

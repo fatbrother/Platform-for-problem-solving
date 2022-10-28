@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:pops/design.dart';
+import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/alert.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/backEnd/user/account.dart';

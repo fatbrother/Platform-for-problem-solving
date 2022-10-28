@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../design.dart';
+import '../design.dart';
 
 class StarPlate extends StatefulWidget {
   final int numOfStars;

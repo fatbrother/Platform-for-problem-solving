@@ -4,8 +4,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-import 'firebase_options.dart';
-import 'routes.dart';
+import 'backEnd/firebase_options.dart';
+import 'frontEnd/routes.dart';
 
 Future<void> main() async {
   // debugPaintSizeEnabled = true;
