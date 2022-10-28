@@ -18,6 +18,8 @@ dependencies:
   cloud_firestore: ^3.5.1
   flutter_windowmanager: ^0.2.0
   phonenumbers: ^1.1.0
+  firebase_storage: ^10.3.11
+  image_picker: ^0.8.6
 
 dev_dependencies:
   flutter_test:
