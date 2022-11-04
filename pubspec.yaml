@@ -20,6 +20,7 @@ dependencies:
   phonenumbers: ^1.1.0
   firebase_storage: ^10.3.11
   image_picker: ^0.8.6
+  flutter_launcher_icons: ^0.10.0
 
 dev_dependencies:
   flutter_test:
@@ -31,3 +32,10 @@ flutter:
   assets: 
     - assets/
   uses-material-design: true
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/Logo.png"
+  adaptive_icon_background: "assets/Background.png"
+  adaptive_icon_foreground: "assets/Logo.png"
