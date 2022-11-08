@@ -7,10 +7,15 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AccountManager.signOut();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page'),
+        leading: IconButton(
+            onPressed: () {
+              AccountManager.signOut();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            icon: const Icon(Icons.logout)),
       ),
       body: const Center(
         child: Text('Home Page'),

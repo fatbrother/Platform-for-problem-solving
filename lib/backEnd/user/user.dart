@@ -52,6 +52,7 @@ class UsersModel {
   String phone;
   List<String> askProblemIds;
   List<String> expertiseTagIds;
+  List<String> chatRoomsIds;
   int tokens;
   double score;
   int numberOfScores;
@@ -63,6 +64,7 @@ class UsersModel {
     this.phone = '',
     this.askProblemIds = const [],
     this.expertiseTagIds = const [],
+    this.chatRoomsIds = const [],
     this.tokens = 0,
     this.score = 0,
     this.numberOfScores = 0,
@@ -76,6 +78,7 @@ class UsersModel {
       phone: data['phone'] ?? '',
       askProblemIds: data['askProblemIds'] ?? [],
       expertiseTagIds: data['expertiseTagIds'] ?? [],
+      chatRoomsIds: data['chatRoomsIds'] ?? [],
       tokens: data['tokens'] ?? 0,
       score: data['score'] ?? 0.0,
       numberOfScores: data['numberOfScores'] ?? 0,
@@ -90,6 +93,7 @@ class UsersModel {
       'phone': phone,
       'askProblemIds': askProblemIds,
       'expertiseTagIds': expertiseTagIds,
+      'chatRoomsIds': chatRoomsIds,
       'tokens': tokens,
       'score': score,
       'numberOfScores': numberOfScores,

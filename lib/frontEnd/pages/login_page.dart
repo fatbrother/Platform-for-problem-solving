@@ -71,8 +71,10 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       SecondaryButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, Routes.signUp);
+                            SchedulerBinding.instance.addPostFrameCallback((_) {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(Routes.home);
+                            });
                           },
                           text: 'Register'),
                       const Text('/', textScaleFactor: 1.5),
@@ -134,24 +136,19 @@ class _LoginPageState extends State<LoginPage> {
               hintText: 'Enter your email',
             ),
           ),
-          onPressed: () {
-            Navigator.of(context).pop();
-
+          onPressed: () async {
             try {
-              AccountManager.resetPassword(emailController.text);
+              await AccountManager.resetPassword(emailController.text);
               emailController.clear();
             } catch (e) {
               DialogManager.showError(e, context);
             }
+            if (mounted) {
+              Navigator.of(context).pop();
+            }
           },
         );
       },
-    );
-
-    DialogManager.showInfo(
-      'Email sent',
-      'Please check your email for a password reset link.',
-      context,
     );
   }
 }

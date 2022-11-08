@@ -11,7 +11,7 @@ import 'pages/register_page.dart';
 class Routes {
   static const String home = '/index';
   static const String login = '/login';
-  static const String signUp = '/signUp';
+  static const String register = '/register';
   static const String verifyPhone = '/verifyPhone';
   // add routes here
   // static const String [route name] = '/[route name]';
@@ -19,7 +19,7 @@ class Routes {
   final Map<String, WidgetBuilder> _routes = {
     home: (context) => const HomePage(),
     login: (context) => const LoginPage(),
-    signUp: (context) => const RegisterPage(),
+    register: (context) => const RegisterPage(),
     // add routes here
     // [route name]: (context) => const [page name](),
   };

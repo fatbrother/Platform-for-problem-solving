@@ -120,6 +120,10 @@ class AccountManager {
   }
 
   static Future<void> resetPassword(String email) async {
+    if (email.isEmpty) {
+      throw Exception('Email is required');
+    }
+
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
@@ -140,10 +144,16 @@ class AccountManager {
   }
 
   static bool isEmailVerified() {
+    if (!isLoggedIn()) {
+      return false;
+    }
     return _auth.currentUser!.emailVerified;
   }
 
   static bool isPhoneVerified() {
+    if (!isLoggedIn()) {
+      return false;
+    }
     return _auth.currentUser!.phoneNumber != null;
   }
 }
