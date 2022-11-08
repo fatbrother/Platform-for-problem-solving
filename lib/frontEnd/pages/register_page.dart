@@ -30,11 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
         Navigator.of(context).pushReplacementNamed(Routes.home);
       });
     }
-    if (AccountManager.isEmailVerified()) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacementNamed(context, Routes.home);
-      });
-    }
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -97,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> signUp() async {
     try {
-      AccountManager.signUp(
+      await AccountManager.signUp(
         userNameController.text,
         emailController.text,
         passwordController.text,
@@ -123,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (!verified) {
       AccountManager.signIn(emailController.text, passwordController.text);
       AccountManager.deleteAccount();
-    }      
+    }
 
     if (verified) {
       SchedulerBinding.instance.addPostFrameCallback((_) {

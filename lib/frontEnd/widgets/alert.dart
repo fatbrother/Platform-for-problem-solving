@@ -15,7 +15,7 @@ class Alert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Error'),
+      title: Text(title),
       content: content,
       actions: [
         TextButton(

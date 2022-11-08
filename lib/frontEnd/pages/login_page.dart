@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             SchedulerBinding.instance.addPostFrameCallback((_) {
                               Navigator.of(context)
-                                  .pushReplacementNamed(Routes.home);
+                                  .pushReplacementNamed(Routes.register);
                             });
                           },
                           text: 'Register'),
