@@ -32,7 +32,6 @@ dev_dependencies:
 flutter:
   assets: 
     - assets/
-    - assets/label_left_triangle.svg
   uses-material-design: true
 
 flutter_icons:

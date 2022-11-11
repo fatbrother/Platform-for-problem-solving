@@ -37,8 +37,12 @@ class UsersDatabase {
   }
 
   static void addUser(UsersModel usersModel) async {
+    if (usersModel.id == '') {
+      throw Exception('User ID cannot be empty');
+    }
+
     try {
-      await DB.addRow('users', usersModel.toMap());
+      UsersDatabase.updateUser(usersModel);
     } catch (e) {
       rethrow;
     }
