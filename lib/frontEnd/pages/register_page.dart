@@ -46,11 +46,11 @@ class _RegisterPageState extends State<RegisterPage> {
           title: const Text('Register Page'),
         ),
         body: Container(
-          margin: Design.outsideSpacing,
+          margin: Design.spacing,
           width: double.infinity,
           height: double.infinity,
           child: Container(
-            padding: Design.outsideSpacing,
+            padding: Design.spacing,
             decoration: const BoxDecoration(
               color: Design.secondaryColor,
               borderRadius: Design.outsideBorderRadius,
