@@ -41,13 +41,13 @@ class _LoginPageState extends State<LoginPage> {
           title: const Text('Login Page'),
         ),
         body: Container(
-          margin: Design.outsideSpacing,
+          margin: Design.spacing,
           width: double.infinity,
           height: double.infinity,
           child: Stack(children: [
             Container(
               margin: const EdgeInsets.only(top: 100.0),
-              padding: Design.outsideSpacing,
+              padding: Design.spacing,
               decoration: const BoxDecoration(
                 color: Design.secondaryColor,
                 borderRadius: Design.outsideBorderRadius,
