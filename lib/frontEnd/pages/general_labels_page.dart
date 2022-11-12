@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/widgets/tag.dart';
 
@@ -121,38 +119,29 @@ class ShowCurrentTagsWidget extends StatelessWidget {
           color: const Color.fromARGB(
               255, 255, 255, 255), //color沒放在decoration裡的話會overflow
         ),
-        child: SizedBox(
-          // set infinite width
-          width: double.infinity,
-          height: 100,
-          child: Column(
-            children: [
-              const Text(
-                '目前顯示的專業標籤',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              SizedBox(
-                // set fill parent
-                width: double.infinity,
-                height: double.infinity,
-                child: Wrap(
-                  spacing: 5,
-                  runSpacing: 5,
-                  direction: Axis.vertical,
-                  children: [
-                    for (final tag in tags) ShowTagsWidget(title: tag),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-            ],
-          ),
+        width: double.infinity,
+        child: Column(
+          children: [
+            const Text(
+              '目前顯示的專業標籤',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Wrap(
+              spacing: 5,
+              runSpacing: 5,
+              direction: Axis.horizontal,
+              children: [
+                for (final tag in tags) ShowTagsWidget(title: tag),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+          ],
         ));
   }
 }
@@ -170,6 +159,8 @@ class ShowUsedTagsWidget extends StatelessWidget {
         color: const Color.fromARGB(
             255, 255, 255, 255), //color沒放在decoration裡的話會overflow
       ),
+      height: 100,
+      width: double.infinity,
       child: Column(children: [
         const Text(
           '曾使用過的專業標籤',
@@ -179,9 +170,19 @@ class ShowUsedTagsWidget extends StatelessWidget {
         const SizedBox(
           height: 5,
         ),
-        Wrap(children: [
-          for (final tag in tags) ShowTagsWidget(title: tag),
-        ]),
+        SizedBox(
+          child: Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            direction: Axis.vertical,
+            children: [
+              for (final tag in tags) ShowTagsWidget(title: tag),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
       ]),
     );
   }

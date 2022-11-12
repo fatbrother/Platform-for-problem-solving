@@ -29,10 +29,10 @@ class Routes {
 
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
-  static Widget Function(BuildContext context)? get homeRoute =>
-      AccountManager.isLoggedIn()
-          ? Routes.routes[Routes.home]
-          : Routes.routes[Routes.login];
   // static Widget Function(BuildContext context)? get homeRoute =>
-  //     Routes.routes[Routes.tagPage];
+  //     AccountManager.isLoggedIn()
+  //         ? Routes.routes[Routes.home]
+  //         : Routes.routes[Routes.login];
+  static Widget Function(BuildContext context)? get homeRoute =>
+      Routes.routes[Routes.tagPage];
 }
