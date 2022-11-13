@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
-//import 'package:pops/frontEnd/widgets/enter_botton.dart';
 import 'package:pops/frontEnd/widgets/suggest_field.dart';
 import 'package:pops/frontEnd/widgets/star_plate.dart';
 
@@ -20,52 +19,40 @@ class _RatingPageState extends State<RatingPage> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
         backgroundColor: Design.backgroundColor,
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: Design.getScreenHeight(context) * 0.05,
-              ),
+              SizedBox(height: Design.getScreenHeight(context) * 0.05),
               Row(
                 children: [
                   IconButton(
                     onPressed: () => {},
                     icon: const Icon(Icons.arrow_back),
-                    iconSize: 40,
+                    iconSize: 35,
                   ),
                 ],
               ),
               const Text(
                 '請給予解題者評分評語',
                 style: TextStyle(
-                  fontSize: 32.0,
+                  fontSize: 30.0,
                   color: Design.primaryColor,
                 ),
-                maxLines: 3,
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
-                height: Design.getScreenHeight(context) * 0.05,
-              ),
-              GestureDetector(
-                child: Center(
-                  child: CircleAvatar(
-                    radius: 0.28 * Design.getScreenWidth(context),
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                    child: StarPlate(numOfStars: numOfStars, size: 200.0),
-                  ),
-                ),
-                onTap: () => setState(
-                  () {
-                    numOfStars++;
-                    numOfStars %= 6;
-                  },
-                ),
+              SizedBox(height: Design.getScreenHeight(context) * 0.03),
+              StarPlate(
+                numOfStars: numOfStars,
+                radius: 0.28 * Design.getScreenWidth(context),
+                onPressed: () => setState(() {
+                  numOfStars++;
+                  numOfStars %= 6;
+                }),
               ),
               Container(
-                margin: const EdgeInsets.all(20),
+                margin: Design.spacing,
+                padding: Design.spacing,
                 child: SuggestField(
                   maxline: 15,
                   hintTextFloating: '輸入評語...',
