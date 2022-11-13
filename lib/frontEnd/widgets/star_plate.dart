@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../design.dart';
@@ -21,15 +23,18 @@ class _StarPlateState extends State<StarPlate> {
 
   @override
   Widget build(BuildContext context) {
+    stars = [];
     for (int i = 0; i < 5; i++) {
       if (i < widget.numOfStars) {
         stars.add(const Icon(
           Icons.star,
+          size: 70,
           color: Design.primaryColor,
         ));
       } else {
         stars.add(const Icon(
           Icons.star,
+          size: 70,
           color: Design.secondaryColor,
         ));
       }
@@ -39,10 +44,10 @@ class _StarPlateState extends State<StarPlate> {
       width: widget.size,
       height: widget.size,
       child: Stack(
-        children: [
+        children: <Widget>[
           for (int i = 0; i < 5; i++)
             Align(
-              alignment: Design.angleToAlignment(360 / 5 * i),
+              alignment: Design.angleToAlignment((pi / 2) * 3 + 2 * pi / 5 * i),
               child: stars[i],
             ),
         ],

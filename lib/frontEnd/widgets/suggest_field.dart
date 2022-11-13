@@ -2,47 +2,38 @@ import 'package:flutter/material.dart';
 
 import '../design.dart';
 
-class InputField extends StatefulWidget {
-  final String hintText;
+class SuggestField extends StatefulWidget {
+  final String hintTextFloating;
   final TextEditingController controller;
   final bool obscureText;
   final int maxline;
 
-  const InputField({
+  const SuggestField({
     super.key,
-    required this.hintText,
+    required this.hintTextFloating,
     required this.controller,
     this.obscureText = false,
     this.maxline = 1,
   });
 
   @override
-  State<InputField> createState() => _InputFieldState();
+  State<SuggestField> createState() => _SuggestFieldState();
 }
 
-class _InputFieldState extends State<InputField> {
+class _SuggestFieldState extends State<SuggestField> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            Text(
-              widget.hintText,
-              textScaleFactor: 1.5,
-              style: const TextStyle(
-                color: Design.primaryColor,
-              ),
-            ),
-          ],
-        ),
         const SizedBox(height: 10.0),
         TextField(
           maxLines: widget.maxline,
           controller: widget.controller,
           decoration: InputDecoration(
-            labelText: widget.hintText,
-            labelStyle: const TextStyle(
+            fillColor: const Color.fromARGB(255, 255, 255, 255),
+            filled: true,
+            hintText: widget.hintTextFloating,
+            hintStyle: const TextStyle(
               color: Design.primaryColor,
             ),
             border: const OutlineInputBorder(
