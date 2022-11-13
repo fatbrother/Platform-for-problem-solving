@@ -9,17 +9,12 @@ class Design {
   static const Color primaryColor = Color(0xFF4F809B);
   static const Color secondaryColor = Color(0x754F809B);
   static const Color backgroundColor = Color(0xFFD9D9D9);
+  static const Color insideColor = Color(0xFFEFEFEF);
 
   static const Color primaryTextColor = Colors.black;
   static const Color secondaryTextColor = Color.fromARGB(137, 11, 11, 11);
 
-  static const outsideSpacing = EdgeInsets.only(
-    top: 40,
-    left: 20,
-    right: 20,
-    bottom: 20,
-  );
-  static const insideSpacing = EdgeInsets.all(10.0);
+  static const spacing = EdgeInsets.all(10.0);
   static const outsideBorderRadius =
       BorderRadius.all(Radius.circular(20.0));
   static const insideBorderRadius =
