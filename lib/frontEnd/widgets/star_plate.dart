@@ -1,15 +1,17 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-
 import '../design.dart';
 
 class StarPlate extends StatefulWidget {
   final int numOfStars;
-  final double size;
+  final double radius;
+  final void Function() onPressed;
 
   const StarPlate({
     super.key,
     required this.numOfStars,
-    required this.size,
+    required this.radius,
+    required this.onPressed,
   });
 
   @override
@@ -17,35 +19,37 @@ class StarPlate extends StatefulWidget {
 }
 
 class _StarPlateState extends State<StarPlate> {
-  List<Widget> stars = [];
-
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < 5; i++) {
-      if (i < widget.numOfStars) {
-        stars.add(const Icon(
-          Icons.star,
-          color: Design.primaryColor,
-        ));
-      } else {
-        stars.add(const Icon(
-          Icons.star,
-          color: Design.secondaryColor,
-        ));
-      }
-    }
-
-    return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: Stack(
-        children: [
-          for (int i = 0; i < 5; i++)
-            Align(
-              alignment: Design.angleToAlignment(360 / 5 * i),
-              child: stars[i],
-            ),
-        ],
+    return GestureDetector(
+      onTap: widget.onPressed,
+      child: CircleAvatar(
+        radius: widget.radius,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        child: SizedBox(
+          width: widget.radius * 1.9,
+          height: widget.radius * 1.9,
+          child: Stack(
+            children: <Widget>[
+              for (int i = 0; i < 5; i++)
+                Align(
+                  alignment:
+                      Design.angleToAlignment((pi / 2) * 3 + 2 * pi / 5 * i),
+                  child: i < widget.numOfStars
+                      ? Icon(
+                          Icons.star,
+                          size: widget.radius * 0.7,
+                          color: Design.primaryColor,
+                        )
+                      : Icon(
+                          Icons.star,
+                          size: widget.radius * 0.7,
+                          color: Design.secondaryColor,
+                        ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

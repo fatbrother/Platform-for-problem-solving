@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 // for example, the color of the button, the color of the text, border radius, etc.
 class Design {
   static const Color primaryColor = Color(0xFF4F809B);
-  static const Color secondaryColor = Color(0x754F809B);
+  static const Color secondaryColor = Color.fromARGB(255, 152, 181, 196);
   static const Color backgroundColor = Color(0xFFD9D9D9);
   static const Color insideColor = Color(0xFFEFEFEF);
 

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class Alert extends StatelessWidget {
   const Alert({
-    Key? key,
+    super.key,
     this.title = "Error",
     required this.content,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final String title;
   final Widget content;
-  final Function onPressed;
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +19,7 @@ class Alert extends StatelessWidget {
       content: content,
       actions: [
         TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: onPressed,
           child: const Text('OK'),
         ),
       ],
