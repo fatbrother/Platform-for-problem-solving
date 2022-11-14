@@ -70,7 +70,7 @@ class ChangePasswordView extends StatefulWidget {
 
 class _ChangePasswordViewState extends State<ChangePasswordView> {
   var message = "";
-  var currentOldPassword = "abcd";
+  var currentOldPassword = "";
   var inputOldPassword = "";
   var firstNewPassword = "";
   var againNewPassword = "";
