@@ -62,7 +62,7 @@ String judge(String currentOldPassword, String inputOldPassword, String againNew
 
 
 class ChangePasswordView extends StatefulWidget {
-  ChangePasswordView({super.key});
+  const ChangePasswordView({super.key});
 
   @override
   State<ChangePasswordView> createState() => _ChangePasswordViewState();
