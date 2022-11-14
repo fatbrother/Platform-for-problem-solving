@@ -32,6 +32,7 @@ dev_dependencies:
 flutter:
   assets: 
     - assets/
+    - assets/top_up/
   uses-material-design: true
 
 flutter_icons:
