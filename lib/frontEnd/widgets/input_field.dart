@@ -55,3 +55,45 @@ class _InputFieldState extends State<InputField> {
     );
   }
 }
+
+class SingleInputField extends StatefulWidget {
+  final TextEditingController controller;
+  final String hintText;
+  final bool obscureText;
+
+  const SingleInputField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    this.obscureText = false,
+  });
+
+  @override
+  State<SingleInputField> createState() => _SingleInputFieldState();
+}
+
+class _SingleInputFieldState extends State<SingleInputField> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(20, 2, 8, 2),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Design.insideColor,
+        ),
+        alignment: Alignment.center,
+        child: TextField(
+          controller: widget.controller,
+          maxLines: 1,
+          decoration: InputDecoration(
+            hintText: widget.hintText,
+            border: InputBorder.none,
+          ),
+          style: const TextStyle(fontSize: 20),
+          obscureText: widget.obscureText,
+        ),
+      ),
+    );
+  }
+}
