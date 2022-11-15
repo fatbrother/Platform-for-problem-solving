@@ -2,9 +2,12 @@ import '../database.dart';
 
 // control the database of the problem with problemsModel
 class ProblemsDatabase {
-  static Future<List> queryAllProblems() async {
+  static Future<List<ProblemsModel>> queryAllProblems() async {
     try {
-      final List result = await DB.getTable('problems');
+      List<ProblemsModel> result = [];
+      for (var item in await DB.getTable('problems')) {
+        result.add(ProblemsModel.fromMap(item));
+      }
       return result;
     }
     catch (e) {
@@ -54,6 +57,8 @@ class ProblemsModel {
   String id;
   String title;
   String description;
+  String authorName;
+  String authorId;
   List<String> imgIds;
   List<int> tags;
   int baseToken;
@@ -68,6 +73,8 @@ class ProblemsModel {
     required this.id,
     required this.title,
     required this.description,
+    required this.authorName,
+    required this.authorId,
     required this.imgIds,
     required this.tags,
     required this.isSolved,
@@ -85,12 +92,14 @@ class ProblemsModel {
       title: data['title'] ?? '',
       tags: data['tags'] ?? [],
       description: data['description'] ?? '',
+      authorName: data['authorName'] ?? '',
+      authorId: data['authorId'] ?? '',
       imgIds: data['imgIds'] ?? [],
       isSolved: data['isSolved'] ?? false,
       baseToken: data['baseToken'] ?? 10,
       solveCommendIds: data['solveCommendIds'] ?? [],
       chooseSolveCommendId: data['chooseSolveCommendId'] ?? '',
-      createdAt: data['createdAt'] ?? DateTime.now(),
+      createdAt: data['createdAt'] ? DateTime.parse(data['createdAt']) : DateTime.now(),
       remainingDays: data['remainingDays'] ?? 3,
       rewardToken: data['rewardToken'] ?? 0,
     );
@@ -102,11 +111,13 @@ class ProblemsModel {
       'title': title,
       'tags': tags,
       'description': description,
+      'authorName': authorName,
+      'authorId': authorId,
       'imgIds': imgIds,
       'isSolved': isSolved,
       'baseToken': baseToken,
       'solveCommendIds': solveCommendIds,
-      'createdAt': createdAt,
+      'createdAt': createdAt.toIso8601String(),
       'remainingDays': remainingDays,
       'rewardToken': rewardToken,
     };
@@ -116,20 +127,27 @@ class ProblemsModel {
     return createdAt.add(Duration(days: remainingDays)).isBefore(DateTime.now());
   }
 
-  Map<String, int> get remainingTimeString {
+  String get existTimeString {
     final DateTime now = DateTime.now();
     final DateTime deadline = createdAt.add(Duration(days: remainingDays));
-    final Duration remainingTime = deadline.difference(now);
-    final int days = remainingTime.inDays;
-    final int hours = remainingTime.inHours - days * 24;
-    final int minutes = remainingTime.inMinutes - days * 24 * 60 - hours * 60;
+    final Duration existTime = deadline.difference(now);
+    final int days = existTime.inDays;
+    final int hours = existTime.inHours - days * 24;
+    final int minutes = existTime.inMinutes - days * 24 * 60 - hours * 60;
     final int seconds =
-        remainingTime.inSeconds - days * 24 * 60 * 60 - hours * 60 * 60 - minutes * 60;
-    return {
-      'days': days,
-      'hours': hours,
-      'minutes': minutes,
-      'seconds': seconds,
-    };
+        existTime.inSeconds - days * 24 * 60 * 60 - hours * 60 * 60 - minutes * 60;
+    
+    if (days > 0) {
+      return '$days days';
+    }
+    else if (hours > 0) {
+      return '$hours hours';
+    }
+    else if (minutes > 0) {
+      return '$minutes minutes';
+    }
+    else {
+      return '$seconds seconds';
+    }
   }
 }
