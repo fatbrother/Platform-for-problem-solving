@@ -25,7 +25,7 @@ class _StarPlateState extends State<StarPlate> {
       onTap: widget.onPressed,
       child: CircleAvatar(
         radius: widget.radius,
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: Design.insideColor,
         child: SizedBox(
           width: widget.radius * 1.9,
           height: widget.radius * 1.9,
@@ -35,17 +35,13 @@ class _StarPlateState extends State<StarPlate> {
                 Align(
                   alignment:
                       Design.angleToAlignment((pi / 2) * 3 + 2 * pi / 5 * i),
-                  child: i < widget.numOfStars
-                      ? Icon(
-                          Icons.star,
-                          size: widget.radius * 0.7,
-                          color: Design.primaryColor,
-                        )
-                      : Icon(
-                          Icons.star,
-                          size: widget.radius * 0.7,
-                          color: Design.secondaryColor,
-                        ),
+                  child: Icon(
+                    Icons.star,
+                    size: widget.radius * 0.7,
+                    color: i < widget.numOfStars
+                        ? Design.primaryColor
+                        : Design.secondaryColor,
+                  ),
                 ),
             ],
           ),
