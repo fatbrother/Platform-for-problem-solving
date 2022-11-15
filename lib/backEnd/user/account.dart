@@ -124,6 +124,22 @@ class AccountManager {
     }
   }
 
+  static Future<bool> verifyPassword(String password) async {
+    try {
+      await _auth.currentUser!.reauthenticateWithCredential(
+        EmailAuthProvider.credential(
+          email: _auth.currentUser!.email!,
+          password: password,
+        ),
+      );
+
+      return true;
+    }
+    catch (e) {
+      return false;
+    }
+  }
+
   static Future<void> resetPassword(String email) async {
     if (email.isEmpty) {
       throw Exception('Email is required');
