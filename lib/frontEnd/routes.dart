@@ -8,10 +8,10 @@ import 'package:pops/frontEnd/pages/change_password_page.dart';
 import 'package:pops/frontEnd/pages/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/general_labels_page.dart';
 import 'package:pops/frontEnd/pages/login_page.dart';
-import 'package:pops/frontEnd/pages/problem_page.dart';
+import 'package:pops/frontEnd/pages/self_problem_page.dart';
 import 'package:pops/frontEnd/pages/rating_page.dart';
 import 'package:pops/frontEnd/pages/register_page.dart';
-import 'package:pops/frontEnd/pages/single_problem_page.dart';
+import 'package:pops/frontEnd/pages/self_single_problem_page.dart';
 import 'package:pops/frontEnd/pages/system_labels_page.dart';
 // import '../backEnd/user/account.dart';
 // import pages here
@@ -23,8 +23,8 @@ class Routes {
   static const String verifyPhone = '/verifyPhone';
   static const String userTagPage = '/userTagPage';
   static const String systemTagPage = '/systemTagPage';
-  static const String problemPage = '/problemPage';
-  static const String singleProblemPage = '/singleProblemPage';
+  static const String selfProblemPage = '/selfProblemPage';
+  static const String selfSingleProblemPage = '/selfSingleProblemPage';
   static const String ratingPage = '/ratingPage';
   static const String changePasswordPage = '/changePasswordPage';
   static const String changePhoneNumberPage = '/changePhoneNumberPage';
@@ -36,7 +36,7 @@ class Routes {
     register: (context) => const RegisterPage(),
     userTagPage: (context) => const UserTagPage(),
     systemTagPage: (context) => const SystemTagPage(),
-    problemPage: (context) => const ProblemPage(),
+    selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
     ratingPage: (context) => const RatingPage(),
@@ -44,17 +44,17 @@ class Routes {
     // [route name]: (context) => const [page name](),
 
     // wideget builder for the single problem page
-    singleProblemPage: (context) {
+    selfSingleProblemPage: (context) {
       final ProblemsModel problem =
           ModalRoute.of(context)!.settings.arguments as ProblemsModel;
-      return SingleProblemPage(problem: problem);
+      return SelSinglefProblemPage(problem: problem);
     },
   };
 
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? problemPage : login;
+      AccountManager.isLoggedIn() ? selfProblemPage : login;
 
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];
