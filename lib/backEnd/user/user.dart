@@ -54,8 +54,11 @@ class UsersModel {
   String email;
   String phone;
   List<dynamic> askProblemIds;
-  List<dynamic> expertiseTagIds;
-  List<dynamic> pastExpertiseTagIds;
+  List<dynamic> pastExpertiseTags;
+  List<dynamic> expertiseTags;
+  List<dynamic> auditFailedTags;
+  List<dynamic> audittingTags;
+
   List<dynamic> chatRoomsIds;
   int tokens;
   double score;
@@ -66,9 +69,11 @@ class UsersModel {
     required this.name,
     required this.email,
     this.phone = '',
+    this.expertiseTags = const [],
+    this.pastExpertiseTags = const [],
+    this.auditFailedTags = const [],
+    this.audittingTags = const [],
     this.askProblemIds = const [],
-    this.expertiseTagIds = const [],
-    this.pastExpertiseTagIds = const [],
     this.chatRoomsIds = const [],
     this.tokens = 0,
     this.score = 0,
@@ -82,8 +87,10 @@ class UsersModel {
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
       askProblemIds: data['askProblemIds'] ?? [],
-      expertiseTagIds: data['expertiseTagIds'] ?? [],
-      pastExpertiseTagIds: data['pastExpertiseTagIds'] ?? [],
+      expertiseTags: data['expertiseTags'] ?? [],
+      pastExpertiseTags: data['pastExpertiseTags'] ?? [],
+      auditFailedTags: data['auditFailedTags'] ?? [],
+      audittingTags: data['audittingTags'] ?? [],
       chatRoomsIds: data['chatRoomsIds'] ?? [],
       tokens: data['tokens'] ?? 0,
       score: data['score'] ?? 0.0,
@@ -98,8 +105,10 @@ class UsersModel {
       'email': email,
       'phone': phone,
       'askProblemIds': askProblemIds,
-      'expertiseTagIds': expertiseTagIds,
-      'pastExpertiseTagIds': pastExpertiseTagIds,
+      'expertiseTags': expertiseTags,
+      'pastExpertiseTags': pastExpertiseTags,
+      'auditFailedTags': auditFailedTags,
+      'audittingTags': audittingTags,
       'chatRoomsIds': chatRoomsIds,
       'tokens': tokens,
       'score': score,
