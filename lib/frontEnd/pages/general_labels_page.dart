@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/tag.dart';
 
-class TagPage extends StatelessWidget {
-  const TagPage({
+class UserTagPage extends StatelessWidget {
+  const UserTagPage({
     Key? key,
   }) : super(key: key);
 
@@ -42,8 +43,8 @@ class GeneralLabelsView extends StatefulWidget {
 
 class _GeneralLabelsViewState extends State<GeneralLabelsView> {
   final TextEditingController _textController = TextEditingController();
-  final List<String> _tags = <String>[];
-  final List<String> _usedTags = <String>[];
+  final List<String> _tags = AccountManager.currentUser!.expertiseTagIds as List<String>;
+  final List<String> _usedTags = AccountManager.currentUser!.pastExpertiseTagIds as List<String>;
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +93,8 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
                       onPressed: () => setState(
                         () {
                           _tags.add(_textController.text);
+                          AccountManager.currentUser!.expertiseTagIds = _tags;
+                          AccountManager.updateCurrentUser();
                           _textController.clear();
                         },
                       ),
