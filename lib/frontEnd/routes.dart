@@ -1,6 +1,7 @@
 // When we are adding a new page, we need to add it to the routes map.
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/frontEnd/pages/change_password_page.dart';
@@ -42,19 +43,39 @@ class Routes {
     // add routes here
     // [route name]: (context) => const [page name](),
 
-
     // wideget builder for the single problem page
     singleProblemPage: (context) {
-      final ProblemsModel problem = ModalRoute.of(context)!.settings.arguments as ProblemsModel;
+      final ProblemsModel problem =
+          ModalRoute.of(context)!.settings.arguments as ProblemsModel;
       return SingleProblemPage(problem: problem);
     },
-    
   };
 
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
+  static String get homeRouteName =>
+      AccountManager.isLoggedIn() ? problemPage : login;
+
   static Widget Function(BuildContext context)? get homeRoute =>
-      AccountManager.isLoggedIn()
-          ? Routes.routes[Routes.problemPage]
-          : Routes.routes[Routes.login];
+      Routes()._routes[homeRouteName];
+
+  static void push(BuildContext context, String routeName,
+      {Object? arguments}) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      Navigator.pushNamed(context, routeName, arguments: arguments);
+    });
+  }
+
+  static void pushReplacement(BuildContext context, String routeName,
+      {Object? arguments}) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      Navigator.pushReplacementNamed(context, routeName, arguments: arguments);
+    });
+  }
+
+  static void back(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      Navigator.pop(context);
+    });
+  }
 }
