@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:pops/frontEnd/widgets/alert.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
@@ -22,9 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     if (AccountManager.isLoggedIn()) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed(Routes.home);
-      });
+      Routes.pushReplacement(context, Routes.homeRouteName);
     }
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -71,10 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       SecondaryButton(
                           onPressed: () {
-                            SchedulerBinding.instance.addPostFrameCallback((_) {
-                              Navigator.of(context)
-                                  .pushReplacementNamed(Routes.register);
-                            });
+                            Routes.pushReplacement(context, Routes.register);
                           },
                           text: 'Register'),
                       const Text('/', textScaleFactor: 1.5),
@@ -117,36 +110,30 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    if (AccountManager.isLoggedIn()) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed(Routes.home);
-      });
-    }
+    setState(() {});
   }
 
   Future<void> forgotPassword() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Alert(
-          title: 'Forgot Password',
-          content: TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              hintText: 'Enter your email',
+        return InkWell(
+          child: Alert(
+            title: 'Forgot Password',
+            content: TextField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                hintText: 'Enter your email',
+              ),
             ),
+            onPressed: () async {
+              try {
+                await AccountManager.resetPasswordBySendEmail(emailController.text);
+              } catch (e) {
+                DialogManager.showError(e, context);
+              }
+            },
           ),
-          onPressed: () async {
-            try {
-              await AccountManager.resetPassword(emailController.text);
-              emailController.clear();
-            } catch (e) {
-              DialogManager.showError(e, context);
-            }
-            if (mounted) {
-              Navigator.of(context).pop();
-            }
-          },
         );
       },
     );

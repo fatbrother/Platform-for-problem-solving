@@ -6,18 +6,17 @@ class ContractsDatabase {
     try {
       final List result = await DB.getTable('contracts');
       return result;
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   static Future<ContractsModel> queryContract(String contractId) async {
     try {
-      final Map<String, dynamic> result = await DB.getRow('contracts', contractId);
+      final Map<String, dynamic> result =
+          await DB.getRow('contracts', contractId);
       return ContractsModel.fromMap(result);
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -25,8 +24,7 @@ class ContractsDatabase {
   static void updateContract(ContractsModel contract) async {
     try {
       await DB.updateRow('contracts', contract.id, contract.toMap());
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -34,8 +32,7 @@ class ContractsDatabase {
   static void deleteContract(String contractId) async {
     try {
       await DB.deleteRow('contracts', contractId);
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -43,8 +40,7 @@ class ContractsDatabase {
   static void addContract(ContractsModel contract) async {
     try {
       await DB.addRow('contracts', contract.toMap());
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -55,12 +51,14 @@ class ContractsModel {
   String requestId;
   String solverId;
   String problemId;
+  DateTime deadline;
 
   ContractsModel({
     required this.id,
     required this.requestId,
     required this.solverId,
     required this.problemId,
+    required this.deadline,
   });
 
   factory ContractsModel.fromMap(Map<String, dynamic> map) {
@@ -69,6 +67,7 @@ class ContractsModel {
       requestId: map['requestId'],
       solverId: map['solverId'],
       problemId: map['problemId'],
+      deadline: DateTime.parse(map['deadline']),
     );
   }
 
@@ -78,6 +77,11 @@ class ContractsModel {
       'requestId': requestId,
       'solverId': solverId,
       'problemId': problemId,
+      'deadline': deadline.toIso8601String(),
     };
-  }  
+  }
+
+  bool isOverdue() {
+    return DateTime.now().isAfter(deadline);
+  }
 }

@@ -5,16 +5,10 @@ import '../database.dart';
 // for example, sign in, sign out, sign up
 class AccountManager {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static UsersModel? currentUser;
 
-  static Future<UsersModel?> get currentUser async {
-    try {
-      final User? user = _auth.currentUser;
-      return user == null
-          ? throw Exception('Not logged in')
-          : await UsersDatabase.queryUser(user.uid);
-    } catch (e) {
-      rethrow;
-    }
+  static void updateCurrentUser() async {
+    UsersDatabase.updateUser(currentUser!);
   }
 
   static Future<void> signIn(String email, String password) async {
@@ -36,6 +30,13 @@ class AccountManager {
         throw Exception('Email is not verified');
       }
 
+    } catch (e) {
+      signOut();
+      rethrow;
+    }
+
+    try {
+      currentUser = await UsersDatabase.queryUser(_auth.currentUser!.uid);
     } catch (e) {
       signOut();
       rethrow;
@@ -66,6 +67,7 @@ class AccountManager {
 
       try {
         UsersDatabase.addUser(usersModel);
+        currentUser = usersModel;
       } catch (e) {
         rethrow;
       }
@@ -76,6 +78,8 @@ class AccountManager {
 
   static Future<void> signOut() async {
     await _auth.signOut();
+
+    currentUser = null;
   }
 
   static Future<String> sendSms(String phone) async {
@@ -108,9 +112,10 @@ class AccountManager {
         smsCode: smsCode,
       ));
       try {
-        UsersModel? usersModel = await currentUser;
+        UsersModel? usersModel = currentUser;
         usersModel!.phone = _auth.currentUser!.phoneNumber!;
         UsersDatabase.updateUser(usersModel);
+        currentUser = usersModel;
       } catch (e) {
         rethrow;
       }
@@ -119,7 +124,23 @@ class AccountManager {
     }
   }
 
-  static Future<void> resetPassword(String email) async {
+  static Future<bool> verifyPassword(String password) async {
+    try {
+      await _auth.currentUser!.reauthenticateWithCredential(
+        EmailAuthProvider.credential(
+          email: _auth.currentUser!.email!,
+          password: password,
+        ),
+      );
+
+      return true;
+    }
+    catch (e) {
+      return false;
+    }
+  }
+
+  static Future<void> resetPasswordBySendEmail(String email) async {
     if (email.isEmpty) {
       throw Exception('Email is required');
     }
@@ -131,12 +152,24 @@ class AccountManager {
     }
   }
 
+  static Future<void> resetPassword(String password) async {
+    try {
+      await _auth.currentUser!.updatePassword(password);
+      currentUser = await UsersDatabase.queryUser(_auth.currentUser!.uid);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   static deleteAccount() async {
     try {
       await _auth.currentUser!.delete();
     } catch (e) {
       rethrow;
     }
+
+    signOut();
+    currentUser = null;
   }
 
   static bool isLoggedIn() {

@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
@@ -26,9 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     if (AccountManager.isLoggedIn()) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed(Routes.home);
-      });
+      Routes.pushReplacement(context, Routes.homeRouteName);
     }
 
     return GestureDetector(
@@ -122,9 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     if (verified) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacementNamed(context, Routes.home);
-      });
+      setState(() {});
     }
   }
 }

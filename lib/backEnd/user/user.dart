@@ -13,8 +13,7 @@ class UsersDatabase {
 
   static Future<UsersModel> queryUser(String userId) async {
     try {
-      final Map<String, dynamic> result = await DB.getRow('users', userId);
-      return UsersModel.fromMap(result);
+      return UsersModel.fromMap(await DB.getRow('users', userId));
     } catch (e) {
       rethrow;
     }
@@ -54,9 +53,13 @@ class UsersModel {
   String name;
   String email;
   String phone;
-  List<String> askProblemIds;
-  List<String> expertiseTagIds;
-  List<String> chatRoomsIds;
+  List<dynamic> askProblemIds;
+  List<dynamic> pastExpertiseTags;
+  List<dynamic> expertiseTags;
+  List<dynamic> auditFailedTags;
+  List<dynamic> audittingTags;
+
+  List<dynamic> chatRoomsIds;
   int tokens;
   double score;
   int numberOfScores;
@@ -66,8 +69,11 @@ class UsersModel {
     required this.name,
     required this.email,
     this.phone = '',
+    this.expertiseTags = const [],
+    this.pastExpertiseTags = const [],
+    this.auditFailedTags = const [],
+    this.audittingTags = const [],
     this.askProblemIds = const [],
-    this.expertiseTagIds = const [],
     this.chatRoomsIds = const [],
     this.tokens = 0,
     this.score = 0,
@@ -81,7 +87,10 @@ class UsersModel {
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
       askProblemIds: data['askProblemIds'] ?? [],
-      expertiseTagIds: data['expertiseTagIds'] ?? [],
+      expertiseTags: data['expertiseTags'] ?? [],
+      pastExpertiseTags: data['pastExpertiseTags'] ?? [],
+      auditFailedTags: data['auditFailedTags'] ?? [],
+      audittingTags: data['audittingTags'] ?? [],
       chatRoomsIds: data['chatRoomsIds'] ?? [],
       tokens: data['tokens'] ?? 0,
       score: data['score'] ?? 0.0,
@@ -96,7 +105,10 @@ class UsersModel {
       'email': email,
       'phone': phone,
       'askProblemIds': askProblemIds,
-      'expertiseTagIds': expertiseTagIds,
+      'expertiseTags': expertiseTags,
+      'pastExpertiseTags': pastExpertiseTags,
+      'auditFailedTags': auditFailedTags,
+      'audittingTags': audittingTags,
       'chatRoomsIds': chatRoomsIds,
       'tokens': tokens,
       'score': score,
