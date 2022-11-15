@@ -67,21 +67,22 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
             child: InkWell(
               onTap: resetPassword(),
               child: Container(
-                  //padding: EdgeInsets.fromLTRB(2, 15, 2, 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Design.insideColor,
-                  ),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    '確認修改',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        //letterSpacing: 10,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Design.primaryTextColor),
-                  )),
+                //padding: EdgeInsets.fromLTRB(2, 15, 2, 15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Design.insideColor,
+                ),
+                alignment: Alignment.center,
+                child: const Text(
+                  '確認修改',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      //letterSpacing: 10,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Design.primaryTextColor),
+                ),
+              ),
             ),
           ),
         ],
@@ -94,11 +95,29 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
     String newPassword = _newPasswordController.text;
     String newPasswordCheck = _newPasswordCheckController.text;
 
+    try {
+      AccountManager.verifyPassword(resentPassword).then((value) {
+        if (!value) {
+          DialogManager.showAlertDialog(
+            context,
+            '請輸入正確的密碼',
+          );
+          return;
+        }
+      });
+    } catch (e) {
+      DialogManager.showAlertDialog(
+        context,
+        '請輸入正確的密碼',
+      );
+      return;
+    }
+
     if (newPassword != newPasswordCheck) {
       DialogManager.showAlertDialog(context, '請確認新密碼是否正確');
     } else {
       try {
-        AccountManager.resetPassword(resentPassword, newPassword)
+        AccountManager.resetPassword(newPassword)
             .then((value) => DialogManager.showAlertDialog(context, '密碼修改成功'));
       } catch (e) {
         DialogManager.showAlertDialog(context, '密碼修改失敗');
