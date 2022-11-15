@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:pops/frontEnd/design.dart';
-import 'package:pops/frontEnd/widgets/alert.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:phonenumbers/phonenumbers.dart';
@@ -9,23 +8,21 @@ import 'package:pops/frontEnd/widgets/dialog.dart';
 
 import '../routes.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class VerifyPage extends StatefulWidget {
+  const VerifyPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<VerifyPage> createState() => _VerifyPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _VerifyPageState extends State<VerifyPage> {
   PhoneNumberEditingController phoneNumberController =
       PhoneNumberEditingController();
 
   @override
   Widget build(BuildContext context) {
     if (AccountManager.isPhoneVerified()) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacementNamed(context, Routes.home);
-      });
+      Routes.back(context);
     }
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -97,15 +94,9 @@ class _RegisterPageState extends State<RegisterPage> {
           } catch (e) {
             DialogManager.showError(e, context);
           }
-          Navigator.of(context).pop();
         },
       ),
     );
-
-    if (AccountManager.isPhoneVerified()) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacementNamed(context, Routes.home);
-      });
-    }
+    setState(() {});
   }
 }
