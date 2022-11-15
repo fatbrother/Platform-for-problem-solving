@@ -14,7 +14,7 @@ class Design {
   static const Color primaryTextColor = Colors.black;
   static const Color secondaryTextColor = Color.fromARGB(137, 11, 11, 11);
 
-  static const spacing = EdgeInsets.all(10.0);
+  static const spacing = EdgeInsets.all(20.0);
   static const outsideBorderRadius =
       BorderRadius.all(Radius.circular(20.0));
   static const insideBorderRadius =
