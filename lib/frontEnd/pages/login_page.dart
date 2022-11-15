@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             onPressed: () async {
               try {
-                await AccountManager.resetPassword(emailController.text);
+                await AccountManager.resetPasswordBySendEmail(emailController.text);
               } catch (e) {
                 DialogManager.showError(e, context);
               }

@@ -140,13 +140,21 @@ class AccountManager {
     }
   }
 
-  static Future<void> resetPassword(String email) async {
+  static Future<void> resetPasswordBySendEmail(String email) async {
     if (email.isEmpty) {
       throw Exception('Email is required');
     }
 
     try {
       await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<void> resetPassword(String password) async {
+    try {
+      await _auth.currentUser!.updatePassword(password);
     } catch (e) {
       rethrow;
     }
