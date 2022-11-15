@@ -15,7 +15,7 @@ class DialogManager {
       builder: (context) => Alert(
         title: 'Error',
         content: Text(message),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: (){},
       ),
     );
   }
@@ -26,7 +26,7 @@ class DialogManager {
       builder: (context) => Alert(
         title: title,
         content: Text(message),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: (){},  
       ),
     );
   }
@@ -51,7 +51,10 @@ class Alert extends StatelessWidget {
       content: content,
       actions: [
         TextButton(
-          onPressed: onPressed,
+          onPressed: () {
+            onPressed();
+            Navigator.of(context).pop();
+          },
           child: const Text('OK'),
         ),
       ],
