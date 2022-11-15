@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'alert.dart';
-
 class DialogManager {
   static void showError(Object e, BuildContext context) {
     String message = 'An error occurred';
@@ -30,6 +28,33 @@ class DialogManager {
         content: Text(message),
         onPressed: () => Navigator.of(context).pop(),
       ),
+    );
+  }
+}
+
+class Alert extends StatelessWidget {
+  const Alert({
+    super.key,
+    this.title = "Error",
+    required this.content,
+    required this.onPressed,
+  });
+
+  final String title;
+  final Widget content;
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: content,
+      actions: [
+        TextButton(
+          onPressed: onPressed,
+          child: const Text('OK'),
+        ),
+      ],
     );
   }
 }

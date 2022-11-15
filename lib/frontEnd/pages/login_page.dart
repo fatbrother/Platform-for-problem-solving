@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:pops/frontEnd/widgets/alert.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
@@ -23,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     if (AccountManager.isLoggedIn()) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed(Routes.home);
+        Navigator.of(context).pushReplacementNamed(Routes.problemPage);
       });
     }
     return GestureDetector(
@@ -119,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (AccountManager.isLoggedIn()) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed(Routes.home);
+        Navigator.of(context).pushReplacementNamed(Routes.problemPage);
       });
     }
   }
@@ -139,7 +138,6 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () async {
             try {
               await AccountManager.resetPassword(emailController.text);
-              emailController.clear();
             } catch (e) {
               DialogManager.showError(e, context);
             }

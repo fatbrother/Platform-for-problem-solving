@@ -27,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     if (AccountManager.isLoggedIn()) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed(Routes.home);
+        Navigator.of(context).pushReplacementNamed(Routes.problemPage);
       });
     }
 
@@ -123,7 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (verified) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacementNamed(context, Routes.home);
+        Navigator.pushReplacementNamed(context, Routes.problemPage);
       });
     }
   }
