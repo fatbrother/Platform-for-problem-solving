@@ -3,7 +3,7 @@ import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
-import 'package:pops/frontEnd/widgets/title_app_bar.dart';
+import 'package:pops/frontEnd/widgets/app_bar.dart';
 
 class ChangePasswordPage extends StatelessWidget {
   const ChangePasswordPage({
@@ -14,7 +14,7 @@ class ChangePasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Design.secondaryColor,
-      appBar: const TitleAppBar(title: '修改密碼') as PreferredSizeWidget?,
+      appBar: MyAppBar.titleAppBar(title: '修改密碼'),
       body: const ChangePasswordView(),
     );
   }
@@ -46,26 +46,26 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
             hintText: '請輸入舊密碼',
             obscureText: true,
           ),
-          const SizedBox(height: 19), //空
+          SizedBox(height: Design.getScreenHeight(context) * 0.03), //空
           //輸入新密碼
           SingleInputField(
             controller: _newPasswordController,
             hintText: '請輸入新密碼',
             obscureText: true,
           ),
-          const SizedBox(height: 19), //空
+          SizedBox(height: Design.getScreenHeight(context) * 0.03), //空
           //確認新密碼
           SingleInputField(
             controller: _newPasswordCheckController,
             hintText: '請確認新密碼',
             obscureText: true,
           ),
-          const SizedBox(height: 19), //空
+          SizedBox(height: Design.getScreenHeight(context) * 0.03), //空
           //確認修改按鈕+更改密碼
           SizedBox(
-            height: 35,
+            height: Design.getScreenHeight(context) * 0.05, //空
             child: InkWell(
-              onTap: resetPassword(),
+              onTap: resetPassword,
               child: Container(
                 //padding: EdgeInsets.fromLTRB(2, 15, 2, 15),
                 decoration: BoxDecoration(
@@ -77,10 +77,11 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   '確認修改',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      //letterSpacing: 10,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Design.primaryTextColor),
+                    //letterSpacing: 10,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Design.primaryTextColor,
+                  ),
                 ),
               ),
             ),
@@ -90,7 +91,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
     );
   }
 
-  resetPassword() {
+  void resetPassword() {
     String resentPassword = _resentPasswordController.text;
     String newPassword = _newPasswordController.text;
     String newPasswordCheck = _newPasswordCheckController.text;
