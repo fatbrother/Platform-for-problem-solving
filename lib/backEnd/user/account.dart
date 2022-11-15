@@ -155,6 +155,7 @@ class AccountManager {
   static Future<void> resetPassword(String password) async {
     try {
       await _auth.currentUser!.updatePassword(password);
+      currentUser = await UsersDatabase.queryUser(_auth.currentUser!.uid);
     } catch (e) {
       rethrow;
     }
