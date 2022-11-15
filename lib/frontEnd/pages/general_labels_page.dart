@@ -43,8 +43,8 @@ class GeneralLabelsView extends StatefulWidget {
 
 class _GeneralLabelsViewState extends State<GeneralLabelsView> {
   final TextEditingController _textController = TextEditingController();
-  final List<String> _tags = AccountManager.currentUser!.expertiseTagIds as List<String>;
-  final List<String> _usedTags = AccountManager.currentUser!.pastExpertiseTagIds as List<String>;
+  final List<String> _tags = AccountManager.currentUser!.expertiseTags.map((e) => e as String).toList();
+  final List<String> _usedTags = AccountManager.currentUser!.pastExpertiseTags.map((e) => e as String).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +93,7 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
                       onPressed: () => setState(
                         () {
                           _tags.add(_textController.text);
-                          AccountManager.currentUser!.expertiseTagIds = _tags;
+                          AccountManager.currentUser!.pastExpertiseTags = _tags;
                           AccountManager.updateCurrentUser();
                           _textController.clear();
                         },
