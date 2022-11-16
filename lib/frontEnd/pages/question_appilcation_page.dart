@@ -1,31 +1,22 @@
-// ignore_for_file: unnecessary_new
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
-
 import "package:pops/backEnd/problem/problem.dart";
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class QuestionApplicationPage extends StatelessWidget {
+  const QuestionApplicationPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const appTitle = 'Form Validation Demo';
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const BackButton(color: Colors.black), backgroundColor: Colors.transparent, elevation: 0
-        ),
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color.fromARGB(235, 217, 217, 217),
-        body: const MyCustomForm(title: 'Flutter Demo Home Page')
+    return Scaffold(
+      appBar: AppBar(
+        title: const BackButton(color: Colors.black), backgroundColor: Colors.transparent, elevation: 0
       ),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: const Color.fromARGB(235, 217, 217, 217),
+      body: const MyCustomForm(title: 'Flutter Demo Home Page')
     );
   }
 }
@@ -45,10 +36,8 @@ class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();  
   DateTime dateTime = DateTime.now();
   DateTime currentTime = DateTime.now();
-  // ignore: non_constant_identifier_names
-  TextEditingController PartialAnsController = TextEditingController();
-  // ignore: non_constant_identifier_names
-  TextEditingController PriceController = TextEditingController();
+  TextEditingController partialAnsController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +50,9 @@ class MyCustomFormState extends State<MyCustomForm> {
           children: [
             Container(
               height: 40,
-              decoration: new BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: new BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(20.0),
               ),
               padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
               margin: const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
@@ -164,7 +153,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 margin: const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
                 //height: 40,
                 child:TextFormField(
-                  controller: PartialAnsController,
+                  controller: partialAnsController,
                   textInputAction: TextInputAction.newline,
                   keyboardType: TextInputType.multiline,
                   //inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
@@ -203,7 +192,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 margin: const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
                 //height: 40,
                 child:TextFormField(
-                  controller: PriceController,
+                  controller: priceController,
                   textInputAction: TextInputAction.newline,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
