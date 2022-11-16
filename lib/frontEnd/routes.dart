@@ -8,6 +8,7 @@ import 'package:pops/frontEnd/pages/change_password_page.dart';
 import 'package:pops/frontEnd/pages/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/general_labels_page.dart';
 import 'package:pops/frontEnd/pages/login_page.dart';
+import 'package:pops/frontEnd/pages/rating_result_page.dart';
 import 'package:pops/frontEnd/pages/self_problem_page.dart';
 import 'package:pops/frontEnd/pages/rating_page.dart';
 import 'package:pops/frontEnd/pages/register_page.dart';
@@ -26,6 +27,7 @@ class Routes {
   static const String selfProblemPage = '/selfProblemPage';
   static const String selfSingleProblemPage = '/selfSingleProblemPage';
   static const String ratingPage = '/ratingPage';
+  static const String ratingResultPage = '/ratingResultPage';
   static const String changePasswordPage = '/changePasswordPage';
   static const String changePhoneNumberPage = '/changePhoneNumberPage';
   // add routes here
@@ -35,11 +37,12 @@ class Routes {
     login: (context) => const LoginPage(),
     register: (context) => const RegisterPage(),
     userTagPage: (context) => const UserTagPage(),
-    systemTagPage: (context) => const SystemTagPage(),
+    //systemTagPage: (context) => const SystemTagPage(),
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
     ratingPage: (context) => const RatingPage(),
+    ratingResultPage: (context) => const RatingResultPage(),
     // add routes here
     // [route name]: (context) => const [page name](),
 
