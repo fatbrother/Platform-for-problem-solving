@@ -43,17 +43,19 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
   }
 }
 
-class ShowSystemTagsWidget extends StatelessWidget {
-  const ShowSystemTagsWidget({
-    Key? key,
-  }) : super(key: key);
+class ShowSystemTagsWidget extends StatefulWidget {
+  const ShowSystemTagsWidget({super.key});
+
+  @override
+  State<ShowSystemTagsWidget> createState() => _ShowSystemTagsWidgetState();
+}
+
+class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
+  List<String> tags = <String>[];
 
   @override
   Widget build(BuildContext context) {
-    List<String> tags = AccountManager.currentUser?.expertiseTags
-            .map((tag) => tag as String)
-            .toList() ??
-        <String>[];
+    loadTags();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -84,16 +86,28 @@ class ShowSystemTagsWidget extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> loadTags() async {
+    var currentUser = await AccountManager.currentUser;
+    tags = currentUser.expertiseTags.map((e) => e as String).toList();
+    debugPrint('tags: $tags');
+    setState(() {});
+  }
 }
 
-class ShowSystemTableWidget extends StatelessWidget {
-  const ShowSystemTableWidget({
-    Key? key,
-  }) : super(key: key);
+class ShowSystemTableWidget extends StatefulWidget {
+  const ShowSystemTableWidget({super.key});
+
+  @override
+  State<ShowSystemTableWidget> createState() => _ShowSystemTableWidgetState();
+}
+
+class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
+  Map<String, List<String>> allTags = <String, List<String>>{};
 
   @override
   Widget build(BuildContext context) {
-    final allTags = loadAllTags();
+    loadAllTags();
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -102,77 +116,69 @@ class ShowSystemTableWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: <Widget>[
-          ShowLableColumn(title: '審核通過的標籤', children: [
-            for (final tag in allTags['showingTags']!)
+          ShowLableColumn(
+            title: '審核通過的標籤',
+            children: [
+              for (final tag in allTags['showingTags']!)
+                ShowSystemTableBoxWidget(
+                  tag: tag,
+                  leftButtonTitle: '隱藏',
+                  leftButtonOnPressed: () {},
+                  rightButtonTitle: '刪除',
+                  rightButtonOnPressed: () {},
+                ),
+              for (final tag in allTags['notShowingTags']!)
+                ShowSystemTableBoxWidget(
+                  tag: tag,
+                  leftButtonTitle: '顯示',
+                  leftButtonOnPressed: () {},
+                  rightButtonTitle: '刪除',
+                  rightButtonOnPressed: () {},
+                ),
+            ],
+          ),
+          SizedBox(height: Design.getScreenHeight(context) * 0.02),
+          ShowLableColumn(title: '審核失敗的標籤', children: [
+            //審核失敗的標籤
+            for (final tag in allTags['auditFailedTags']!)
               ShowSystemTableBoxWidget(
                 tag: tag,
-                leftButtonTitle: '隱藏',
+                leftButtonTitle: '查看',
                 leftButtonOnPressed: () {},
                 rightButtonTitle: '刪除',
                 rightButtonOnPressed: () {},
-              ),
-            for (final tag in allTags['notShowingTags']!)
-              ShowSystemTableBoxWidget(
-                tag: tag,
-                leftButtonTitle: '顯示',
-                leftButtonOnPressed: () {},
-                rightButtonTitle: '刪除',
-                rightButtonOnPressed: () {},
-              ),
+              ), //顯示所有該分類tags
           ]),
           SizedBox(height: Design.getScreenHeight(context) * 0.02),
-          ShowLableColumn(
-            title: '審核失敗的標籤',
-            children: [
-              //審核失敗的標籤
-              for (final tag in allTags['auditFailedTags']!)
-                ShowSystemTableBoxWidget(
-                  tag: tag,
-                  leftButtonTitle: '查看',
-                  leftButtonOnPressed: () {},
-                  rightButtonTitle: '刪除',
-                  rightButtonOnPressed: () {},
-                ), //顯示所有該分類tags
-            ],
-          ),
-          SizedBox(height: Design.getScreenHeight(context) * 0.02),
-          ShowLableColumn(
-            title: '審核中的標籤',
-            children: [
-              //審核中的標籤
-              for (final tag in allTags['audittingTags']!)
-                ShowSystemTableBoxWidget(
-                  tag: tag,
-                  leftButtonTitle: '查看',
-                  leftButtonOnPressed: () {},
-                  rightButtonTitle: '刪除',
-                  rightButtonOnPressed: () {},
-                ), //顯示所有該分類tags
-            ],
-          ),
+          ShowLableColumn(title: '審核中的標籤', children: [
+            //審核中的標籤
+            for (final tag in allTags['audittingTags']!)
+              ShowSystemTableBoxWidget(
+                tag: tag,
+                leftButtonTitle: '查看',
+                leftButtonOnPressed: () {},
+                rightButtonTitle: '刪除',
+                rightButtonOnPressed: () {},
+              ), //顯示所有該分類tags
+          ]),
         ],
       ),
     );
   }
 
-  Map<String, List<String>> loadAllTags() {
-    Map<String, List<String>> allTags = <String, List<String>>{};
-    allTags['audittingTags'] = AccountManager.currentUser?.audittingTags
-            .map((tag) => tag as String)
-            .toList() ??
-        <String>[];
-    allTags['auditFailedTags'] = AccountManager.currentUser?.auditFailedTags
-            .map((tag) => tag as String)
-            .toList() ?? <String>[];
-    allTags['showingTags'] = AccountManager.currentUser?.expertiseTags
-            .map((tag) => tag as String)
-            .toList() ??
-        <String>[];
-    allTags['notShowingTags'] = AccountManager.currentUser?.pastExpertiseTags
-            .map((tag) => tag as String)
-            .toList() ?? <String>[];
+  Future<void> loadAllTags() async {
+    var currentUser = await AccountManager.currentUser;
+    allTags = <String, List<String>>{};
+    allTags['audittingTags'] =
+        currentUser.audittingTags.map((tag) => tag as String).toList();
+    allTags['auditFailedTags'] =
+        currentUser.auditFailedTags.map((tag) => tag as String).toList();
+    allTags['showingTags'] =
+        currentUser.expertiseTags.map((tag) => tag as String).toList();
+    allTags['notShowingTags'] =
+        currentUser.pastExpertiseTags.map((tag) => tag as String).toList();
 
-    return allTags;
+    setState(() {});
   }
 }
 
@@ -199,19 +205,22 @@ class ShowLableColumn extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         color: const Color.fromARGB(198, 192, 220, 236),
       ),
-      child: Column(children: [
-        //標題
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 20,
-            color: Design.primaryTextColor,
+      child: Column(
+        children: [
+          //標題
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 20,
+              color: Design.primaryTextColor,
+            ),
           ),
-        ),
-        SizedBox(height: Design.getScreenHeight(context) * 0.01),
-        for (final child in children) child,
-      ]),
+          SizedBox(height: Design.getScreenHeight(context) * 0.01),
+          for (final child in children) child,
+          SizedBox(height: Design.getScreenHeight(context) * 0.01),
+        ],
+      ),
     );
   }
 }
@@ -242,9 +251,9 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: Design.getScreenHeight(context) * 0.01),
         Container(
           height: Design.getScreenHeight(context) * 0.05,
-          //padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           decoration: const BoxDecoration(
             color: Design.insideColor,
           ),
@@ -288,7 +297,7 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
             ],
           ),
         ),
-        SizedBox(height: Design.getScreenHeight(context) * 0.05), //間距
+        SizedBox(height: Design.getScreenHeight(context) * 0.01), //間距
       ],
     );
   }

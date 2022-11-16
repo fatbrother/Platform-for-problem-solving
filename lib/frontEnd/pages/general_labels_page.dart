@@ -42,12 +42,13 @@ class GeneralLabelsView extends StatefulWidget {
 }
 
 class _GeneralLabelsViewState extends State<GeneralLabelsView> {
-  final TextEditingController _textController = TextEditingController();
-  final List<String> _tags = AccountManager.currentUser!.expertiseTags.map((e) => e as String).toList();
-  final List<String> _usedTags = AccountManager.currentUser!.pastExpertiseTags.map((e) => e as String).toList();
+  TextEditingController textController = TextEditingController();
+  List<String> tags = <String>[];
+  List<String> usedTags = <String>[];
 
   @override
   Widget build(BuildContext context) {
+    loadTags();
     return Container(
       decoration: const BoxDecoration(color: Design.backgroundColor),
       padding: Design.spacing,
@@ -58,9 +59,9 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
             borderRadius: Design.outsideBorderRadius),
         child: Column(
           children: [
-            ShowCurrentTagsWidget(tags: _tags),
+            ShowCurrentTagsWidget(tags: tags),
             SizedBox(height: Design.getScreenHeight(context) * 0.02),
-            ShowUsedTagsWidget(tags: _usedTags),
+            ShowUsedTagsWidget(tags: usedTags),
             SizedBox(height: Design.getScreenHeight(context) * 0.02),
             //AddNewLabelText:59~96
             SizedBox(
@@ -75,7 +76,7 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
                     ),
                     alignment: Alignment.center,
                     child: TextField(
-                      controller: _textController,
+                      controller: textController,
                       maxLines: 1,
                       decoration: const InputDecoration(
                         hintText: '新增標籤',
@@ -92,10 +93,8 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
                       ),
                       onPressed: () => setState(
                         () {
-                          _tags.add(_textController.text);
-                          AccountManager.currentUser!.pastExpertiseTags = _tags;
-                          AccountManager.updateCurrentUser();
-                          _textController.clear();
+                          addTags(textController.text);
+                          textController.clear();
                         },
                       ),
                     ),
@@ -110,6 +109,16 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
       ),
     );
   }
+
+  Future<void> addTags(String text) async {
+    tags.add(text);
+    final currentUser = await AccountManager.currentUser;
+    currentUser.pastExpertiseTags = tags;
+    AccountManager.updateCurrentUser();
+    setState(() {});
+  }
+
+  void loadTags() {}
 }
 
 class ShowCurrentTagsWidget extends StatelessWidget {
