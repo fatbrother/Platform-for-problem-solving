@@ -8,7 +8,9 @@ import 'package:pops/frontEnd/pages/change_password_page.dart';
 import 'package:pops/frontEnd/pages/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/general_labels_page.dart';
 import 'package:pops/frontEnd/pages/login_page.dart';
-import 'package:pops/frontEnd/pages/rating_result_page.dart';
+import 'package:pops/frontEnd/pages/report_page.dart';
+import 'package:pops/frontEnd/pages/report_fail_page.dart';
+import 'package:pops/frontEnd/pages/report_success_page.dart';
 import 'package:pops/frontEnd/pages/self_problem_page.dart';
 import 'package:pops/frontEnd/pages/rating_page.dart';
 import 'package:pops/frontEnd/pages/register_page.dart';
@@ -27,9 +29,11 @@ class Routes {
   static const String selfProblemPage = '/selfProblemPage';
   static const String selfSingleProblemPage = '/selfSingleProblemPage';
   static const String ratingPage = '/ratingPage';
-  static const String ratingResultPage = '/ratingResultPage';
+  static const String reportPage = '/reportPage';
   static const String changePasswordPage = '/changePasswordPage';
   static const String changePhoneNumberPage = '/changePhoneNumberPage';
+  static const String reportSuccessPage = '/reportSuccessPage';
+  static const String reportFailPage = '/reportFailPage';
   // add routes here
   // static const String [route name] = '/[route name]';
 
@@ -42,7 +46,9 @@ class Routes {
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
     ratingPage: (context) => const RatingPage(),
-    ratingResultPage: (context) => const RatingResultPage(),
+    reportPage: (context) => const ReportPage(),
+    reportSuccessPage: (context) => const ReportSuccessPage(),
+    reportFailPage: (context) => const ReportFailPage(),
     // add routes here
     // [route name]: (context) => const [page name](),
 
