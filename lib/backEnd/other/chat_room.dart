@@ -49,7 +49,10 @@ class ChatRoomModel
 {
   String id;
   List<String> memberIds;
-  List<String> messages;
+  // store messeages with user id and message
+  // use messeaage[id] to get user's id
+  // use messeaage[message] to get user's message
+  List<Map<String, String>> messages;
 
   ChatRoomModel({
     required this.id,
@@ -69,7 +72,7 @@ class ChatRoomModel
     return ChatRoomModel(
       id: map['id'],
       memberIds: List<String>.from(map['memberIds']),
-      messages: List<String>.from(map['messages']),
+      messages: List<Map<String, String>>.from(map['messages']),
     );
   }
 }
