@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
-import 'package:pops/frontEnd/widgets/app_bar.dart';
 
 class RatePage extends StatefulWidget {
   const RatePage({super.key});
@@ -14,64 +13,85 @@ class _RatePageState extends State<RatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar.titleAppBar(title: 'Rate'),
-      backgroundColor: Design.secondaryColor,
+      backgroundColor: Design.backgroundColor,
       body: Column(
         children: [
-          SizedBox(height: Design.getScreenHeight(context) * 0.02),
+          SizedBox(height: Design.getScreenHeight(context) * 0.06),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              LittleSwitch(
-                isOn: starNum == 6,
-                onChanged: () {
-                  setState(() {
-                    starNum = 6;
-                  });
-                },
-                children: [
-                  Text('全部',
-                      style: TextStyle(
-                          color: starNum == 6
-                              ? Colors.white
-                              : Design.primaryTextColor))
-                ],
+              IconButton(
+                onPressed: () => {},
+                icon: const Icon(Icons.arrow_back),
+                iconSize: 35,
               ),
-              for (int i = 5; i > 0; i--)
-                LittleSwitch(
-                  isOn: i == starNum,
-                  onChanged: () {
-                    setState(() {
-                      starNum = i;
-                    });
-                  },
-                  children: [
-                    Text('$i',
-                        style: TextStyle(
-                          color: i == starNum
-                              ? Colors.white
-                              : Design.primaryTextColor,
-                        )),
-                    Icon(Icons.star_border_rounded,
-                        color: i == starNum
-                            ? Colors.white
-                            : Design.primaryTextColor),
-                  ],
-                ),
             ],
           ),
-          SizedBox(height: Design.getScreenHeight(context) * 0.02),
-          SizedBox(
-            height: Design.getScreenHeight(context) * 0.792,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  for (final star in starList)
-                    if (star == starNum || starNum == 6) RateBox(rateNum: star),
-                ],
-              ),
+          Container(
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+            decoration: const BoxDecoration(
+              color: Design.secondaryColor,
+              borderRadius: Design.insideBorderRadius,
             ),
-          ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    LittleSwitch(
+                      isOn: starNum == 6,
+                      onChanged: () {
+                        setState(() {
+                          starNum = 6;
+                        });
+                      },
+                      children: [
+                        Text('全部',
+                            style: TextStyle(
+                                color: starNum == 6
+                                    ? Colors.white
+                                    : Design.primaryTextColor))
+                      ],
+                    ),
+                    for (int i = 5; i > 0; i--)
+                      LittleSwitch(
+                        isOn: i == starNum,
+                        onChanged: () {
+                          setState(() {
+                            starNum = i;
+                          });
+                        },
+                        children: [
+                          Text('$i',
+                              style: TextStyle(
+                                color: i == starNum
+                                    ? Colors.white
+                                    : Design.primaryTextColor,
+                              )),
+                          Icon(Icons.star_border_rounded,
+                              color: i == starNum
+                                  ? Colors.white
+                                  : Design.primaryTextColor),
+                        ],
+                      ),
+                  ],
+                ),
+                SizedBox(height: Design.getScreenHeight(context) * 0.02),
+                SizedBox(
+                  height: Design.getScreenHeight(context) * 0.77,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        for (final star in starList)
+                          if (star == starNum || starNum == 6)
+                            RateBox(rateNum: star),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -89,11 +109,11 @@ class RateBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: Design.spacing,
-      margin: Design.spacing,
+      padding: const EdgeInsets.all(15),
+      margin: const EdgeInsets.all(10),
       decoration: const BoxDecoration(
         borderRadius: Design.outsideBorderRadius,
-        color: Colors.white,
+        color: Design.insideColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
