@@ -7,13 +7,17 @@ import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/frontEnd/pages/change_password_page.dart';
 import 'package:pops/frontEnd/pages/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/general_labels_page.dart';
+import 'package:pops/frontEnd/pages/identification_page.dart';
 import 'package:pops/frontEnd/pages/login_page.dart';
 import 'package:pops/frontEnd/pages/rating_result_page.dart';
+import 'package:pops/frontEnd/pages/report_fail_page.dart';
+import 'package:pops/frontEnd/pages/report_page.dart';
+import 'package:pops/frontEnd/pages/report_success_page.dart';
 import 'package:pops/frontEnd/pages/self_problem_page.dart';
 import 'package:pops/frontEnd/pages/rating_page.dart';
 import 'package:pops/frontEnd/pages/register_page.dart';
 import 'package:pops/frontEnd/pages/self_single_problem_page.dart';
-import 'package:pops/frontEnd/pages/system_labels_page.dart';
+import 'package:pops/frontEnd/pages/top_up_page.dart';
 // import '../backEnd/user/account.dart';
 // import pages here
 // import 'pages/[page file name].dart';
@@ -22,14 +26,22 @@ class Routes {
   static const String login = '/login';
   static const String register = '/register';
   static const String verifyPhone = '/verifyPhone';
-  static const String userTagPage = '/userTagPage';
-  static const String systemTagPage = '/systemTagPage';
+  static const String topUp = '/topUp';
+
   static const String selfProblemPage = '/selfProblemPage';
   static const String selfSingleProblemPage = '/selfSingleProblemPage';
-  static const String ratingPage = '/ratingPage';
-  static const String ratingResultPage = '/ratingResultPage';
+  static const String identificationPage = '/identificationPage';
+
+  static const String userTagPage = '/userTagPage';
+  static const String systemTagPage = '/systemTagPage';
   static const String changePasswordPage = '/changePasswordPage';
   static const String changePhoneNumberPage = '/changePhoneNumberPage';
+
+  static const String ratingPage = '/ratingPage';
+  static const String ratingResultPage = '/ratingResultPage';
+  static const String reportFailPage = '/reportFailPage';
+  static const String reportPage = '/reportPage';
+  static const String reportSuccessPage = '/reportSuccessPage';
   // add routes here
   // static const String [route name] = '/[route name]';
 
@@ -37,12 +49,16 @@ class Routes {
     login: (context) => const LoginPage(),
     register: (context) => const RegisterPage(),
     userTagPage: (context) => const UserTagPage(),
-    //systemTagPage: (context) => const SystemTagPage(),
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
     ratingPage: (context) => const RatingPage(),
     ratingResultPage: (context) => const RatingResultPage(),
+    identificationPage: (context) => const IdentificationPage(),
+    reportFailPage: (context) => const ReportFailPage(),
+    topUp: (context) => const TopUpPage(),
+    reportPage: (context) => const ReportPage(),
+    reportSuccessPage: (context) => const ReportSuccessPage(),
     // add routes here
     // [route name]: (context) => const [page name](),
 
@@ -57,7 +73,7 @@ class Routes {
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? selfProblemPage : login;
+      AccountManager.isLoggedIn() ? systemTagPage : login;
 
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];
