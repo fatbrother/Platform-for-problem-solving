@@ -207,14 +207,7 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
               color:Color.fromARGB(255, 255, 0, 0), size: 15,),
               onPressed: (){
                 setState(() {
-                //tags[count]加到usedTags，從tags中刪除
-                  print(which);
-                  print(tags[which]);
-                  print("從tags被轉移到usedTags");
-                  removeTagsToUsed(which);
-                  print(which);
-                  print("現在是");
-                  print(tags[which]);
+                  removeTagsToUsed(which);;
                 });
               },
             ),
@@ -236,7 +229,6 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
               color:Color.fromARGB(255, 0, 0, 0), size: 15,),
               onPressed: (){
                 setState(() {
-                //usedTags[count]加到tags，從usedTags中刪除
                   removeUsedTagsToTags(which);
                 });
               },
