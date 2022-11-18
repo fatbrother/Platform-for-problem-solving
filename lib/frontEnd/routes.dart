@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/frontEnd/pages/audit_failed_tags_page.dart';
 import 'package:pops/frontEnd/pages/change_password_page.dart';
 import 'package:pops/frontEnd/pages/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/general_labels_page.dart';
@@ -17,6 +18,7 @@ import 'package:pops/frontEnd/pages/self_problem_page.dart';
 import 'package:pops/frontEnd/pages/rating_page.dart';
 import 'package:pops/frontEnd/pages/register_page.dart';
 import 'package:pops/frontEnd/pages/self_single_problem_page.dart';
+import 'package:pops/frontEnd/pages/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/top_up_page.dart';
 // import '../backEnd/user/account.dart';
 // import pages here
@@ -36,6 +38,7 @@ class Routes {
   static const String systemTagPage = '/systemTagPage';
   static const String changePasswordPage = '/changePasswordPage';
   static const String changePhoneNumberPage = '/changePhoneNumberPage';
+  static const String auditFailedTagsPage = '/auditFailedTagsPage';
 
   static const String ratingPage = '/ratingPage';
   static const String ratingResultPage = '/ratingResultPage';
@@ -49,6 +52,8 @@ class Routes {
     login: (context) => const LoginPage(),
     register: (context) => const RegisterPage(),
     userTagPage: (context) => const UserTagPage(),
+    systemTagPage: (context) => const SystemTagPage(),
+    auditFailedTagsPage: (context) => const AuditFailedTagsPage(),
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),

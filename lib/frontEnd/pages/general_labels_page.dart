@@ -45,7 +45,7 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
   TextEditingController textController = TextEditingController();
   List<String> tags = <String>[];
   List<String> usedTags = <String>[];
-
+  bool editing = false;  int count = 0;
   @override
   Widget build(BuildContext context) {
     loadTags();
@@ -59,11 +59,96 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
             borderRadius: Design.outsideBorderRadius),
         child: Column(
           children: [
-            ShowCurrentTagsWidget(tags: tags),
+            //ShowCurrentTags
+            Stack(
+              children: [
+                Container(
+                  padding: Design.spacing,
+                  decoration: const BoxDecoration(
+                      borderRadius: Design.outsideBorderRadius,
+                      color: Design.insideColor 
+                      ),
+                  width: double.infinity,
+                  constraints: BoxConstraints(
+                    minHeight: Design.getScreenHeight(context) * 0.1,
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        '目前顯示的專業標籤',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(height: Design.getScreenHeight(context) * 0.02),
+                      Wrap(
+                        spacing: Design.getScreenHeight(context) * 0.01,
+                        runSpacing: Design.getScreenHeight(context) * 0.01,
+                        direction: Axis.horizontal,
+                        children: [
+                          if(!editing)
+                            for (final tag in tags) ShowTagsWidget(title: tag),
+                          if(editing)
+                            for (count = 0; count<tags.length; count++) showEditTags(count),
+                        ],
+                      ),
+                      SizedBox(height: Design.getScreenHeight(context) * 0.01),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 2, 0),
+                  alignment: const Alignment(1, 0),
+                  child:  IconButton(
+                      icon: const Icon(Icons.edit),
+                      //color: const Color.fromARGB(255, 0, 0, 0),
+                      onPressed: (){
+                        setState(() {
+                          editing = !editing;
+                          //print(editing);
+                        });
+                      },
+                    ),
+                ),
+              ],
+            ),
             SizedBox(height: Design.getScreenHeight(context) * 0.02),
-            ShowUsedTagsWidget(tags: usedTags),
+            //ShowUsedTagsWidget(tags: usedTags),
+            Stack(
+              children: [
+                Container(
+                  padding: Design.spacing,
+                  decoration: const BoxDecoration(
+                      borderRadius: Design.outsideBorderRadius,
+                      color: Design.insideColor 
+                      ),
+                  width: double.infinity,
+                  constraints: BoxConstraints(
+                    minHeight: Design.getScreenHeight(context) * 0.1,
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        '曾經顯示的專業標籤',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(height: Design.getScreenHeight(context) * 0.02),
+                      Wrap(
+                        spacing: Design.getScreenHeight(context) * 0.01,
+                        runSpacing: Design.getScreenHeight(context) * 0.01,
+                        direction: Axis.horizontal,
+                        children: [
+                            for (count = 0; count<usedTags.length; count++) showUsedTags(count),
+                        ],
+                      ),
+                      SizedBox(height: Design.getScreenHeight(context) * 0.01),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             SizedBox(height: Design.getScreenHeight(context) * 0.02),
-            //AddNewLabelText:59~96
+            //AddNewLabelText
             SizedBox(
               height: 50,
               child: Stack(
@@ -109,104 +194,83 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
       ),
     );
   }
+  Widget showEditTags(int which)
+  {
+    return Stack(
+      children: [
+        ShowTagsWidget(title: tags[which]),
+        Positioned(
+          top: -22.0, right: -20.0,
+           child: IconButton(
+              alignment: Alignment.center,
+              icon: const Icon(Icons.highlight_off, 
+              color:Color.fromARGB(255, 255, 0, 0), size: 15,),
+              onPressed: (){
+                setState(() {
+                  removeTagsToUsed(which);;
+                });
+              },
+            ),
+        ),
+      ],
+    );
+  }
+
+  Widget showUsedTags(int which)
+  {
+    return Stack(
+      children: [
+        ShowTagsWidget(title: usedTags[which]),
+        Positioned(
+          top: -22.0, right: -20.0,
+           child: IconButton(
+              alignment: Alignment.center,
+              icon: const Icon(Icons.add_circle_outline, 
+              color:Color.fromARGB(255, 0, 0, 0), size: 15,),
+              onPressed: (){
+                setState(() {
+                  removeUsedTagsToTags(which);
+                });
+              },
+            ),
+        ),
+      ],
+    );
+  }
 
   Future<void> addTags(String text) async {
     tags.add(text);
     final currentUser = await AccountManager.currentUser;
-    currentUser.pastExpertiseTags = tags;
+    //currentUser.pastExpertiseTags = tags;
+    currentUser.pastExpertiseTags = usedTags;
+    currentUser.expertiseTags = tags;//
+    AccountManager.updateCurrentUser();
+    setState(() {});
+  }
+
+  Future<void> removeTagsToUsed(int which) async {
+    usedTags.add(tags[which]);
+    tags.removeAt(which);
+    final currentUser = await AccountManager.currentUser;
+    //currentUser.pastExpertiseTags = tags;
+    currentUser.pastExpertiseTags = usedTags;
+    currentUser.expertiseTags = tags;//
+    AccountManager.updateCurrentUser();
+    setState(() {});
+  }
+
+  Future<void> removeUsedTagsToTags(int which) async {
+    tags.add(usedTags[which]);
+    usedTags.removeAt(which);
+    final currentUser = await AccountManager.currentUser;
+    currentUser.pastExpertiseTags = usedTags;
+    currentUser.expertiseTags = tags;
     AccountManager.updateCurrentUser();
     setState(() {});
   }
 
   void loadTags() {}
 }
-
-class ShowCurrentTagsWidget extends StatelessWidget {
-  final List<String> tags;
-  const ShowCurrentTagsWidget({
-    Key? key,
-    required this.tags,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: Design.spacing,
-      decoration: const BoxDecoration(
-          borderRadius: Design.outsideBorderRadius,
-          color: Design.insideColor //color沒放在decoration裡的話會overflow
-          ),
-      width: double.infinity,
-      constraints: BoxConstraints(
-        minHeight: Design.getScreenHeight(context) * 0.1,
-      ),
-      child: Column(
-        children: [
-          const Text(
-            '目前顯示的專業標籤',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
-          ),
-          SizedBox(height: Design.getScreenHeight(context) * 0.02),
-          Wrap(
-            spacing: Design.getScreenHeight(context) * 0.01,
-            runSpacing: Design.getScreenHeight(context) * 0.01,
-            direction: Axis.horizontal,
-            children: [
-              for (final tag in tags) ShowTagsWidget(title: tag),
-            ],
-          ),
-          SizedBox(height: Design.getScreenHeight(context) * 0.01),
-        ],
-      ),
-    );
-  }
-}
-
-class ShowUsedTagsWidget extends StatelessWidget {
-  final List<String> tags;
-
-  const ShowUsedTagsWidget({super.key, required this.tags});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: Design.spacing,
-      decoration: const BoxDecoration(
-        borderRadius: Design.outsideBorderRadius,
-        color: Design.insideColor, //color沒放在decoration裡的話會overflow
-      ),
-      constraints:
-          BoxConstraints(minHeight: Design.getScreenHeight(context) * 0.1),
-      width: double.infinity,
-      child: Column(children: [
-        const Text(
-          '曾使用過的專業標籤',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
-        ),
-        SizedBox(
-          height: Design.getScreenHeight(context) * 0.02,
-        ),
-        SizedBox(
-          child: Wrap(
-            spacing: Design.getScreenHeight(context) * 0.01,
-            runSpacing: Design.getScreenHeight(context) * 0.01,
-            direction: Axis.vertical,
-            children: [
-              for (final tag in tags) ShowTagsWidget(title: tag),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: Design.getScreenHeight(context) * 0.01,
-        ),
-      ]),
-    );
-  }
-}
-
-//24.2, 18
-//const Color.fromARGB(255, 240, 235, 116),系統認證標籤顏色
 
 //說明頁面按鈕
 class InstructionsWiget extends StatelessWidget {
