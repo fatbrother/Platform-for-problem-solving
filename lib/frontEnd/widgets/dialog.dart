@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pops/frontEnd/design.dart';
 
 class DialogManager {
   static void showError(Object e, BuildContext context) {
@@ -16,7 +17,7 @@ class DialogManager {
         title: 'Error',
         content: Text(message),
         onPressed: () {
-          Navigator.of(context).pop();  // Close the dialog
+          Navigator.of(context).pop(); // Close the dialog
         },
       ),
     );
@@ -38,19 +39,18 @@ class DialogManager {
   static void showAlertDialog(BuildContext context, String message) {
     AlertDialog dialog = AlertDialog(
       actionsPadding: const EdgeInsets.symmetric(horizontal: 0.0),
-      //title: const Text("Confirm Dialog"),
       content: Text(
         message,
         textAlign: TextAlign.center,
       ),
       actions: <Widget>[
         SizedBox(
-          width: 600,
-          height: 40,
+          width: Design.getScreenWidth(context) * 0.8,
+          height: Design.getScreenHeight(context) * 0.05,
           child: TextButton(
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(198, 192, 220, 236)),
+                    Design.secondaryColor), // background color
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(

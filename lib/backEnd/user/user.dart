@@ -58,6 +58,7 @@ class UsersModel {
   List<dynamic> expertiseTags;
   List<dynamic> auditFailedTags;
   List<dynamic> audittingTags;
+
   List<dynamic> chatRoomsIds;
   int tokens;
   double score;
