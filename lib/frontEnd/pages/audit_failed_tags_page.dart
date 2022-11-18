@@ -6,8 +6,8 @@ import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 
-class IdentificationPage extends StatelessWidget {
-  const IdentificationPage({
+class  AuditFailedTagsPage extends StatelessWidget {
+  const  AuditFailedTagsPage({
     Key? key,
   }) : super(key: key);
 
