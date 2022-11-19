@@ -14,6 +14,9 @@ class Design {
   static const Color primaryTextColor = Colors.black;
   static const Color secondaryTextColor = Color.fromARGB(137, 11, 11, 11);
 
+  static const Color generalTagColor = Color.fromARGB(255, 208, 171, 204);
+  static const Color systemTagColor = Color.fromARGB(255, 240, 235, 116);
+
   static const spacing = EdgeInsets.all(20.0);
   static const outsideBorderRadius =
       BorderRadius.all(Radius.circular(20.0));

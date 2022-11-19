@@ -79,7 +79,7 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
               runSpacing: 5,
               direction: Axis.horizontal,
               children: [
-                for (final tag in tags) ShowTagsWidget(title: tag),
+                for (final tag in tags) ShowTagsWidget(title: tag, isGeneral: false,),
               ]),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
         ],

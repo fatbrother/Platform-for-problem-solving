@@ -30,6 +30,7 @@ class AuditFailedTagsView extends StatefulWidget {
 
 class _AuditFailedTagsViewState extends State<AuditFailedTagsView> {
   final String _auditFailedTag = '2020/07/09';//提交日期
+  //audittingTags[?]<--本身是提交日期，內含失敗的詳細情形內容?
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class _AuditFailedTagsViewState extends State<AuditFailedTagsView> {
         children: <Widget>[
           DateWidget(tag:_auditFailedTag),
           SizedBox(height: Design.getScreenHeight(context) * 0.03),
-          //Detailsidget(tag:_auditFailedTag),
+          Detailsidget(tag:_auditFailedTag),
           SizedBox(height: Design.getScreenHeight(context) * 0.03),
           
         ],
@@ -63,38 +64,85 @@ class DateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: Design.getScreenHeight(context) * 0.08,
+      height: Design.getScreenHeight(context) * 0.1,
       child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10,),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Design.insideColor,
         ),
-        alignment: Alignment.center,
         child: Column(
           children: [
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Design.primaryColor,
+                color: Design.secondaryColor,
               ),
               child: Row(
-                children: [
-                  const Text(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
                   "審核失敗",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 20,
                       color: Design.primaryTextColor),
                   ),
-                  const Icon(Icons.error_outline,),
+                  Icon(Icons.error_outline,),
                 ],  
               ),
             ),
+            SizedBox(height: Design.getScreenHeight(context) * 0.008),
             Text(
               "$tag提交",
               textAlign: TextAlign.center,
               style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
+                  color: Design.primaryTextColor),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//列出此審核失敗的標籤詳細資訊
+class Detailsidget extends StatelessWidget {
+  final String tag;
+  const Detailsidget({super.key, required this.tag});
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10,),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Design.insideColor,
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Design.secondaryColor,
+              ),
+              child: 
+                const Text(
+                 "詳細情形",
+                 textAlign: TextAlign.center,
+                 style: TextStyle(
+                     fontSize: 20,
+                     color: Design.primaryTextColor),
+                 ),
+            ),
+            SizedBox(height: Design.getScreenHeight(context) * 0.008),
+            Text(
+              "aaaaaaaaaaaaaaaaaaaaaa內容aaaaaaaaaaaaaaaaaa",
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  fontSize: 18,
                   color: Design.primaryTextColor),
             ),
           ],
