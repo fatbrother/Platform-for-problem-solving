@@ -52,7 +52,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
           label: 'user',
         ),
       ],
-      currentIndex: 0,
+      currentIndex: widget.currentIndex,
       selectedItemColor: Design.primaryColor,
       unselectedItemColor: Colors.black54,
       onTap: widget.onTap,

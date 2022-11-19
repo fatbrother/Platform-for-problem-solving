@@ -14,7 +14,7 @@ class MyAppBar extends StatelessWidget {
             IconButton(
               onPressed: () => {},
               icon: const Icon(Icons.arrow_back),
-              iconSize: 35,
+              iconSize: Design.getScreenHeight(context) * 0.04,
             ),
           ],
         ),
