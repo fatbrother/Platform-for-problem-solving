@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/frontEnd/design.dart';
-import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
+import 'package:pops/frontEnd/widgets/scaffold.dart';
 import 'package:pops/frontEnd/widgets/tag.dart';
 
 class SystemTagPage extends StatelessWidget {
@@ -12,9 +12,11 @@ class SystemTagPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color.fromARGB(198, 192, 220, 236),
-      body: SystemLabelsView(),
+    return MyScaffold(
+      body: const SystemLabelsView(),
+      onTap: (int index) {},
+      backgroundColor: Design.secondaryColor,
+      currentIndex: 0,
     );
   }
 }
@@ -33,7 +35,6 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
       padding: Design.spacing,
       child: Column(
         children: <Widget>[
-          const MyAppBar(),
           const ShowSystemTagsWidget(),
           SizedBox(height: Design.getScreenHeight(context) * 0.03),
           const ShowSystemTableWidget(),
@@ -52,10 +53,13 @@ class ShowSystemTagsWidget extends StatefulWidget {
 
 class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
   List<String> tags = <String>[];
+  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
-    loadTags();
+    if (isLoading) {
+      loadTags();
+    }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -79,7 +83,11 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
               runSpacing: 5,
               direction: Axis.horizontal,
               children: [
-                for (final tag in tags) ShowTagsWidget(title: tag, isGeneral: false,),
+                for (final tag in tags)
+                  ShowTagsWidget(
+                    title: tag,
+                    isGeneral: false,
+                  ),
               ]),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
         ],
@@ -91,7 +99,9 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
     var currentUser = await AccountManager.currentUser;
     tags = currentUser.expertiseTags.map((e) => e as String).toList();
     debugPrint('tags: $tags');
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 }
 
@@ -104,10 +114,13 @@ class ShowSystemTableWidget extends StatefulWidget {
 
 class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
   Map<String, List<String>> allTags = <String, List<String>>{};
+  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
-    loadAllTags();
+    if (isLoading) {
+      loadAllTags();
+    }
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -178,7 +191,9 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
     allTags['notShowingTags'] =
         currentUser.pastExpertiseTags.map((tag) => tag as String).toList();
 
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 }
 
