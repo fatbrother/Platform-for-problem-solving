@@ -207,7 +207,7 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
               color:Color.fromARGB(255, 255, 0, 0), size: 15,),
               onPressed: (){
                 setState(() {
-                  removeTagsToUsed(which);;
+                  removeTagsToUsed(which);
                 });
               },
             ),
