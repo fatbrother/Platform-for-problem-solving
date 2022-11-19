@@ -15,7 +15,6 @@ class IdentificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Design.secondaryColor,
-      appBar: MyAppBar.titleAppBar(title: '驗證身分'),
       body: const IdentificationView(),
     );
   }
@@ -39,6 +38,7 @@ class _IdentificationViewState extends State<IdentificationView> {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 35),
       child: Column(
         children: <Widget>[
+          const MyAppBar(),
           PhoneNumberWidget(phoneNumber: _phoneNumber == "" ? "未設定" : _phoneNumber),
           SizedBox(height: Design.getScreenHeight(context) * 0.03),
           PersonalStateWidget(personalState: _personalState),

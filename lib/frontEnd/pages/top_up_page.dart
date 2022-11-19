@@ -11,10 +11,9 @@ class TopUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Design.secondaryColor,
-      appBar: MyAppBar.titleAppBar(title: '儲值'),
-      body: const TopUpView(),
+      body: TopUpView(),
     );
   }
 }
@@ -50,6 +49,7 @@ class _TopUpView extends State<TopUpView> {
       padding: Design.spacing,
       child: Column(
         children: <Widget>[
+          const MyAppBar(),
           //輸入儲值金額
           SizedBox(
             child: Container(

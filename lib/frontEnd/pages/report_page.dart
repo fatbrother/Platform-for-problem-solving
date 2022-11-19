@@ -19,7 +19,6 @@ class _ReportPageState extends State<ReportPage> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: MyAppBar.titleAppBar(title: "檢舉原因"),
         backgroundColor: Design.backgroundColor,
         body: Container(
           margin: Design.spacing,
@@ -27,6 +26,7 @@ class _ReportPageState extends State<ReportPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                const MyAppBar(),
                 const Text(
                   '請提出檢舉原因',
                   style: TextStyle(

@@ -12,10 +12,9 @@ class SystemTagPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(198, 192, 220, 236),
-      appBar: MyAppBar.titleAppBar(title: '系統標籤'),
-      body: const SystemLabelsView(),
+    return const Scaffold(
+      backgroundColor: Color.fromARGB(198, 192, 220, 236),
+      body: SystemLabelsView(),
     );
   }
 }
@@ -34,6 +33,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
       padding: Design.spacing,
       child: Column(
         children: <Widget>[
+          const MyAppBar(),
           const ShowSystemTagsWidget(),
           SizedBox(height: Design.getScreenHeight(context) * 0.03),
           const ShowSystemTableWidget(),

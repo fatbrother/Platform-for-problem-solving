@@ -18,13 +18,13 @@ class _ReportFailPageState extends State<ReportFailPage> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: MyAppBar.titleAppBar(title: "檢舉失敗"),
         backgroundColor: Design.backgroundColor,
         body: Container(
           margin: Design.spacing,
           child: SingleChildScrollView(
             child: Column(
               children: [
+                const MyAppBar(),
                 const Text(
                   '檢舉失敗',
                   style: TextStyle(

@@ -14,7 +14,6 @@ class ChangePasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Design.secondaryColor,
-      appBar: MyAppBar.titleAppBar(title: '修改密碼'),
       body: const ChangePasswordView(),
     );
   }
@@ -40,6 +39,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 35),
       child: Column(
         children: <Widget>[
+          const MyAppBar(),
           //輸入舊密碼
           SingleInputField(
             controller: _resentPasswordController,
