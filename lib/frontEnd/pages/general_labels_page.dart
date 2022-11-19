@@ -86,7 +86,7 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
                         direction: Axis.horizontal,
                         children: [
                           if(!editing)
-                            for (final tag in tags) ShowTagsWidget(title: tag),
+                            for (final tag in tags) ShowTagsWidget(title: tag, isGeneral: true,),
                           if(editing)
                             for (count = 0; count<tags.length; count++) showEditTags(count),
                         ],
@@ -198,7 +198,7 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
   {
     return Stack(
       children: [
-        ShowTagsWidget(title: tags[which]),
+        ShowTagsWidget(title: tags[which], isGeneral: true,),
         Positioned(
           top: -22.0, right: -20.0,
            child: IconButton(
@@ -220,7 +220,7 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
   {
     return Stack(
       children: [
-        ShowTagsWidget(title: usedTags[which]),
+        ShowTagsWidget(title: usedTags[which], isGeneral: true,),
         Positioned(
           top: -22.0, right: -20.0,
            child: IconButton(
