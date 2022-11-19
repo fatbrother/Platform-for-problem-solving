@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
-  const MyBottomNavigationBar({super.key});
+  const MyBottomNavigationBar({
+    super.key,
+    required this.onTap,
+    required this.currentIndex,
+  });
+
+  final void Function(int) onTap;
+  final int currentIndex;
 
   @override
   State<MyBottomNavigationBar> createState() => _MyBottomNavigationBarState();
@@ -48,11 +55,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       currentIndex: 0,
       selectedItemColor: Design.primaryColor,
       unselectedItemColor: Colors.black54,
-      onTap: (int index) {
-        setState(() {
-          // _selectedIndex = index;
-        });
-      },
+      onTap: widget.onTap,
     );
   }
 }
