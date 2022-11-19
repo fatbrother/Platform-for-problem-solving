@@ -30,6 +30,7 @@ class AuditFailedTagsView extends StatefulWidget {
 
 class _AuditFailedTagsViewState extends State<AuditFailedTagsView> {
   final String _auditFailedTag = '2020/07/09';//提交日期
+  //audittingTags[?]<--本身是提交日期，內含失敗的詳細情形內容?
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +139,7 @@ class Detailsidget extends StatelessWidget {
             ),
             SizedBox(height: Design.getScreenHeight(context) * 0.008),
             Text(
-              "$tag:asdfasdgsadgasdgasdgsdgasdgasdgsdaasdasdasdasd",
+              "aaaaaaaaaaaaaaaaaaaaaa內容aaaaaaaaaaaaaaaaaa",
               textAlign: TextAlign.center,
               style: const TextStyle(
                   fontSize: 18,
