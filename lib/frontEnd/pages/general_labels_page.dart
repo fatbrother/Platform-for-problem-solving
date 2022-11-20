@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/tag.dart';
 
@@ -45,7 +46,8 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
   TextEditingController textController = TextEditingController();
   List<String> tags = <String>[];
   List<String> usedTags = <String>[];
-  bool editing = false;  int count = 0;
+  bool editing = false;
+  int count = 0;
   @override
   Widget build(BuildContext context) {
     loadTags();
@@ -66,8 +68,7 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
                   padding: Design.spacing,
                   decoration: const BoxDecoration(
                       borderRadius: Design.outsideBorderRadius,
-                      color: Design.insideColor 
-                      ),
+                      color: Design.insideColor),
                   width: double.infinity,
                   constraints: BoxConstraints(
                     minHeight: Design.getScreenHeight(context) * 0.1,
@@ -85,10 +86,15 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
                         runSpacing: Design.getScreenHeight(context) * 0.01,
                         direction: Axis.horizontal,
                         children: [
-                          if(!editing)
-                            for (final tag in tags) ShowTagsWidget(title: tag, isGeneral: true,),
-                          if(editing)
-                            for (count = 0; count<tags.length; count++) showEditTags(count),
+                          if (!editing)
+                            for (final tag in tags)
+                              ShowTagsWidget(
+                                title: tag,
+                                isGeneral: true,
+                              ),
+                          if (editing)
+                            for (count = 0; count < tags.length; count++)
+                              showEditTags(count),
                         ],
                       ),
                       SizedBox(height: Design.getScreenHeight(context) * 0.01),
@@ -98,16 +104,16 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
                 Container(
                   padding: const EdgeInsets.fromLTRB(0, 10, 2, 0),
                   alignment: const Alignment(1, 0),
-                  child:  IconButton(
-                      icon: const Icon(Icons.edit),
-                      //color: const Color.fromARGB(255, 0, 0, 0),
-                      onPressed: (){
-                        setState(() {
-                          editing = !editing;
-                          //print(editing);
-                        });
-                      },
-                    ),
+                  child: IconButton(
+                    icon: const Icon(Icons.edit),
+                    //color: const Color.fromARGB(255, 0, 0, 0),
+                    onPressed: () {
+                      setState(() {
+                        editing = !editing;
+                        //print(editing);
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
@@ -119,8 +125,7 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
                   padding: Design.spacing,
                   decoration: const BoxDecoration(
                       borderRadius: Design.outsideBorderRadius,
-                      color: Design.insideColor 
-                      ),
+                      color: Design.insideColor),
                   width: double.infinity,
                   constraints: BoxConstraints(
                     minHeight: Design.getScreenHeight(context) * 0.1,
@@ -138,7 +143,8 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
                         runSpacing: Design.getScreenHeight(context) * 0.01,
                         direction: Axis.horizontal,
                         children: [
-                            for (count = 0; count<usedTags.length; count++) showUsedTags(count),
+                          for (count = 0; count < usedTags.length; count++)
+                            showUsedTags(count),
                         ],
                       ),
                       SizedBox(height: Design.getScreenHeight(context) * 0.01),
@@ -194,45 +200,58 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
       ),
     );
   }
-  Widget showEditTags(int which)
-  {
+
+  Widget showEditTags(int which) {
     return Stack(
       children: [
-        ShowTagsWidget(title: tags[which], isGeneral: true,),
+        ShowTagsWidget(
+          title: tags[which],
+          isGeneral: true,
+        ),
         Positioned(
-          top: -22.0, right: -20.0,
-           child: IconButton(
-              alignment: Alignment.center,
-              icon: const Icon(Icons.highlight_off, 
-              color:Color.fromARGB(255, 255, 0, 0), size: 15,),
-              onPressed: (){
-                setState(() {
-                  removeTagsToUsed(which);
-                });
-              },
+          top: -22.0,
+          right: -20.0,
+          child: IconButton(
+            alignment: Alignment.center,
+            icon: const Icon(
+              Icons.highlight_off,
+              color: Color.fromARGB(255, 255, 0, 0),
+              size: 15,
             ),
+            onPressed: () {
+              setState(() {
+                removeTagsToUsed(which);
+              });
+            },
+          ),
         ),
       ],
     );
   }
 
-  Widget showUsedTags(int which)
-  {
+  Widget showUsedTags(int which) {
     return Stack(
       children: [
-        ShowTagsWidget(title: usedTags[which], isGeneral: true,),
+        ShowTagsWidget(
+          title: usedTags[which],
+          isGeneral: true,
+        ),
         Positioned(
-          top: -22.0, right: -20.0,
-           child: IconButton(
-              alignment: Alignment.center,
-              icon: const Icon(Icons.add_circle_outline, 
-              color:Color.fromARGB(255, 0, 0, 0), size: 15,),
-              onPressed: (){
-                setState(() {
-                  removeUsedTagsToTags(which);
-                });
-              },
+          top: -22.0,
+          right: -20.0,
+          child: IconButton(
+            alignment: Alignment.center,
+            icon: const Icon(
+              Icons.add_circle_outline,
+              color: Color.fromARGB(255, 0, 0, 0),
+              size: 15,
             ),
+            onPressed: () {
+              setState(() {
+                removeUsedTagsToTags(which);
+              });
+            },
+          ),
         ),
       ],
     );
@@ -241,10 +260,16 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
   Future<void> addTags(String text) async {
     tags.add(text);
     final currentUser = await AccountManager.currentUser;
-    //currentUser.pastExpertiseTags = tags;
-    currentUser.pastExpertiseTags = usedTags;
-    currentUser.expertiseTags = tags;//
-    AccountManager.updateCurrentUser();
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      pastExpertiseTags: usedTags,
+      expertiseTags: tags,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
     setState(() {});
   }
 
@@ -252,10 +277,16 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
     usedTags.add(tags[which]);
     tags.removeAt(which);
     final currentUser = await AccountManager.currentUser;
-    //currentUser.pastExpertiseTags = tags;
-    currentUser.pastExpertiseTags = usedTags;
-    currentUser.expertiseTags = tags;//
-    AccountManager.updateCurrentUser();
+
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      pastExpertiseTags: usedTags,
+      expertiseTags: tags,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
     setState(() {});
   }
 
@@ -263,13 +294,29 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
     tags.add(usedTags[which]);
     usedTags.removeAt(which);
     final currentUser = await AccountManager.currentUser;
-    currentUser.pastExpertiseTags = usedTags;
-    currentUser.expertiseTags = tags;
-    AccountManager.updateCurrentUser();
+    
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      pastExpertiseTags: usedTags,
+      expertiseTags: tags,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
     setState(() {});
   }
 
-  void loadTags() {}
+  void loadTags() {
+    AccountManager.currentUser.then((value) {
+      setState(() {
+        tags = value.expertiseTags.map((e) => e as String).toList();
+        usedTags = value.pastExpertiseTags.map((e) => e as String).toList();
+      });
+    });
+
+    setState(() {});
+  }
 }
 
 //說明頁面按鈕
