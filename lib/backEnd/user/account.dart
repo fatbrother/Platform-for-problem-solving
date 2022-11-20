@@ -5,10 +5,14 @@ import '../database.dart';
 // for example, sign in, sign out, sign up
 class AccountManager {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-  static Future<UsersModel> get currentUser async => await UsersDatabase.queryUser(_auth.currentUser!.uid);
+  static Future<UsersModel> get currentUser async =>
+      await UsersDatabase.queryUser(_auth.currentUser!.uid);
 
-  static void updateCurrentUser() async {
-    currentUser.then((value) => UsersDatabase.updateUser(value));
+  static Future<void> updateCurrentUser(UsersModel user) async {
+    user.id = _auth.currentUser!.uid;
+    user.email = _auth.currentUser!.email!;
+    user.phone = _auth.currentUser!.phoneNumber??'';
+    UsersDatabase.updateUser(user);
   }
 
   static Future<void> signIn(String email, String password) async {
@@ -29,18 +33,20 @@ class AccountManager {
         signOut();
         throw Exception('Email is not verified');
       }
-
     } catch (e) {
       signOut();
       rethrow;
     }
+
+    _auth.currentUser!.reload();
   }
 
-  static Future<void> signUp(String name, String email, String password, String confirmPassword) async {
+  static Future<bool> signUp(String name, String email, String password,
+      String confirmPassword) async {
     if (password != confirmPassword) {
       throw Exception('Passwords do not match');
     }
-    
+
     try {
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -52,17 +58,29 @@ class AccountManager {
 
       user!.sendEmailVerification();
 
-      final UsersModel usersModel = UsersModel(
-        id: userCredential.user!.uid,
+      // wait for the user to verify their email
+      // if they don't verify their email, delete the account
+      int timer = 0;
+      while (!user.emailVerified && timer < 120) {
+        await Future.delayed(const Duration(seconds: 1));
+        await user.reload();
+        timer++;
+      }
+
+      if (!user.emailVerified) {
+        user.delete();
+        throw Exception('Email is not verified');
+      }
+
+      await signIn(email, password);
+      UsersDatabase.addUser(UsersModel(
+        id: user.uid,
         name: name,
         email: email,
-      );
+      ));
+      await _auth.currentUser!.reload();
 
-      try {
-        UsersDatabase.addUser(usersModel);
-      } catch (e) {
-        rethrow;
-      }
+      return true;
     } catch (e) {
       rethrow;
     }
@@ -123,8 +141,7 @@ class AccountManager {
       );
 
       return true;
-    }
-    catch (e) {
+    } catch (e) {
       return false;
     }
   }
@@ -144,6 +161,7 @@ class AccountManager {
   static Future<void> resetPassword(String password) async {
     try {
       await _auth.currentUser!.updatePassword(password);
+      await _auth.currentUser!.reload();
     } catch (e) {
       rethrow;
     }
@@ -151,29 +169,19 @@ class AccountManager {
 
   static deleteAccount() async {
     try {
+      UsersDatabase.deleteUser(_auth.currentUser!.uid);
       await _auth.currentUser!.delete();
+      await _auth.currentUser!.reload();
     } catch (e) {
       rethrow;
     }
-
-    signOut();
   }
 
   static bool isLoggedIn() {
     return _auth.currentUser != null;
   }
 
-  static bool isEmailVerified() {
-    if (!isLoggedIn()) {
-      return false;
-    }
-    return _auth.currentUser!.emailVerified;
-  }
-
   static bool isPhoneVerified() {
-    if (!isLoggedIn()) {
-      return false;
-    }
     return _auth.currentUser!.phoneNumber != null;
   }
 }

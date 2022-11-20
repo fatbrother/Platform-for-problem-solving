@@ -87,8 +87,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> signUp() async {
+    bool verified = true;
     try {
-      await AccountManager.signUp(
+      verified = await AccountManager.signUp(
         userNameController.text,
         emailController.text,
         passwordController.text,
@@ -97,23 +98,6 @@ class _RegisterPageState extends State<RegisterPage> {
     } catch (e) {
       DialogManager.showError(e, context);
       return;
-    }
-
-    // count for two minutes to verify email
-    int count = 0;
-    bool verified = true;
-    while (!AccountManager.isEmailVerified()) {
-      if (count > 120) {
-        verified = false;
-        break;
-      }
-      await Future.delayed(const Duration(seconds: 1));
-      count++;
-    }
-
-    if (!verified) {
-      AccountManager.signIn(emailController.text, passwordController.text);
-      AccountManager.deleteAccount();
     }
 
     if (verified) {
