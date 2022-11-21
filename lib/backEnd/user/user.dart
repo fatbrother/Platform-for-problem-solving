@@ -56,6 +56,8 @@ class UsersModel {
   List<dynamic> askProblemIds;
   List<dynamic> pastExpertiseTags;
   List<dynamic> expertiseTags;
+  List<dynamic> displaySystemTags;
+  List<dynamic> hideSystemTags;
   List<dynamic> auditFailedTags;
   List<dynamic> audittingTags;
 
@@ -71,6 +73,8 @@ class UsersModel {
     this.phone = '',
     this.expertiseTags = const [],
     this.pastExpertiseTags = const [],
+    this.displaySystemTags = const[],
+    this.hideSystemTags = const[],
     this.auditFailedTags = const [],
     this.audittingTags = const [],
     this.askProblemIds = const [],
@@ -89,6 +93,8 @@ class UsersModel {
       askProblemIds: data['askProblemIds'] ?? [],
       expertiseTags: data['expertiseTags'] ?? [],
       pastExpertiseTags: data['pastExpertiseTags'] ?? [],
+      displaySystemTags: data['displaySystemTags'] ?? [],
+      hideSystemTags: data['hideSystemTags'] ?? [],
       auditFailedTags: data['auditFailedTags'] ?? [],
       audittingTags: data['audittingTags'] ?? [],
       chatRoomsIds: data['chatRoomsIds'] ?? [],
@@ -107,6 +113,8 @@ class UsersModel {
       'askProblemIds': askProblemIds,
       'expertiseTags': expertiseTags,
       'pastExpertiseTags': pastExpertiseTags,
+      'displaySystemTags': displaySystemTags,
+      'hideSystemTags': hideSystemTags,
       'auditFailedTags': auditFailedTags,
       'audittingTags': audittingTags,
       'chatRoomsIds': chatRoomsIds,

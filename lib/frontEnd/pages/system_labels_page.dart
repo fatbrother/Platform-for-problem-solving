@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/scaffold.dart';
@@ -51,15 +52,24 @@ class ShowSystemTagsWidget extends StatefulWidget {
   State<ShowSystemTagsWidget> createState() => _ShowSystemTagsWidgetState();
 }
 
+
+
 class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
-  List<String> tags = <String>[];
+  List<String> tags = <String>['dog','cat'];
   bool isLoading = true;
+  //bool first = true;
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
       loadTags();
     }
+    /*
+    if(first){
+      BeginTags();
+      first = false;
+    }
+    */
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -94,13 +104,28 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
       ),
     );
   }
+  /*
+  Future<void> BeginTags() async {
+    final currentUser = await AccountManager.currentUser;
+    
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: tags,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+  }
+  */
 
   Future<void> loadTags() async {
     var currentUser = await AccountManager.currentUser;
-    tags = currentUser.expertiseTags.map((e) => e as String).toList();
+    tags = currentUser.displaySystemTags.map((e) => e as String).toList();
     debugPrint('tags: $tags');
     setState(() {
-      isLoading = false;
+      //isLoading = false;
     });
   }
 }
@@ -115,6 +140,7 @@ class ShowSystemTableWidget extends StatefulWidget {
 class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
   Map<String, List<String>> allTags = <String, List<String>>{};
   bool isLoading = true;
+  int count = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -132,21 +158,29 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
           ShowLableColumn(
             title: '審核通過的標籤',
             children: [
-              for (final tag in allTags['showingTags']!)
+              for (int i = 0; i < allTags['showingTags']!.length; i++)
                 ShowSystemTableBoxWidget(
-                  tag: tag,
+                  tag: allTags['showingTags']![i],
                   leftButtonTitle: '隱藏',
-                  leftButtonOnPressed: () {},
+                  leftButtonOnPressed: () {
+                    removeDisplayTagsToHideTags(i);
+                  },
                   rightButtonTitle: '刪除',
-                  rightButtonOnPressed: () {},
+                  rightButtonOnPressed: () {
+                    removeDisplayTags(i);
+                  },
                 ),
-              for (final tag in allTags['notShowingTags']!)
+              for (int i = 0; i < allTags['notShowingTags']!.length; i++)
                 ShowSystemTableBoxWidget(
-                  tag: tag,
+                  tag: allTags['notShowingTags']![i],
                   leftButtonTitle: '顯示',
-                  leftButtonOnPressed: () {},
+                  leftButtonOnPressed: () {
+                    removeHideTagsToDisplayTags(i);
+                  },
                   rightButtonTitle: '刪除',
-                  rightButtonOnPressed: () {},
+                  rightButtonOnPressed: () {
+                    removeHideTags(i);
+                  },
                 ),
             ],
           ),
@@ -186,15 +220,84 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
         currentUser.audittingTags.map((tag) => tag as String).toList();
     allTags['auditFailedTags'] =
         currentUser.auditFailedTags.map((tag) => tag as String).toList();
-    allTags['showingTags'] =
-        currentUser.expertiseTags.map((tag) => tag as String).toList();
-    allTags['notShowingTags'] =
-        currentUser.pastExpertiseTags.map((tag) => tag as String).toList();
+    allTags['showingTags'] = //
+        currentUser.displaySystemTags.map((tag) => tag as String).toList();
+    allTags['notShowingTags'] = //
+        currentUser.hideSystemTags.map((tag) => tag as String).toList();
 
     setState(() {
       isLoading = false;
     });
   }
+
+   Future<void> removeDisplayTagsToHideTags(int which) async {
+    allTags['notShowingTags']?.add(allTags['showingTags']![which]);
+    allTags['showingTags']?.removeAt(which);
+    final currentUser = await AccountManager.currentUser;
+    
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: allTags['showingTags']!,
+      hideSystemTags: allTags['notShowingTags']!,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+    //print(allTags['notShowingTags']);//
+  }
+
+  Future<void> removeHideTagsToDisplayTags(int which) async {
+    allTags['showingTags']?.add(allTags['notShowingTags']![which]);
+    allTags['notShowingTags']?.removeAt(which);
+    final currentUser = await AccountManager.currentUser;
+    
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: allTags['showingTags']!,
+      hideSystemTags: allTags['notShowingTags']!,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+    //print(allTags['showingTags']);
+  }
+
+  Future<void> removeHideTags(int which) async {
+    allTags['notShowingTags']?.removeAt(which);
+    final currentUser = await AccountManager.currentUser;
+    
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: allTags['showingTags']!,
+      hideSystemTags: allTags['notShowingTags']!,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+  }
+
+    Future<void> removeDisplayTags(int which) async {
+    allTags['showingTags']?.removeAt(which);
+    final currentUser = await AccountManager.currentUser;
+    
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: allTags['showingTags']!,
+      hideSystemTags: allTags['notShowingTags']!,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+  }
+
 }
 
 class ShowLableColumn extends StatelessWidget {
