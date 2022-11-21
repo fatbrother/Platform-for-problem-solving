@@ -321,7 +321,7 @@ class ShowLableColumn extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color.fromARGB(198, 192, 220, 236),
+        color: const Color.fromARGB(136, 160, 182, 195),
       ),
       child: Column(
         children: [
@@ -396,7 +396,7 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 child: ColorButton(
                   title: widget.leftButtonTitle,
-                  backgroundColor: const Color.fromARGB(198, 192, 220, 236),
+                  backgroundColor: const Color.fromARGB(136, 160, 182, 195),
                   onPressed: widget.leftButtonOnPressed,
                 ),
               ),
@@ -408,7 +408,7 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
                 //height: 36,
                 child: ColorButton(
                   title: widget.rightButtonTitle,
-                  backgroundColor: const Color.fromARGB(255, 224, 210, 209),
+                  backgroundColor: const Color.fromARGB(255, 212, 199, 198),
                   onPressed: widget.rightButtonOnPressed,
                 ),
               ),
