@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
 
 class DialogManager {
   static void showError(Object e, BuildContext context) {
@@ -17,7 +18,7 @@ class DialogManager {
         title: 'Error',
         content: Text(message),
         onPressed: () {
-          Navigator.of(context).pop(); // Close the dialog
+          Routes.back(context);
         },
       ),
     );
@@ -30,7 +31,7 @@ class DialogManager {
         title: title,
         content: Text(message),
         onPressed: () {
-          Navigator.of(context).pop();
+          Routes.back(context);
         },
       ),
     );
@@ -63,7 +64,7 @@ class DialogManager {
             child: const Text("確認",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.black)),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Routes.back(context),
           ),
         )
       ],
@@ -99,8 +100,8 @@ class Alert extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            onPressed();
-            Navigator.of(context).pop();
+            onPressed;
+            Routes.back(context);
           },
           child: const Text('OK'),
         ),
