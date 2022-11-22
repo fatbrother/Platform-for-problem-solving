@@ -7,7 +7,6 @@ class MyScaffold extends StatefulWidget {
   const MyScaffold({
     super.key,
     required this.body,
-    required this.onTap,
     required this.backgroundColor,
     required this.currentIndex,
   });
@@ -15,7 +14,6 @@ class MyScaffold extends StatefulWidget {
   final int currentIndex;
   final Color backgroundColor;
   final Widget body;
-  final void Function(int) onTap;
 
   @override
   State<MyScaffold> createState() => _MyScaffoldState();
@@ -39,7 +37,9 @@ class _MyScaffoldState extends State<MyScaffold> {
         ],
       ),
       bottomNavigationBar: MyBottomNavigationBar(
-        onTap: widget.onTap,
+        onTap: (index) {
+          // Routes.pushReplacement(context, Routes.bottomNavigationRoutes[index]);
+        },
         currentIndex: widget.currentIndex,
       ),
     );
