@@ -12,11 +12,11 @@ class SystemTagPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
-      body: const SystemLabelsView(),
-      onTap: (int index) {},
+    return const MyScaffold(
+      body: SystemLabelsView(),
       backgroundColor: Design.secondaryColor,
       currentIndex: 0,
+      // currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.systemLabelsPage),
     );
   }
 }
@@ -53,13 +53,15 @@ class ShowSystemTagsWidget extends StatefulWidget {
 
 class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
   List<String> tags = <String>[];
-  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadTags();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      loadTags();
-    }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -99,9 +101,7 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
     var currentUser = await AccountManager.currentUser;
     tags = currentUser.expertiseTags.map((e) => e as String).toList();
     debugPrint('tags: $tags');
-    setState(() {
-      isLoading = false;
-    });
+    setState(() {});
   }
 }
 
@@ -114,19 +114,21 @@ class ShowSystemTableWidget extends StatefulWidget {
 
 class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
   Map<String, List<String>> allTags = <String, List<String>>{};
-  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadAllTags();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      loadAllTags();
-    }
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+      decoration: const BoxDecoration(
+        borderRadius: Design.outsideBorderRadius,
         color: Design.insideColor,
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: Design.spacing,
       child: Column(
         children: <Widget>[
           ShowLableColumn(
@@ -191,9 +193,7 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
     allTags['notShowingTags'] =
         currentUser.pastExpertiseTags.map((tag) => tag as String).toList();
 
-    setState(() {
-      isLoading = false;
-    });
+    setState(() {});
   }
 }
 
@@ -209,6 +209,16 @@ class ShowLableColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // add sizebox between child of children
+    List<Widget> childrenWithSizeBox = <Widget>[];
+    for (int i = 0; i < children.length; i++) {
+      childrenWithSizeBox.add(children[i]);
+      if (i != children.length - 1) {
+        childrenWithSizeBox
+            .add(SizedBox(height: Design.getScreenHeight(context) * 0.02));
+      }
+    }
+
     return Container(
       //審核失敗的標籤
       width: double.infinity,
@@ -216,9 +226,9 @@ class ShowLableColumn extends StatelessWidget {
         minHeight: Design.getScreenHeight(context) * 0.15,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: const Color.fromARGB(198, 192, 220, 236),
+      decoration: const BoxDecoration(
+        borderRadius: Design.outsideBorderRadius,
+        color: Color.fromARGB(198, 192, 220, 236),
       ),
       child: Column(
         children: [
@@ -232,7 +242,7 @@ class ShowLableColumn extends StatelessWidget {
             ),
           ),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
-          for (final child in children) child,
+          for (final child in childrenWithSizeBox) child,
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
         ],
       ),
@@ -266,7 +276,6 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: Design.getScreenHeight(context) * 0.01),
         Container(
           height: Design.getScreenHeight(context) * 0.05,
           decoration: const BoxDecoration(
@@ -301,8 +310,6 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
                 alignment: const Alignment(1, 0),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                //padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                //height: 36,
                 child: ColorButton(
                   title: widget.rightButtonTitle,
                   backgroundColor: const Color.fromARGB(255, 224, 210, 209),
@@ -312,7 +319,6 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
             ],
           ),
         ),
-        SizedBox(height: Design.getScreenHeight(context) * 0.01), //間距
       ],
     );
   }
