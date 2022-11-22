@@ -51,6 +51,8 @@ class ShowSystemTagsWidget extends StatefulWidget {
   State<ShowSystemTagsWidget> createState() => _ShowSystemTagsWidgetState();
 }
 
+
+
 class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
   List<String> tags = <String>[];
 
@@ -96,10 +98,25 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
       ),
     );
   }
+  /*
+  Future<void> BeginTags() async {
+    final currentUser = await AccountManager.currentUser;
+    
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: tags,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+  }
+  */
 
   Future<void> loadTags() async {
     var currentUser = await AccountManager.currentUser;
-    tags = currentUser.expertiseTags.map((e) => e as String).toList();
+    tags = currentUser.displaySystemTags.map((e) => e as String).toList();
     debugPrint('tags: $tags');
     setState(() {});
   }
@@ -134,21 +151,29 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
           ShowLableColumn(
             title: '審核通過的標籤',
             children: [
-              for (final tag in allTags['showingTags']!)
+              for (int i = 0; i < allTags['showingTags']!.length; i++)
                 ShowSystemTableBoxWidget(
-                  tag: tag,
+                  tag: allTags['showingTags']![i],
                   leftButtonTitle: '隱藏',
-                  leftButtonOnPressed: () {},
+                  leftButtonOnPressed: () {
+                    // removeDisplayTagsToHideTags(i);
+                  },
                   rightButtonTitle: '刪除',
-                  rightButtonOnPressed: () {},
+                  rightButtonOnPressed: () {
+                    // removeDisplayTags(i);
+                  },
                 ),
-              for (final tag in allTags['notShowingTags']!)
+              for (int i = 0; i < allTags['notShowingTags']!.length; i++)
                 ShowSystemTableBoxWidget(
-                  tag: tag,
+                  tag: allTags['notShowingTags']![i],
                   leftButtonTitle: '顯示',
-                  leftButtonOnPressed: () {},
+                  leftButtonOnPressed: () {
+                    // removeHideTagsToDisplayTags(i);
+                  },
                   rightButtonTitle: '刪除',
-                  rightButtonOnPressed: () {},
+                  rightButtonOnPressed: () {
+                    // removeHideTags(i);
+                  },
                 ),
             ],
           ),
@@ -193,7 +218,8 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
     allTags['notShowingTags'] =
         currentUser.pastExpertiseTags.map((tag) => tag as String).toList();
 
-    setState(() {});
+    setState(() {
+    });
   }
 }
 
@@ -228,7 +254,7 @@ class ShowLableColumn extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: const BoxDecoration(
         borderRadius: Design.outsideBorderRadius,
-        color: Color.fromARGB(198, 192, 220, 236),
+        color: Color.fromARGB(136, 160, 182, 195),
       ),
       child: Column(
         children: [
@@ -302,7 +328,7 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 child: ColorButton(
                   title: widget.leftButtonTitle,
-                  backgroundColor: const Color.fromARGB(198, 192, 220, 236),
+                  backgroundColor: const Color.fromARGB(136, 160, 182, 195),
                   onPressed: widget.leftButtonOnPressed,
                 ),
               ),
@@ -312,7 +338,7 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 child: ColorButton(
                   title: widget.rightButtonTitle,
-                  backgroundColor: const Color.fromARGB(255, 224, 210, 209),
+                  backgroundColor: const Color.fromARGB(255, 212, 199, 198),
                   onPressed: widget.rightButtonOnPressed,
                 ),
               ),
