@@ -82,22 +82,22 @@ class _HomePageState extends State<HomePage> {
         body: //RefreshIndicator(
             //onRefresh: refresh,
             /*child:*/ ListView.builder(
-          controller: controller,
-          padding: const EdgeInsets.all(8),
-          itemCount: allProblems.length + 1,
-          itemBuilder: (context, index) {
-            //print(allProblems.length);
-            if (index < allProblems.length) {
-              final item = allProblems[index];
+                controller: controller,
+                padding: const EdgeInsets.all(8),
+                itemCount: allProblems.length + 1,
+                itemBuilder: (context, index) {
+                  //print(allProblems.length);
+                  if (index < allProblems.length) {
+                    final item = allProblems[index];
 
-              return ListTile(title: Text(item.id));
-            } else {
-              var listOfContainers = <Container>[];
-              allProblems.forEach((element) {
-                return listOfContainers
-                    .add(Container(child: Text(allProblems[index].title)));
-              });
-              /*return Padding(
+                    return ListTile(title: Text(item.id));
+                  } //else {
+                  var listOfContainers = <Container>[];
+                  allProblems.forEach((element) {
+                    return listOfContainers
+                        .add(Container(child: Text(allProblems[index].title)));
+                  });
+                  /*return Padding(
                 padding: EdgeInsets.symmetric(vertical: 32),
                 child: Center(
                   child: /*hasMore
@@ -106,10 +106,12 @@ class _HomePageState extends State<HomePage> {
                       Text('CatCat'),
                 ),
               );*/
-            }
-            return Container();
-          },
-        )
+                  return Container(
+                    child: Text('CatCat'),
+                  );
+                }
+                //},
+                )
         //)
         );
   }
