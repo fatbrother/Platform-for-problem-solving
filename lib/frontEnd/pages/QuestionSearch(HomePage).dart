@@ -4,9 +4,9 @@ import 'dart:convert';
 
 import 'package:pops/backEnd/problem/problem.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+//void main() {
+//  runApp(const MyApp());
+//}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,131 +18,159 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MainPage(title: 'Flutter Demo Home Page'),
+      home: const HomePage(/*title: 'Flutter Demo Home Page'*/),
     );
   }
 }
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key, required this.title});
+class HomePage extends StatefulWidget {
+  const HomePage({
+    super.key,
+    /*required this.title*/
+  });
 
-  final String title;
+  //final String title;
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MainPageState extends State<MainPage>
-{
+class _HomePageState extends State<HomePage> {
   final controller = ScrollController();
-  List<String> items = [];
-  bool hasMore = true;
+  List<ProblemsModel> allProblems = [];
+  ////bool hasMore = true;
   int page = 1;
   bool isLoading = false;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
-    fetch();
+    loadUnsolvedQ();
 
-    controller.addListener(() { 
-      if (controller.position.maxScrollExtent == controller.offset){
-        fetch();
-
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        loadUnsolvedQ();
       }
     });
   }
 
   @override
-  void dispose(){
+  void dispose() {
     controller.dispose();
 
     super.dispose();
   }
 
-  Future fetch() async{
+  ////Future refresh() async{
+  ////  setState((){
+  ////    isLoading = false;
+  ////    hasMore = true;
+  ////    page = 0;
+  ////    items.clear();
+  ////  });
+
+  ////  fetch();
+  ////}
+
+  @override
+  Widget build(BuildContext context) {
+    loadUnsolvedQ();
+    //print(allProblems.length);
+    return Scaffold(
+        appBar: AppBar(title: const Text('Infinite Scroll ListView')),
+        body: //RefreshIndicator(
+            //onRefresh: refresh,
+            /*child:*/ ListView.builder(
+          controller: controller,
+          padding: const EdgeInsets.all(8),
+          itemCount: allProblems.length + 1,
+          itemBuilder: (context, index) {
+            //print(allProblems.length);
+            if (index < allProblems.length) {
+              final item = allProblems[index];
+
+              return ListTile(title: Text(item.id));
+            } else {
+              var listOfContainers = <Container>[];
+              allProblems.forEach((element) {
+                return listOfContainers
+                    .add(Container(child: Text(allProblems[index].title)));
+              });
+              /*return Padding(
+                padding: EdgeInsets.symmetric(vertical: 32),
+                child: Center(
+                  child: /*hasMore
+                    ? const CircularProgressIndicator()
+                   : const Text('No more data to load'),*/
+                      Text('CatCat'),
+                ),
+              );*/
+            }
+            return Container();
+          },
+        )
+        //)
+        );
+  }
+
+  Future<void> loadUnsolvedQ() async {
+    ProblemsModel problem1 = ProblemsModel(
+        id: "01",
+        title: "Q1 title",
+        description: "kjsdhlfsjdbanjehfiuesrhvmdnvmjhfjsmd\nksjdnsdcm,mxncksjd",
+        authorName: "CatCat",
+        authorId: "1019",
+        imgIds: ["0"],
+        tagIds: [0],
+        isSolved: false,
+        baseToken: 0,
+        solveCommendIds: ["abc"],
+        chooseSolveCommendId: "sdfjns",
+        createdAt: DateTime(2022, 09, 17),
+        remainingDays: 15,
+        rewardToken: 100);
+    ProblemsDatabase.addProblem(problem1);
+
+    ProblemsModel problem2 = ProblemsModel(
+        id: "02",
+        title: "Q2 title",
+        description: "kjsdhlfsjdbanjehfiuesrhvmdnvmjhfjsmd\nksjdnsdcm,mxncksjd",
+        authorName: "CatCat",
+        authorId: "1019",
+        imgIds: ["0"],
+        tagIds: [0],
+        isSolved: false,
+        baseToken: 0,
+        solveCommendIds: ["abc"],
+        chooseSolveCommendId: "sdfjns",
+        createdAt: DateTime(2022, 09, 17),
+        remainingDays: 15,
+        rewardToken: 100);
+    ProblemsDatabase.addProblem(problem2);
+
+    ProblemsModel problem3 = ProblemsModel(
+        id: "03",
+        title: "Q3 title",
+        description: "kjsdhlfsjdbanjehfiuesrhvmdnvmjhfjsmd\nksjdnsdcm,mxncksjd",
+        authorName: "CatCat",
+        authorId: "1019",
+        imgIds: ["0"],
+        tagIds: [0],
+        isSolved: false,
+        baseToken: 0,
+        solveCommendIds: ["abc"],
+        chooseSolveCommendId: "sdfjns",
+        createdAt: DateTime(2022, 09, 17),
+        remainingDays: 15,
+        rewardToken: 100);
+    ProblemsDatabase.addProblem(problem3);
+
     if (isLoading) return;
     isLoading = true;
 
-    const limit = 25;
-    //final url = Uri.parse('https://jsonplaceholder.typicode.com/posts?_limit=$limit&page=$page');
-    //final response = await http.get(url);
+    allProblems = await ProblemsDatabase.queryAllProblems();
 
-    //if (response.statusCode == 200){
-    //  final List newItems = json.decode(response.body);
-    final Future<List<ProblemsModel>> newItems = ProblemsDatabase.queryAllProblems();
-
-      setState(() {
-        page++;
-        isLoading = false;
-
-        late Future<int> lengthOfData;
-        
-        Future<int> getFileLength() async{
-          return await ProblemsDatabase.queryAllProblems().then((value) {
-            return value.length;
-          });
-        }
-
-        //if (newItems.length < limit){
-        //  hasMore = false;
-        //}
-        int len = 0;
-        getFileLength().then((value) => len = value);
-        if ( len < limit ){
-          hasMore = false;
-        }
-
-        //items.addAll(newItems.map<String>((item){
-        //  final number = item['id'];
-
-        //  return 'Item $number';
-        //}).toList());
-      //});
-    });
+    setState(() {});
   }
-
-  Future refresh() async{
-    setState((){
-      isLoading = false;
-      hasMore = true;
-      page = 0;
-      items.clear();
-    });
-
-    fetch();
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: const Text('Infinite Scroll ListView')
-    ),
-    body: RefreshIndicator( 
-      onRefresh: refresh,
-      child: ListView.builder(
-        controller: controller,
-        padding: const EdgeInsets.all(8),
-        itemCount: items.length + 1,
-        itemBuilder: (context, index){
-          if (index < items.length){
-            final item = items[index];
-
-            return ListTile(title: Text(item));
-          }else{
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 32),
-              child: Center(
-                child: hasMore
-                  ? const CircularProgressIndicator()
-                  : const Text('No more data to load'),
-              ),
-            );
-          }
-        },
-      )
-    )
-  );
 }
-

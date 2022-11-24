@@ -20,6 +20,8 @@ import 'package:pops/frontEnd/pages/register_page.dart';
 import 'package:pops/frontEnd/pages/self_single_problem_page.dart';
 import 'package:pops/frontEnd/pages/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/top_up_page.dart';
+
+import 'package:pops/frontEnd/pages/QuestionSearch(HomePage).dart';
 // import '../backEnd/user/account.dart';
 // import pages here
 // import 'pages/[page file name].dart';
@@ -45,6 +47,8 @@ class Routes {
   static const String reportFailPage = '/reportFailPage';
   static const String reportPage = '/reportPage';
   static const String reportSuccessPage = '/reportSuccessPage';
+
+  static const String homePage = '/homePage';
   // add routes here
   // static const String [route name] = '/[route name]';
 
@@ -64,6 +68,7 @@ class Routes {
     topUp: (context) => const TopUpPage(),
     reportPage: (context) => const ReportPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
+    homePage: (context) => const HomePage(),
     // add routes here
     // [route name]: (context) => const [page name](),
 
@@ -78,7 +83,7 @@ class Routes {
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? systemTagPage : login;
+      AccountManager.isLoggedIn() ? homePage : login;
 
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];
