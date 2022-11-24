@@ -60,7 +60,7 @@ class ProblemsModel {
   String authorName;
   String authorId;
   List<String> imgIds;
-  List<int> tags;
+  List<int> tagIds;
   int baseToken;
   bool isSolved;
   List<String> solveCommendIds;
@@ -76,7 +76,7 @@ class ProblemsModel {
     required this.authorName,
     required this.authorId,
     required this.imgIds,
-    required this.tags,
+    required this.tagIds,
     required this.isSolved,
     required this.baseToken,
     required this.solveCommendIds,
@@ -90,14 +90,14 @@ class ProblemsModel {
     return ProblemsModel(
       id: data['id'] ?? '',
       title: data['title'] ?? '',
-      tags: data['tags'] ?? [],
+      tagIds: data['tags'].map((e) => e as String).toList() ?? [],
       description: data['description'] ?? '',
       authorName: data['authorName'] ?? '',
       authorId: data['authorId'] ?? '',
       imgIds: data['imgIds'] ?? [],
       isSolved: data['isSolved'] ?? false,
       baseToken: data['baseToken'] ?? 10,
-      solveCommendIds: data['solveCommendIds'] ?? [],
+      solveCommendIds: data['solveCommendIds'].map((e) => e as String).toList() ?? [],
       chooseSolveCommendId: data['chooseSolveCommendId'] ?? '',
       createdAt: data['createdAt'] ? DateTime.parse(data['createdAt']) : DateTime.now(),
       remainingDays: data['remainingDays'] ?? 3,
@@ -109,7 +109,7 @@ class ProblemsModel {
     return {
       'id': id,
       'title': title,
-      'tags': tags,
+      'tagIds': tagIds,
       'description': description,
       'authorName': authorName,
       'authorId': authorId,
