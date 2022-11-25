@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       SecondaryButton(
                           onPressed: () {
-                            Routes.pushReplacement(context, Routes.register);
+                            Routes.push(context, Routes.register);
                           },
                           text: 'Register'),
                       const Text('/', textScaleFactor: 1.5),

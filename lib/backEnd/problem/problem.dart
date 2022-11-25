@@ -9,18 +9,17 @@ class ProblemsDatabase {
         result.add(ProblemsModel.fromMap(item));
       }
       return result;
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   static Future<ProblemsModel> queryProblem(String problemId) async {
     try {
-      final Map<String, dynamic> result = await DB.getRow('problems', problemId);
+      final Map<String, dynamic> result =
+          await DB.getRow('problems', problemId);
       return ProblemsModel.fromMap(result);
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -28,8 +27,7 @@ class ProblemsDatabase {
   static void updateProblem(ProblemsModel problem) async {
     try {
       await DB.updateRow('problems', problem.id, problem.toMap());
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -37,8 +35,7 @@ class ProblemsDatabase {
   static void deleteProblem(String problemId) async {
     try {
       await DB.deleteRow('problems', problemId);
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -46,8 +43,7 @@ class ProblemsDatabase {
   static void addProblem(ProblemsModel problem) async {
     try {
       await DB.addRow('problems', problem.toMap());
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -60,7 +56,7 @@ class ProblemsModel {
   String authorName;
   String authorId;
   List<String> imgIds;
-  List<int> tagIds;
+  List<String> tags;
   int baseToken;
   bool isSolved;
   List<String> solveCommendIds;
@@ -76,7 +72,7 @@ class ProblemsModel {
     required this.authorName,
     required this.authorId,
     required this.imgIds,
-    required this.tagIds,
+    required this.tags,
     required this.isSolved,
     required this.baseToken,
     required this.solveCommendIds,
@@ -90,16 +86,20 @@ class ProblemsModel {
     return ProblemsModel(
       id: data['id'] ?? '',
       title: data['title'] ?? '',
-      tagIds: data['tags'] == null ? [] : data['tags'].cast<String>() ?? [],
+      tags: data['tags'] == null ? [] : data['tags'].cast<String>(),
       description: data['description'] ?? '',
       authorName: data['authorName'] ?? '',
       authorId: data['authorId'] ?? '',
       imgIds: data['imgIds'] == null ? [] : data['imgIds'].cast<String>(),
       isSolved: data['isSolved'] ?? false,
       baseToken: data['baseToken'] ?? 10,
-      solveCommendIds: data['solveCommendIds'] == null ? [] : data['solveCommendIds'].cast<String>(),
+      solveCommendIds: data['solveCommendIds'] == null
+          ? []
+          : data['solveCommendIds'].cast<String>(),
       chooseSolveCommendId: data['chooseSolveCommendId'] ?? '',
-      createdAt: data['createdAt'] ? DateTime.parse(data['createdAt']) : DateTime.now(),
+      createdAt: data['createdAt']
+          ? DateTime.parse(data['createdAt'])
+          : DateTime.now(),
       remainingDays: data['remainingDays'] ?? 3,
       rewardToken: data['rewardToken'] ?? 0,
     );
@@ -109,7 +109,7 @@ class ProblemsModel {
     return {
       'id': id,
       'title': title,
-      'tagIds': tagIds,
+      'tagIds': tags,
       'description': description,
       'authorName': authorName,
       'authorId': authorId,
@@ -124,7 +124,9 @@ class ProblemsModel {
   }
 
   bool get isOverdue {
-    return createdAt.add(Duration(days: remainingDays)).isBefore(DateTime.now());
+    return createdAt
+        .add(Duration(days: remainingDays))
+        .isBefore(DateTime.now());
   }
 
   String get existTimeString {
@@ -134,19 +136,18 @@ class ProblemsModel {
     final int days = existTime.inDays;
     final int hours = existTime.inHours - days * 24;
     final int minutes = existTime.inMinutes - days * 24 * 60 - hours * 60;
-    final int seconds =
-        existTime.inSeconds - days * 24 * 60 * 60 - hours * 60 * 60 - minutes * 60;
-    
+    final int seconds = existTime.inSeconds -
+        days * 24 * 60 * 60 -
+        hours * 60 * 60 -
+        minutes * 60;
+
     if (days > 0) {
       return '$days days';
-    }
-    else if (hours > 0) {
+    } else if (hours > 0) {
       return '$hours hours';
-    }
-    else if (minutes > 0) {
+    } else if (minutes > 0) {
       return '$minutes minutes';
-    }
-    else {
+    } else {
       return '$seconds seconds';
     }
   }
