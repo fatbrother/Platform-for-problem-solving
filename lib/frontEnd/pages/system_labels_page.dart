@@ -31,10 +31,7 @@ class SystemLabelsView extends StatefulWidget {
 }
 
 class _SystemLabelsViewState extends State<SystemLabelsView> {
-  _update()
-  {
-    setState(() {});
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +41,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
         children: <Widget>[
           const ShowSystemTagsWidget(),
           SizedBox(height: Design.getScreenHeight(context) * 0.03),
-          ShowSystemTableWidget(update: _update),
+          const ShowSystemTableWidget(),
         ],
       ),
     );
@@ -74,7 +71,7 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          color: Design.insideColor //color沒放在decoration裡的話會overflow
+          color: Design.insideColor
           ),
       width: double.infinity,
       constraints: BoxConstraints(
@@ -129,8 +126,7 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
 }
 
 class ShowSystemTableWidget extends StatefulWidget {
-  const ShowSystemTableWidget({super.key, required this.update});
-  final Function update;
+  const ShowSystemTableWidget({super.key});
 
   @override
   State<ShowSystemTableWidget> createState() => _ShowSystemTableWidgetState();
@@ -164,7 +160,6 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                   leftButtonTitle: '隱藏',
                   leftButtonOnPressed: () {
                       removeDisplayTagsToHideTags(i);
-                      widget.update();
                   },
                   rightButtonTitle: '刪除',
                   rightButtonOnPressed: () {
@@ -177,7 +172,6 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                   leftButtonTitle: '顯示',
                   leftButtonOnPressed: () {
                       removeHideTagsToDisplayTags(i);
-                      widget.update();
                   },
                   rightButtonTitle: '刪除',
                   rightButtonOnPressed: () {
@@ -194,7 +188,9 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
               ShowSystemTableBoxWidget(
                 tag: tag,
                 leftButtonTitle: '查看',
-                leftButtonOnPressed: () {},
+                leftButtonOnPressed: () {
+                  //audit_failed_tags_page
+                },
                 rightButtonTitle: '刪除',
                 rightButtonOnPressed: () {
                   //
