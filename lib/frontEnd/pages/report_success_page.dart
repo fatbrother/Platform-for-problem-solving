@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/suggest_field.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 
 class ReportSuccessPage extends StatefulWidget {
   const ReportSuccessPage({super.key});
@@ -21,6 +22,7 @@ class _ReportSuccessPageState extends State<ReportSuccessPage> {
         backgroundColor: Design.backgroundColor,
         body: Container(
           margin: Design.spacing,
+          padding: Design.spacing,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -58,7 +60,10 @@ class _ReportSuccessPageState extends State<ReportSuccessPage> {
                   controller: reportSuccessController,
                 ),
                 SizedBox(height: Design.getScreenHeight(context) * 0.05),
-                SendButton(onPressed: () => {}, text: '確認'),
+                SendButton(
+                    onPressed: () =>
+                        {DialogManager.showAlertDialog(context, '感謝您的建議。')},
+                    text: '確認'),
               ],
             ),
           ),

@@ -11,7 +11,7 @@ class AccountManager {
   static Future<void> updateCurrentUser(UsersModel user) async {
     user.id = _auth.currentUser!.uid;
     user.email = _auth.currentUser!.email!;
-    user.phone = _auth.currentUser!.phoneNumber??'';
+    user.phone = _auth.currentUser!.phoneNumber ?? '';
     UsersDatabase.updateUser(user);
   }
 

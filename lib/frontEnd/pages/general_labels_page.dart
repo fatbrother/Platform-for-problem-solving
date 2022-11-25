@@ -3,6 +3,7 @@ import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/tag.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 
 class UserTagPage extends StatelessWidget {
   const UserTagPage({
@@ -229,6 +230,9 @@ class _GeneralLabelsViewState extends State<GeneralLabelsView> {
     );
   }
 
+class ShowUsedTagsWidget extends StatelessWidget {
+  final List<String> tags;
+
   Widget showUsedTags(int which) {
     return Stack(
       children: [
@@ -328,8 +332,10 @@ class InstructionsWiget extends StatelessWidget {
       height: Design.getScreenHeight(context) * 0.05,
       child: InkWell(
         onTap: () {
-          //-->說明頁面
-          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChangePhoneNumberPage()));
+          DialogManager.showAlertDialog(
+            context, 
+            "自定義專業標籤，可使提問者更加了解您所擅長的領域。"
+          );
         },
         child: Stack(children: <Widget>[
           Container(

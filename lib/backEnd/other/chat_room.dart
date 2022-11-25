@@ -45,14 +45,35 @@ class ChatRoomDatabase
   }
 }
 
+class Messeaage {
+  String id;
+  String message;
+
+  Messeaage({
+    required this.id,
+    required this.message,
+  });
+
+  Map<String, String> toMap() {
+    return {
+      'id': id,
+      'message': message,
+    };
+  }
+
+  factory Messeaage.fromMap(Map<String, dynamic> map) {
+    return Messeaage(
+      id: map['id'],
+      message: map['message'],
+    );
+  }
+}
+
 class ChatRoomModel 
 {
   String id;
   List<String> memberIds;
-  // store messeages with user id and message
-  // use messeaage[id] to get user's id
-  // use messeaage[message] to get user's message
-  List<Map<String, String>> messages;
+  List<Messeaage> messages;
 
   ChatRoomModel({
     required this.id,
@@ -61,6 +82,10 @@ class ChatRoomModel
   });
 
   Map<String, dynamic> toMap() {
+    List<Map<String, String>> messagesMap = [];
+    for (var message in messages) {
+      messagesMap.add(message.toMap());
+    }
     return {
       'id': id,
       'memberIds': memberIds,
@@ -69,10 +94,15 @@ class ChatRoomModel
   }
 
   factory ChatRoomModel.fromMap(Map<String, dynamic> map) {
+    List<Messeaage> result = [];
+    for (var value in map['messages']) {
+      result.add(Messeaage.fromMap(value));
+    }
     return ChatRoomModel(
       id: map['id'],
       memberIds: List<String>.from(map['memberIds']),
-      messages: List<Map<String, String>>.from(map['messages']),
+      messages: result,
     );
   }
 }
+

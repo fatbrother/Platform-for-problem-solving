@@ -10,9 +10,8 @@ import 'package:pops/frontEnd/pages/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/general_labels_page.dart';
 import 'package:pops/frontEnd/pages/identification_page.dart';
 import 'package:pops/frontEnd/pages/login_page.dart';
-import 'package:pops/frontEnd/pages/rating_result_page.dart';
-import 'package:pops/frontEnd/pages/report_fail_page.dart';
 import 'package:pops/frontEnd/pages/report_page.dart';
+import 'package:pops/frontEnd/pages/report_fail_page.dart';
 import 'package:pops/frontEnd/pages/report_success_page.dart';
 import 'package:pops/frontEnd/pages/self_problem_page.dart';
 import 'package:pops/frontEnd/pages/rating_page.dart';
@@ -20,7 +19,7 @@ import 'package:pops/frontEnd/pages/register_page.dart';
 import 'package:pops/frontEnd/pages/self_single_problem_page.dart';
 import 'package:pops/frontEnd/pages/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/top_up_page.dart';
-
+import 'package:pops/frontEnd/pages/self_information_page.dart';
 import 'package:pops/frontEnd/pages/QuestionSearch(HomePage).dart';
 import 'package:pops/frontEnd/pages/question_appilcation_page.dart';
 // import '../backEnd/user/account.dart';
@@ -44,10 +43,10 @@ class Routes {
   static const String auditFailedTagsPage = '/auditFailedTagsPage';
 
   static const String ratingPage = '/ratingPage';
-  static const String ratingResultPage = '/ratingResultPage';
-  static const String reportFailPage = '/reportFailPage';
   static const String reportPage = '/reportPage';
+  static const String reportFailPage = '/reportFailPage';
   static const String reportSuccessPage = '/reportSuccessPage';
+  static const String selfInformationPage = '/selfInformationPage';
 
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
@@ -57,21 +56,25 @@ class Routes {
   final Map<String, WidgetBuilder> _routes = {
     login: (context) => const LoginPage(),
     register: (context) => const RegisterPage(),
-    userTagPage: (context) => const UserTagPage(),
+    //userTagPage: (context) => const UserTagPage(),
     systemTagPage: (context) => const SystemTagPage(),
     auditFailedTagsPage: (context) => const AuditFailedTagsPage(),
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
     ratingPage: (context) => const RatingPage(),
-    ratingResultPage: (context) => const RatingResultPage(),
     identificationPage: (context) => const IdentificationPage(),
-    reportFailPage: (context) => const ReportFailPage(),
     topUp: (context) => const TopUpPage(),
     reportPage: (context) => const ReportPage(),
+    reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
+<<<<<<< HEAD
     homePage: (context) => const HomePage(),
     questionApplyPage: (context) => QuestionApplyPage(),
+=======
+    selfInformationPage: ((context) => const SelfInformationPage()),
+    //homePage: (context) => const HomePage(),
+>>>>>>> 11720fe757e81553cc068a59060d5ef1d5942a9a
     // add routes here
     // [route name]: (context) => const [page name](),
 
@@ -86,7 +89,11 @@ class Routes {
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
   static String get homeRouteName =>
+<<<<<<< HEAD
       AccountManager.isLoggedIn() ? questionApplyPage : login;
+=======
+      AccountManager.isLoggedIn() ? homePage : ratingPage;
+>>>>>>> 11720fe757e81553cc068a59060d5ef1d5942a9a
 
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];

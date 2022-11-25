@@ -42,6 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         body: Container(
           margin: Design.spacing,
+          padding: Design.spacing,
           width: double.infinity,
           height: double.infinity,
           child: Container(

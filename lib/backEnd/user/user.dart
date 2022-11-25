@@ -53,13 +53,13 @@ class UsersModel {
   String name;
   String email;
   String phone;
-  List<dynamic> askProblemIds;
-  List<dynamic> pastExpertiseTags;
-  List<dynamic> expertiseTags;
-  List<dynamic> displaySystemTags;
-  List<dynamic> hideSystemTags;
-  List<dynamic> auditFailedTags;
-  List<dynamic> audittingTags;
+  List<String> askProblemIds;
+  List<String> pastExpertiseTags;
+  List<String> expertiseTags;
+  List<String> displaySystemTags;
+  List<String> hideSystemTags;
+  List<String> auditFailedTags;
+  List<String> audittingTags;
 
   List<dynamic> chatRoomsIds;
   int tokens;
@@ -73,8 +73,8 @@ class UsersModel {
     this.phone = '',
     this.expertiseTags = const [],
     this.pastExpertiseTags = const [],
-    this.displaySystemTags = const[],
-    this.hideSystemTags = const[],
+    this.displaySystemTags = const [],
+    this.hideSystemTags = const [],
     this.auditFailedTags = const [],
     this.audittingTags = const [],
     this.askProblemIds = const [],
@@ -90,14 +90,30 @@ class UsersModel {
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
-      askProblemIds: data['askProblemIds'] ?? [],
-      expertiseTags: data['expertiseTags'] ?? [],
-      pastExpertiseTags: data['pastExpertiseTags'] ?? [],
-      displaySystemTags: data['displaySystemTags'] ?? [],
-      hideSystemTags: data['hideSystemTags'] ?? [],
-      auditFailedTags: data['auditFailedTags'] ?? [],
-      audittingTags: data['audittingTags'] ?? [],
-      chatRoomsIds: data['chatRoomsIds'] ?? [],
+      askProblemIds: data['askProblemIds'] == null
+          ? []
+          : data['askProblemIds'].cast<String>(),
+      expertiseTags: data['expertiseTags'] == null
+          ? []
+          : data['expertiseTags'].cast<String>(),
+      pastExpertiseTags: data['pastExpertiseTags'] == null
+          ? []
+          : data['pastExpertiseTags'].cast<String>(),
+      displaySystemTags: data['displaySystemTags'] == null
+          ? []
+          : data['displaySystemTags'].cast<String>(),
+      hideSystemTags: data['hideSystemTags'] == null
+          ? []
+          : data['hideSystemTags'].cast<String>(),
+      auditFailedTags: data['auditFailedTags'] == null
+          ? []
+          : data['auditFailedTags'].cast<String>(),
+      audittingTags: data['audittingTags'] == null
+          ? []
+          : data['audittingTags'].cast<String>(),
+      chatRoomsIds: data['chatRoomsIds'] == null
+          ? []
+          : data['chatRoomsIds'].cast<String>(),
       tokens: data['tokens'] ?? 0,
       score: data['score'] ?? 0.0,
       numberOfScores: data['numberOfScores'] ?? 0,

@@ -9,7 +9,7 @@ class ImgManager {
   // get the image from the database
   static Future<Image> getImage(String imgId) async {
     try {
-      var image = await storage.ref(imgId).getData(1000000000);
+      var image = await storage.ref(imgId).getData();
 
       if (image == null) {
         throw Exception('No image found');
