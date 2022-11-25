@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/scaffold.dart';
 import 'package:pops/frontEnd/widgets/tag.dart';
 
@@ -156,11 +158,15 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                   tag: allTags['showingTags']![i],
                   leftButtonTitle: '隱藏',
                   leftButtonOnPressed: () {
-                    // removeDisplayTagsToHideTags(i);
+                    setState(() {
+                      removeDisplayTagsToHideTags(i);
+                    });
                   },
                   rightButtonTitle: '刪除',
                   rightButtonOnPressed: () {
-                    // removeDisplayTags(i);
+                    setState(() {
+                      showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'showingTags', i);
+                    });
                   },
                 ),
               for (int i = 0; i < allTags['notShowingTags']!.length; i++)
@@ -168,11 +174,14 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                   tag: allTags['notShowingTags']![i],
                   leftButtonTitle: '顯示',
                   leftButtonOnPressed: () {
-                    // removeHideTagsToDisplayTags(i);
+                    setState(() {
+                      removeHideTagsToDisplayTags(i);
+                    });
                   },
                   rightButtonTitle: '刪除',
                   rightButtonOnPressed: () {
                     // removeHideTags(i);
+                    showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'notShowingTags', i);
                   },
                 ),
             ],
@@ -186,7 +195,10 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                 leftButtonTitle: '查看',
                 leftButtonOnPressed: () {},
                 rightButtonTitle: '刪除',
-                rightButtonOnPressed: () {},
+                rightButtonOnPressed: () {
+                  //
+                  //showDeleteAlertDialog(context, "確認刪除將無法再回復！");
+                },
               ), //顯示所有該分類tags
           ]),
           SizedBox(height: Design.getScreenHeight(context) * 0.02),
@@ -196,9 +208,18 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
               ShowSystemTableBoxWidget(
                 tag: tag,
                 leftButtonTitle: '查看',
-                leftButtonOnPressed: () {},
+                leftButtonOnPressed: () {
+                  DialogManager.showAlertDialog(
+                    context,
+                    "標籤需經由人工審核，可能花費較長時間，請耐心等候。"
+                  );
+                  //or 顯示該標籤內容
+                },
                 rightButtonTitle: '刪除',
-                rightButtonOnPressed: () {},
+                rightButtonOnPressed: () {
+                  //
+                  //showDeleteAlertDialog(context, "確認刪除將無法再回復！");
+                },
               ), //顯示所有該分類tags
           ]),
         ],
@@ -214,14 +235,180 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
     allTags['auditFailedTags'] =
         currentUser.auditFailedTags.map((tag) => tag as String).toList();
     allTags['showingTags'] =
-        currentUser.expertiseTags.map((tag) => tag as String).toList();
+        currentUser.displaySystemTags.map((tag) => tag as String).toList();
     allTags['notShowingTags'] =
-        currentUser.pastExpertiseTags.map((tag) => tag as String).toList();
+        currentUser.hideSystemTags.map((tag) => tag as String).toList();
 
     setState(() {
     });
   }
+
+  Future<void> removeDisplayTagsToHideTags(int which) async {
+    allTags['notShowingTags']?.add(allTags['showingTags']![which]);
+    allTags['showingTags']?.removeAt(which);
+    final currentUser = await AccountManager.currentUser;
+
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: allTags['showingTags']!,
+      hideSystemTags: allTags['notShowingTags']!,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+    //print(allTags['notShowingTags']);//
+  }
+
+  Future<void> removeHideTagsToDisplayTags(int which) async {
+    allTags['showingTags']?.add(allTags['notShowingTags']![which]);
+    allTags['notShowingTags']?.removeAt(which);
+    final currentUser = await AccountManager.currentUser;
+
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: allTags['showingTags']!,
+      hideSystemTags: allTags['notShowingTags']!,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+    //print(allTags['showingTags']);
+  }
+
+  Future<void> removeHideTags(int which) async {
+    allTags['notShowingTags']?.removeAt(which);
+    final currentUser = await AccountManager.currentUser;
+
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: allTags['showingTags']!,
+      hideSystemTags: allTags['notShowingTags']!,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+  }
+
+    Future<void> removeDisplayTags(int which) async {
+    allTags['showingTags']?.removeAt(which);
+    final currentUser = await AccountManager.currentUser;
+
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: allTags['showingTags']!,
+      hideSystemTags: allTags['notShowingTags']!,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+  }
+  
+  
+  
+  
+  
+  
+  void showDeleteAlertDialog(BuildContext context, String message, String type, int num) {
+    AlertDialog dialog = AlertDialog(
+      actionsPadding: const EdgeInsets.symmetric(horizontal: 0.0),
+      //title: const Text("Confirm Dialog"),
+      content: Text(
+        message,
+        textAlign: TextAlign.center,
+      ),
+      actions: <Widget>[
+        Row(
+          children: [
+              Expanded(
+                child: 
+                  SizedBox(
+                    height: 35,
+                    child: TextButton(
+                    style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              Design.generalTagColor),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(0),
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(0),
+                            ),
+                          ))),
+                      child: const Text("刪除",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black)),
+                      onPressed: (){
+                        if(type == 'showingTags')
+                        {
+                          removeDisplayTags(num);
+                        }
+                        else if(type == 'notShowingTags')
+                        {
+                          removeHideTags(num);
+                        }
+                        
+
+
+
+
+                      },
+                    ),
+                  ),
+            ),
+            Expanded(
+              child: 
+                  SizedBox(
+                    height: 35,
+                    child: TextButton(
+                    style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            Design.secondaryColor),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(20),
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(0),
+                            ),
+                          ))),
+                      child: const Text("取消",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black)),
+                        onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+            )
+          ],
+        ),
+        
+      ],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    );
+
+    // Show the dialog
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        });
+  }
 }
+
+
+
+
+
 
 class ShowLableColumn extends StatelessWidget {
   const ShowLableColumn({
