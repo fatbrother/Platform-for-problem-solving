@@ -3,17 +3,17 @@ import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/suggest_field.dart';
-import 'package:pops/frontEnd/widgets/dialog.dart';
 
-class ReportPage extends StatefulWidget {
-  const ReportPage({super.key});
+
+class RatingResultPage extends StatefulWidget {
+  const RatingResultPage({super.key});
   @override
-  State<ReportPage> createState() => _ReportPageState();
+  State<RatingResultPage> createState() => _RatingResultPageState();
 }
 
-class _ReportPageState extends State<ReportPage> {
+class _RatingResultPageState extends State<RatingResultPage> {
   TextEditingController ratingController = TextEditingController();
-  int check = 0;
+  List<bool> checkList = [false, false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,6 @@ class _ReportPageState extends State<ReportPage> {
         backgroundColor: Design.backgroundColor,
         body: Container(
           margin: Design.spacing,
-          padding: Design.spacing,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -40,10 +39,14 @@ class _ReportPageState extends State<ReportPage> {
                 CheckButton(
                   text: '空白答案',
                   backgroundColor: Design.backgroundColor,
-                  ischeck: check == 0,
+                  ischeck: checkList[0],
                   onPressed: () => setState(
                     () {
-                      check = 0;
+                      if (checkList[0]) {
+                        checkList[0] = false;
+                      } else {
+                        checkList[0] = true;
+                      }
                     },
                   ),
                 ),
@@ -51,10 +54,14 @@ class _ReportPageState extends State<ReportPage> {
                 CheckButton(
                   text: '不雅字眼',
                   backgroundColor: Design.backgroundColor,
-                  ischeck: check == 1,
+                  ischeck: checkList[1],
                   onPressed: () => setState(
                     () {
-                      check = 1;
+                      if (checkList[1]) {
+                        checkList[1] = false;
+                      } else {
+                        checkList[1] = true;
+                      }
                     },
                   ),
                 ),
@@ -62,10 +69,14 @@ class _ReportPageState extends State<ReportPage> {
                 CheckButton(
                   text: '答案與問題無關',
                   backgroundColor: Design.backgroundColor,
-                  ischeck: check == 2,
+                  ischeck: checkList[2],
                   onPressed: () => setState(
                     () {
-                      check = 2;
+                      if (checkList[2]) {
+                        checkList[2] = false;
+                      } else {
+                        checkList[2] = true;
+                      }
                     },
                   ),
                 ),
@@ -73,15 +84,19 @@ class _ReportPageState extends State<ReportPage> {
                 CheckButton(
                   text: '其他',
                   backgroundColor: Design.backgroundColor,
-                  ischeck: check == 3,
+                  ischeck: checkList[3],
                   onPressed: () => setState(
                     () {
-                      check = 3;
+                      if (checkList[3]) {
+                        checkList[3] = false;
+                      } else {
+                        checkList[3] = true;
+                      }
                     },
                   ),
                 ),
                 ReportField(
-                  maxline: 15,
+                  maxline: 12,
                   hintTextFloating: '請對檢舉原因加以解釋...',
                   controller: ratingController,
                 ),

@@ -1,317 +1,351 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/widgets/buttons.dart';
+import 'package:pops/frontEnd/widgets/scaffold.dart';
 import 'package:pops/frontEnd/widgets/tag.dart';
-void main(){
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SystemTagPage extends StatelessWidget {
+  const SystemTagPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const appTitle = '系統標籤';
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: appTitle,
-      home: Scaffold(
-        backgroundColor: const Color.fromARGB(198, 192, 220, 236),
-        appBar: AppBar(
-          //build arrow_back
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.arrow_back),
-                color: const Color.fromARGB(255, 0, 0, 0),
-                onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-              );
-            },
-          ),
-          //AppBar color and word
-          backgroundColor: const Color.fromARGB(222, 255, 255, 255),
-          title: const Text(appTitle,  style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))), 
-          centerTitle: true,
-        ),
-
-        body: SystemLabelsView(),
-      ),
+    return const MyScaffold(
+      body: SystemLabelsView(),
+      backgroundColor: Design.secondaryColor,
+      currentIndex: 0,
+      // currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.systemLabelsPage),
     );
   }
 }
+
 class SystemLabelsView extends StatefulWidget {
-  SystemLabelsView({super.key});
+  const SystemLabelsView({super.key});
 
   @override
   State<SystemLabelsView> createState() => _SystemLabelsViewState();
 }
 
 class _SystemLabelsViewState extends State<SystemLabelsView> {
-  List<String> tags = <String>['目補習班自然老師','目補習班數學老師','未補習班國文老師','目學校國文老師','失2022/4/5提交','中2022/11/12提交'];
-  int count = 0;//for tagsbox
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: Design.spacing,
+      child: Column(
+        children: <Widget>[
+          const ShowSystemTagsWidget(),
+          SizedBox(height: Design.getScreenHeight(context) * 0.03),
+          const ShowSystemTableWidget(),
+        ],
+      ),
+    );
+  }
+}
+
+class ShowSystemTagsWidget extends StatefulWidget {
+  const ShowSystemTagsWidget({super.key});
+
+  @override
+  State<ShowSystemTagsWidget> createState() => _ShowSystemTagsWidgetState();
+}
+
+
+
+class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
+  List<String> tags = <String>[];
+
+  @override
+  void initState() {
+    super.initState();
+    loadTags();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 35),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          color: Design.insideColor //color沒放在decoration裡的話會overflow
+          ),
+      width: double.infinity,
+      constraints: BoxConstraints(
+        minHeight: Design.getScreenHeight(context) * 0.15,
+      ),
+      child: Column(
+        children: [
+          const Text(
+            '目前顯示的系統標籤',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(height: Design.getScreenHeight(context) * 0.01),
+          Wrap(
+              spacing: 5,
+              runSpacing: 5,
+              direction: Axis.horizontal,
+              children: [
+                for (final tag in tags)
+                  ShowTagsWidget(
+                    title: tag,
+                    isGeneral: false,
+                  ),
+              ]),
+          SizedBox(height: Design.getScreenHeight(context) * 0.01),
+        ],
+      ),
+    );
+  }
+  /*
+  Future<void> BeginTags() async {
+    final currentUser = await AccountManager.currentUser;
+    
+    final newUser = UsersModel(
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      displaySystemTags: tags,
+    );
+
+    AccountManager.updateCurrentUser(newUser);
+    setState(() {});
+  }
+  */
+
+  Future<void> loadTags() async {
+    var currentUser = await AccountManager.currentUser;
+    tags = currentUser.displaySystemTags.map((e) => e as String).toList();
+    debugPrint('tags: $tags');
+    setState(() {});
+  }
+}
+
+class ShowSystemTableWidget extends StatefulWidget {
+  const ShowSystemTableWidget({super.key});
+
+  @override
+  State<ShowSystemTableWidget> createState() => _ShowSystemTableWidgetState();
+}
+
+class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
+  Map<String, List<String>> allTags = <String, List<String>>{};
+
+  @override
+  void initState() {
+    super.initState();
+    loadAllTags();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        borderRadius: Design.outsideBorderRadius,
+        color: Design.insideColor,
+      ),
+      padding: Design.spacing,
       child: Column(
         children: <Widget>[
-          //顯示的系統標籤
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color: const Color.fromARGB(
-                  255, 255, 255, 255), //color沒放在decoration裡的話會overflow
-            ),
-            width: double.infinity,
-            child: Column(
-              children: [
-                const Text(
-                  '目前顯示的系統標籤',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
+          ShowLableColumn(
+            title: '審核通過的標籤',
+            children: [
+              for (int i = 0; i < allTags['showingTags']!.length; i++)
+                ShowSystemTableBoxWidget(
+                  tag: allTags['showingTags']![i],
+                  leftButtonTitle: '隱藏',
+                  leftButtonOnPressed: () {
+                    // removeDisplayTagsToHideTags(i);
+                  },
+                  rightButtonTitle: '刪除',
+                  rightButtonOnPressed: () {
+                    // removeDisplayTags(i);
+                  },
                 ),
-                const SizedBox(
-                  height: 5,
+              for (int i = 0; i < allTags['notShowingTags']!.length; i++)
+                ShowSystemTableBoxWidget(
+                  tag: allTags['notShowingTags']![i],
+                  leftButtonTitle: '顯示',
+                  leftButtonOnPressed: () {
+                    // removeHideTagsToDisplayTags(i);
+                  },
+                  rightButtonTitle: '刪除',
+                  rightButtonOnPressed: () {
+                    // removeHideTags(i);
+                  },
                 ),
-                Wrap(
-                  spacing: 5,
-                  runSpacing: 5,
-                  direction: Axis.horizontal,
-                  children: [
-                    for (final tag in tags) if(tag[0] == '目')//只顯示「目前有顯示的」
-                      ShowTagsWidget(title: tag.substring(1)),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-              ],
-            )
+            ],
           ),
-          const SizedBox(height: 19),
-          //系統標籤狀態表
-          Container(//外白框
-              width: 370,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color:const Color.fromARGB(255, 255, 255, 255),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Column(
-                children: <Widget>[
-                  Container(//審核通過的標籤
-                    width: 370,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color:const Color.fromARGB(198, 192, 220, 236),
-                    ),
-                    child:
-                      Column(
-                        children: [
-                          const Text(//標題
-                          '審核通過的標籤',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                          fontSize: 20,
-                          color: Color.fromARGB(255, 0, 0, 0)),
-                        ),
-                          const SizedBox(height: 10),
-                          //審核通過的-->有'目前已顯示'及'未顯示'兩種，都列出
-                            for(count = 0;count<tags.length;count++)
-                              if(tags[count][0] == '目' || tags[count][0] == '未')
-                                ShowSystemTableBox(tags[count], count),
-                        ],
-                      ),
-                  ),
-
-                  const SizedBox(height: 10),//空
-
-                  Container(//審核失敗的標籤
-                    width: 370,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color:const Color.fromARGB(198, 192, 220, 236),
-                    ),
-                    child:
-                      Column(
-                        children: [
-                          const Text(//標題
-                          '審核失敗的標籤',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                          fontSize: 20,
-                          color: Color.fromARGB(255, 0, 0, 0)),
-                        ),
-                          const SizedBox(height: 10),
-                          //列出審核失敗的標籤
-                            for(count = 0;count<tags.length;count++)
-                              if(tags[count][0] == '失')
-                                ShowSystemTableBox(tags[count], count),
-                        ],
-                      ),
-                  ),
-
-                  const SizedBox(height: 10),//空
-
-                  Container(//審核中的標籤
-                    width: 370,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color:const Color.fromARGB(198, 192, 220, 236),
-                    ),
-                    child:
-                      Column(
-                        children: [
-                          const Text(//標題
-                          '審核中的標籤',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                          fontSize: 20,
-                          color: Color.fromARGB(255, 0, 0, 0)),
-                        ),
-                          const SizedBox(height: 10),
-                          //列出審核中的標籤
-                          for(count = 0;count<tags.length;count++)
-                            if(tags[count][0] == '中')
-                              ShowSystemTableBox(tags[count], count),
-                        ],
-                      ),
-                  ),
-                ],
-              ),
-          ),
-          const SizedBox(height: 19),
+          SizedBox(height: Design.getScreenHeight(context) * 0.02),
+          ShowLableColumn(title: '審核失敗的標籤', children: [
+            //審核失敗的標籤
+            for (final tag in allTags['auditFailedTags']!)
+              ShowSystemTableBoxWidget(
+                tag: tag,
+                leftButtonTitle: '查看',
+                leftButtonOnPressed: () {},
+                rightButtonTitle: '刪除',
+                rightButtonOnPressed: () {},
+              ), //顯示所有該分類tags
+          ]),
+          SizedBox(height: Design.getScreenHeight(context) * 0.02),
+          ShowLableColumn(title: '審核中的標籤', children: [
+            //審核中的標籤
+            for (final tag in allTags['audittingTags']!)
+              ShowSystemTableBoxWidget(
+                tag: tag,
+                leftButtonTitle: '查看',
+                leftButtonOnPressed: () {},
+                rightButtonTitle: '刪除',
+                rightButtonOnPressed: () {},
+              ), //顯示所有該分類tags
+          ]),
         ],
       ),
     );
   }
 
-  Widget ShowSystemTableBox(String tag, int count)
-  {
-    return Column(
-        children: [
-          Container(
-            width: 370,
-            height: 40,
-            //padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: const BoxDecoration(
-              color:Color.fromARGB(255, 255, 255, 255),
-            ),
+  Future<void> loadAllTags() async {
+    var currentUser = await AccountManager.currentUser;
+    allTags = <String, List<String>>{};
+    allTags['audittingTags'] =
+        currentUser.audittingTags.map((tag) => tag as String).toList();
+    allTags['auditFailedTags'] =
+        currentUser.auditFailedTags.map((tag) => tag as String).toList();
+    allTags['showingTags'] =
+        currentUser.expertiseTags.map((tag) => tag as String).toList();
+    allTags['notShowingTags'] =
+        currentUser.pastExpertiseTags.map((tag) => tag as String).toList();
 
-            child: Stack(
-              children: [
-                Container(
-                  alignment: const Alignment(-1, 0),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  child: Text(
-                        tag.substring(1),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(//letterSpacing: 10,
-                        fontSize: 15,
-                        //fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 0, 0, 0)),
-                      ),
-                ),
-
-                Container(
-                  alignment: const Alignment(0.4, 0),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  child: TextButton(
-                    onPressed: (){
-                      if(tag[0] == '目') {
-                        setState(() {
-                          //print(tags[count]);
-                          tags[count] = tag.replaceRange(0, 1, '未');
-                          //print(tags[count]);
-                        });
-                      } else if(tag[0] == '未') {
-                        setState(() {
-                          //print(tags[count]);
-                          tags[count] = tag.replaceRange(0, 1, '目');
-                          //print(tags[count]);
-                        });
-                      }
-                      else if(tag[0] == '失')
-                      {
-
-                      }
-                      else if(tag[0] == '中')
-                      {
-
-                      }
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(198, 192, 220, 236),
-                      padding: const EdgeInsets.all(0.0),
-                    ),
-                    child: LeftButton(state: tag[0],),
-                  ),
-                ),
-
-                Container(
-                  alignment: const Alignment(1, 0),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  //padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                  //height: 36,
-                  child: TextButton(
-                    onPressed: (){},
-                    style: TextButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 224, 210, 209),
-                      padding: const EdgeInsets.all(0.0),
-                    ),
-                    child: const Text('刪除',
-                      style: TextStyle( 
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        fontSize: 15,
-                      )),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),//間距
-        ],
-      );
+    setState(() {
+    });
   }
 }
 
+class ShowLableColumn extends StatelessWidget {
+  const ShowLableColumn({
+    Key? key,
+    required this.title,
+    required this.children,
+  }) : super(key: key);
 
-class LeftButton extends StatelessWidget
-{
-  final String state;
-  const LeftButton({super.key, required this.state});
+  final List<Widget> children;
+  final String title;
+
   @override
-  Widget build(BuildContext context)
-  {
-    switch(state)
-    {
-      case '目': return const Text('隱藏',
-                    style: TextStyle( 
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      fontSize: 15,
-                    )
-                  );
-      case '未': return const Text('顯示',
-                    style: TextStyle( 
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      fontSize: 15,
-                    )
-                  );
-      case '失': return const Text('查看',
-                    style: TextStyle( 
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      fontSize: 15,
-                    )
-                  );
-      case '中': return const Text('查看',
-                    style: TextStyle( 
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      fontSize: 15,
-                    )
-                  );   
-      default: return const Text('LeftButton is error!');
+  Widget build(BuildContext context) {
+    // add sizebox between child of children
+    List<Widget> childrenWithSizeBox = <Widget>[];
+    for (int i = 0; i < children.length; i++) {
+      childrenWithSizeBox.add(children[i]);
+      if (i != children.length - 1) {
+        childrenWithSizeBox
+            .add(SizedBox(height: Design.getScreenHeight(context) * 0.02));
+      }
     }
+
+    return Container(
+      //審核失敗的標籤
+      width: double.infinity,
+      constraints: BoxConstraints(
+        minHeight: Design.getScreenHeight(context) * 0.15,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: const BoxDecoration(
+        borderRadius: Design.outsideBorderRadius,
+        color: Color.fromARGB(136, 160, 182, 195),
+      ),
+      child: Column(
+        children: [
+          //標題
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 20,
+              color: Design.primaryTextColor,
+            ),
+          ),
+          SizedBox(height: Design.getScreenHeight(context) * 0.01),
+          for (final child in childrenWithSizeBox) child,
+          SizedBox(height: Design.getScreenHeight(context) * 0.01),
+        ],
+      ),
+    );
+  }
+}
+
+class ShowSystemTableBoxWidget extends StatefulWidget {
+  final String tag;
+  final String leftButtonTitle;
+  final void Function() leftButtonOnPressed;
+  final String rightButtonTitle;
+  final void Function() rightButtonOnPressed;
+
+  const ShowSystemTableBoxWidget({
+    super.key,
+    required this.tag,
+    required this.leftButtonTitle,
+    required this.leftButtonOnPressed,
+    required this.rightButtonTitle,
+    required this.rightButtonOnPressed,
+  });
+
+  @override
+  State<ShowSystemTableBoxWidget> createState() =>
+      _ShowSystemTableBoxWidgetState();
+}
+
+class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: Design.getScreenHeight(context) * 0.05,
+          decoration: const BoxDecoration(
+            color: Design.insideColor,
+          ),
+          child: Stack(
+            children: [
+              Container(
+                alignment: const Alignment(-1, 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                child: Text(
+                  widget.tag,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Design.primaryTextColor,
+                  ),
+                ),
+              ),
+              Container(
+                alignment: const Alignment(0.4, 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                child: ColorButton(
+                  title: widget.leftButtonTitle,
+                  backgroundColor: const Color.fromARGB(136, 160, 182, 195),
+                  onPressed: widget.leftButtonOnPressed,
+                ),
+              ),
+              Container(
+                alignment: const Alignment(1, 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                child: ColorButton(
+                  title: widget.rightButtonTitle,
+                  backgroundColor: const Color.fromARGB(255, 212, 199, 198),
+                  onPressed: widget.rightButtonOnPressed,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

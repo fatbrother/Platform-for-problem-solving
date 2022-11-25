@@ -60,7 +60,7 @@ class ProblemsModel {
   String authorName;
   String authorId;
   List<String> imgIds;
-  List<int> tags;
+  List<String> tags;
   int baseToken;
   bool isSolved;
   List<String> solveCommendIds;
@@ -90,14 +90,14 @@ class ProblemsModel {
     return ProblemsModel(
       id: data['id'] ?? '',
       title: data['title'] ?? '',
-      tags: data['tags'] ?? [],
+      tags: data['tags'] == null ? [] : data['tags'].cast<String>() ?? [],
       description: data['description'] ?? '',
       authorName: data['authorName'] ?? '',
       authorId: data['authorId'] ?? '',
-      imgIds: data['imgIds'] ?? [],
+      imgIds: data['imgIds'] == null ? [] : data['imgIds'].cast<String>(),
       isSolved: data['isSolved'] ?? false,
       baseToken: data['baseToken'] ?? 10,
-      solveCommendIds: data['solveCommendIds'] ?? [],
+      solveCommendIds: data['solveCommendIds'] == null ? [] : data['solveCommendIds'].cast<String>(),
       chooseSolveCommendId: data['chooseSolveCommendId'] ?? '',
       createdAt: data['createdAt'] ? DateTime.parse(data['createdAt']) : DateTime.now(),
       remainingDays: data['remainingDays'] ?? 3,
@@ -109,7 +109,7 @@ class ProblemsModel {
     return {
       'id': id,
       'title': title,
-      'tags': tags,
+      'tagIds': tags,
       'description': description,
       'authorName': authorName,
       'authorId': authorId,

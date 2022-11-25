@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
@@ -24,7 +21,6 @@ class _ReportSuccessPageState extends State<ReportSuccessPage> {
         backgroundColor: Design.backgroundColor,
         body: Container(
           margin: Design.spacing,
-          padding: Design.spacing,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -48,32 +44,16 @@ class _ReportSuccessPageState extends State<ReportSuccessPage> {
                 ),
                 SizedBox(height: Design.getScreenHeight(context) * 0.05),
                 const Text(
-                  '點選確定系統將歸還代幣。',
+                  '點選確定系統將歸還代幣。\n解題者會受到警告。\n感謝您的使用。',
                   style: TextStyle(
                     fontSize: 20.0,
                     color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const Text(
-                  '解題者會受到警告。',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const Text(
-                  '感謝您的使用。',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.025),
+                SizedBox(height: Design.getScreenHeight(context) * 0.03),
                 ReportField(
-                  maxline: 18,
+                  maxline: 15,
                   hintTextFloating: '請提供您寶貴的意見...',
                   controller: reportSuccessController,
                 ),

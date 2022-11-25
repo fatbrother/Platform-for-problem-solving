@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pops/frontEnd/design.dart';
 
 class ShowTagsWidget extends StatelessWidget {
-  final String title;
-  const ShowTagsWidget({super.key, required this.title});
+  final String title;final bool isGeneral;
+  const ShowTagsWidget({super.key, required this.title, required this.isGeneral});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -11,12 +12,12 @@ class ShowTagsWidget extends StatelessWidget {
       children: <Widget>[
       SvgPicture.asset(
         'assets/label_left_triangle.svg',
-        color: const Color.fromARGB(255, 208, 171, 204),
+        color: (isGeneral)?Design.generalTagColor:Design.systemTagColor,
       ),
       Container(
           height: 24.2,
           padding: const EdgeInsets.symmetric(horizontal: 3.4, vertical: 3.1),
-          color: const Color.fromARGB(255, 208, 171, 204),
+          color: (isGeneral)?Design.generalTagColor:Design.systemTagColor,
           child: Container(
             //alignment: Alignment.center, <--用了的話container的長度就沒辦法hug text
             color: const Color.fromARGB(255, 255, 255, 255),

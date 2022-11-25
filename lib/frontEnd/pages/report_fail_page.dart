@@ -1,8 +1,6 @@
-import 'dart:ffi';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/suggest_field.dart';
 
@@ -14,7 +12,6 @@ class ReportFailPage extends StatefulWidget {
 
 class _ReportFailPageState extends State<ReportFailPage> {
   TextEditingController reportSuccessController = TextEditingController();
-  List<bool> checkList = [false, false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -24,20 +21,10 @@ class _ReportFailPageState extends State<ReportFailPage> {
         backgroundColor: Design.backgroundColor,
         body: Container(
           margin: Design.spacing,
-          padding: Design.spacing,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: Design.getScreenHeight(context) * 0.05),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => {},
-                      icon: const Icon(Icons.arrow_back),
-                      iconSize: 35,
-                    ),
-                  ],
-                ),
+                const MyAppBar(),
                 const Text(
                   '檢舉失敗',
                   style: TextStyle(
@@ -46,25 +33,9 @@ class _ReportFailPageState extends State<ReportFailPage> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.05),
+                SizedBox(height: Design.getScreenHeight(context) * 0.03),
                 const Text(
-                  '系統無法退還代幣，',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const Text(
-                  '但您還是能對解題者評分評論。',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const Text(
-                  '感謝您的使用。',
+                  '系統無法退還代幣，\n但您還是能對解題者評分評論。\n感謝您的使用。',
                   style: TextStyle(
                     fontSize: 20.0,
                     color: Colors.black,
@@ -73,7 +44,7 @@ class _ReportFailPageState extends State<ReportFailPage> {
                 ),
                 SizedBox(height: Design.getScreenHeight(context) * 0.025),
                 ReportField(
-                  maxline: 18,
+                  maxline: 15,
                   hintTextFloating: '請提供您寶貴的意見...',
                   controller: reportSuccessController,
                 ),
