@@ -67,7 +67,7 @@ class Routes {
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
     selfInformationPage: ((context) => const SelfInformationPage()),
-    //homePage: (context) => const HomePage(),
+    homePage: (context) => const HomePage(),
     // add routes here
     // [route name]: (context) => const [page name](),
 
@@ -82,7 +82,7 @@ class Routes {
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? homePage : ratingPage;
+      AccountManager.isLoggedIn() ? homePage : login;
 
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];
