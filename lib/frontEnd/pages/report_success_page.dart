@@ -24,7 +24,7 @@ class _ReportSuccessPageState extends State<ReportSuccessPage> {
         backgroundColor: Design.backgroundColor,
         body: Container(
           margin: Design.spacing,
-          //padding: Design.spacing,
+          padding: Design.spacing,
           child: SingleChildScrollView(
             child: Column(
               children: [

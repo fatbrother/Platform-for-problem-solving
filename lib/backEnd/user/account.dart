@@ -5,10 +5,10 @@ import '../database.dart';
 // for example, sign in, sign out, sign up
 class AccountManager {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-  static UsersModel? currentUser;
+  static Future<UsersModel> get currentUser async => await UsersDatabase.queryUser(_auth.currentUser!.uid);
 
   static void updateCurrentUser() async {
-    UsersDatabase.updateUser(currentUser!);
+    currentUser.then((value) => UsersDatabase.updateUser(value));
   }
 
   static Future<void> signIn(String email, String password) async {
@@ -30,13 +30,6 @@ class AccountManager {
         throw Exception('Email is not verified');
       }
 
-    } catch (e) {
-      signOut();
-      rethrow;
-    }
-
-    try {
-      currentUser = await UsersDatabase.queryUser(_auth.currentUser!.uid);
     } catch (e) {
       signOut();
       rethrow;
@@ -67,7 +60,6 @@ class AccountManager {
 
       try {
         UsersDatabase.addUser(usersModel);
-        currentUser = usersModel;
       } catch (e) {
         rethrow;
       }
@@ -78,8 +70,6 @@ class AccountManager {
 
   static Future<void> signOut() async {
     await _auth.signOut();
-
-    currentUser = null;
   }
 
   static Future<String> sendSms(String phone) async {
@@ -112,10 +102,9 @@ class AccountManager {
         smsCode: smsCode,
       ));
       try {
-        UsersModel? usersModel = currentUser;
-        usersModel!.phone = _auth.currentUser!.phoneNumber!;
+        UsersModel? usersModel = await currentUser;
+        usersModel.phone = _auth.currentUser!.phoneNumber!;
         UsersDatabase.updateUser(usersModel);
-        currentUser = usersModel;
       } catch (e) {
         rethrow;
       }
@@ -155,7 +144,6 @@ class AccountManager {
   static Future<void> resetPassword(String password) async {
     try {
       await _auth.currentUser!.updatePassword(password);
-      currentUser = await UsersDatabase.queryUser(_auth.currentUser!.uid);
     } catch (e) {
       rethrow;
     }
@@ -169,7 +157,6 @@ class AccountManager {
     }
 
     signOut();
-    currentUser = null;
   }
 
   static bool isLoggedIn() {

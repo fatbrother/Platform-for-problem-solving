@@ -20,47 +20,49 @@ class _RatingPageState extends State<RatingPage> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         backgroundColor: Design.backgroundColor,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: Design.getScreenHeight(context) * 0.05),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () => {},
-                    icon: const Icon(Icons.arrow_back),
-                    iconSize: 35,
-                  ),
-                ],
-              ),
-              const Text(
-                '請給予解題者評分評語',
-                style: TextStyle(
-                  fontSize: 30.0,
-                  color: Design.primaryColor,
+        body: Container(
+          margin: Design.spacing,
+          padding: Design.spacing,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: Design.getScreenHeight(context) * 0.025),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => {},
+                      icon: const Icon(Icons.arrow_back),
+                      iconSize: 35,
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: Design.getScreenHeight(context) * 0.03),
-              StarPlate(
-                numOfStars: numOfStars,
-                radius: 0.28 * Design.getScreenWidth(context),
-                onPressed: () => setState(() {
-                  numOfStars++;
-                  numOfStars %= 6;
-                }),
-              ),
-              Container(
-                margin: Design.spacing,
-                padding: Design.spacing,
-                child: SuggestField(
-                  maxline: 15,
+                const Text(
+                  '請給予解題者評分評語',
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    color: Design.primaryColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: Design.getScreenHeight(context) * 0.03),
+                StarPlate(
+                  numOfStars: numOfStars,
+                  radius: 0.28 * Design.getScreenWidth(context),
+                  onPressed: () => setState(() {
+                    numOfStars++;
+                    numOfStars %= 6;
+                  }),
+                ),
+                SizedBox(height: Design.getScreenHeight(context) * 0.02),
+                SuggestField(
+                  maxline: 14,
                   hintTextFloating: '輸入評語...',
                   controller: ratingController,
                 ),
-              ),
-              SendButton(onPressed: () => {}, text: '送出'),
-            ],
+                SizedBox(height: Design.getScreenHeight(context) * 0.02),
+                SendButton(onPressed: () => {}, text: '送出'),
+              ],
+            ),
           ),
         ),
       ),

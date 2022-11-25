@@ -59,7 +59,7 @@ class ReportField extends StatefulWidget {
     required this.hintTextFloating,
     required this.controller,
     this.obscureText = false,
-    this.maxline = 1,
+    this.maxline = 2,
   });
 
   @override
