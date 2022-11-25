@@ -51,8 +51,6 @@ class ShowSystemTagsWidget extends StatefulWidget {
   State<ShowSystemTagsWidget> createState() => _ShowSystemTagsWidgetState();
 }
 
-
-
 class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
   List<String> tags = <String>[];
 
@@ -209,17 +207,12 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
   Future<void> loadAllTags() async {
     var currentUser = await AccountManager.currentUser;
     allTags = <String, List<String>>{};
-    allTags['audittingTags'] =
-        currentUser.audittingTags.map((tag) => tag as String).toList();
-    allTags['auditFailedTags'] =
-        currentUser.auditFailedTags.map((tag) => tag as String).toList();
-    allTags['showingTags'] =
-        currentUser.expertiseTags.map((tag) => tag as String).toList();
-    allTags['notShowingTags'] =
-        currentUser.pastExpertiseTags.map((tag) => tag as String).toList();
+    allTags['audittingTags'] = currentUser.audittingTags;
+    allTags['auditFailedTags'] = currentUser.auditFailedTags;
+    allTags['showingTags'] = currentUser.expertiseTags;
+    allTags['notShowingTags'] = currentUser.pastExpertiseTags;
 
-    setState(() {
-    });
+    setState(() {});
   }
 }
 
