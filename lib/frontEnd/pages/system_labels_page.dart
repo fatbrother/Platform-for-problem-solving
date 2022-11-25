@@ -31,6 +31,11 @@ class SystemLabelsView extends StatefulWidget {
 }
 
 class _SystemLabelsViewState extends State<SystemLabelsView> {
+  _update()
+  {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -39,7 +44,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
         children: <Widget>[
           const ShowSystemTagsWidget(),
           SizedBox(height: Design.getScreenHeight(context) * 0.03),
-          const ShowSystemTableWidget(),
+          ShowSystemTableWidget(update: _update),
         ],
       ),
     );
@@ -57,15 +62,14 @@ class ShowSystemTagsWidget extends StatefulWidget {
 
 class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
   List<String> tags = <String>[];
-
   @override
   void initState() {
     super.initState();
     loadTags();
   }
-
   @override
   Widget build(BuildContext context) {
+    loadTags();//要有這行，不然只會loadTags一次？
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -125,7 +129,8 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
 }
 
 class ShowSystemTableWidget extends StatefulWidget {
-  const ShowSystemTableWidget({super.key});
+  const ShowSystemTableWidget({super.key, required this.update});
+  final Function update;
 
   @override
   State<ShowSystemTableWidget> createState() => _ShowSystemTableWidgetState();
@@ -158,15 +163,12 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                   tag: allTags['showingTags']![i],
                   leftButtonTitle: '隱藏',
                   leftButtonOnPressed: () {
-                    setState(() {
                       removeDisplayTagsToHideTags(i);
-                    });
+                      widget.update();
                   },
                   rightButtonTitle: '刪除',
                   rightButtonOnPressed: () {
-                    setState(() {
                       showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'showingTags', i);
-                    });
                   },
                 ),
               for (int i = 0; i < allTags['notShowingTags']!.length; i++)
@@ -174,9 +176,8 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                   tag: allTags['notShowingTags']![i],
                   leftButtonTitle: '顯示',
                   leftButtonOnPressed: () {
-                    setState(() {
                       removeHideTagsToDisplayTags(i);
-                    });
+                      widget.update();
                   },
                   rightButtonTitle: '刪除',
                   rightButtonOnPressed: () {
