@@ -42,7 +42,7 @@ class Routes {
   static const String changePhoneNumberPage = '/changePhoneNumberPage';
   static const String auditFailedTagsPage = '/auditFailedTagsPage';
 
-  static const String ratingPage = '/ratingPage';
+  //static const String ratingPage = '/ratingPage';
   static const String reportPage = '/reportPage';
   static const String reportFailPage = '/reportFailPage';
   static const String reportSuccessPage = '/reportSuccessPage';
@@ -62,19 +62,14 @@ class Routes {
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
-    ratingPage: (context) => const RatingPage(),
+    // ratingPage: (context) => const RatingPage(),
     identificationPage: (context) => const IdentificationPage(),
     topUp: (context) => const TopUpPage(),
     reportPage: (context) => const ReportPage(),
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
-<<<<<<< HEAD
     homePage: (context) => const HomePage(),
     questionApplyPage: (context) => QuestionApplyPage(),
-=======
-    selfInformationPage: ((context) => const SelfInformationPage()),
-    //homePage: (context) => const HomePage(),
->>>>>>> 11720fe757e81553cc068a59060d5ef1d5942a9a
     // add routes here
     // [route name]: (context) => const [page name](),
 
@@ -89,11 +84,7 @@ class Routes {
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
   static String get homeRouteName =>
-<<<<<<< HEAD
-      AccountManager.isLoggedIn() ? questionApplyPage : login;
-=======
-      AccountManager.isLoggedIn() ? homePage : ratingPage;
->>>>>>> 11720fe757e81553cc068a59060d5ef1d5942a9a
+      AccountManager.isLoggedIn() ? homePage : login;
 
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];
