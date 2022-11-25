@@ -60,7 +60,7 @@ class ProblemsModel {
   String authorName;
   String authorId;
   List<String> imgIds;
-  List<int> tagIds;
+  List<String> tags;
   int baseToken;
   bool isSolved;
   List<String> solveCommendIds;
@@ -76,7 +76,7 @@ class ProblemsModel {
     required this.authorName,
     required this.authorId,
     required this.imgIds,
-    required this.tagIds,
+    required this.tags,
     required this.isSolved,
     required this.baseToken,
     required this.solveCommendIds,
@@ -90,7 +90,7 @@ class ProblemsModel {
     return ProblemsModel(
       id: data['id'] ?? '',
       title: data['title'] ?? '',
-      tagIds: data['tags'] == null ? [] : data['tags'].cast<String>() ?? [],
+      tags: data['tags'] == null ? [] : data['tags'].cast<String>() ?? [],
       description: data['description'] ?? '',
       authorName: data['authorName'] ?? '',
       authorId: data['authorId'] ?? '',
@@ -109,7 +109,7 @@ class ProblemsModel {
     return {
       'id': id,
       'title': title,
-      'tagIds': tagIds,
+      'tagIds': tags,
       'description': description,
       'authorName': authorName,
       'authorId': authorId,
