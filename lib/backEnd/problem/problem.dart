@@ -90,7 +90,7 @@ class ProblemsModel {
     return ProblemsModel(
       id: data['id'] ?? '',
       title: data['title'] ?? '',
-      tags: data['tags'] == null ? [] : data['tags'].cast<String>() ?? [],
+      tags: data['tags'] == null ? [] : data['tags'].cast<String>(),
       description: data['description'] ?? '',
       authorName: data['authorName'] ?? '',
       authorId: data['authorId'] ?? '',
