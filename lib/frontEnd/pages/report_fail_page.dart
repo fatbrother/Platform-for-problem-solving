@@ -24,7 +24,7 @@ class _ReportFailPageState extends State<ReportFailPage> {
         backgroundColor: Design.backgroundColor,
         body: Container(
           margin: Design.spacing,
-          //padding: Design.spacing,
+          padding: Design.spacing,
           child: SingleChildScrollView(
             child: Column(
               children: [
