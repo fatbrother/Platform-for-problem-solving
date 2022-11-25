@@ -86,7 +86,12 @@ class _ReportPageState extends State<ReportPage> {
                   controller: ratingController,
                 ),
                 SizedBox(height: Design.getScreenHeight(context) * 0.02),
-                SendButton(onPressed: () {}, text: '送出'),
+                SendButton(
+                    onPressed: () {
+                      DialogManager.showAlertDialog(
+                          context, '您的檢舉將進入審核，所需時間較長，請耐心等候。');
+                    },
+                    text: '送出'),
               ],
             ),
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/suggest_field.dart';
 import 'package:pops/frontEnd/widgets/star_plate.dart';
 
@@ -60,7 +61,10 @@ class _RatingPageState extends State<RatingPage> {
                   controller: ratingController,
                 ),
                 SizedBox(height: Design.getScreenHeight(context) * 0.02),
-                SendButton(onPressed: () => {}, text: '送出'),
+                SendButton(
+                    onPressed: () =>
+                        {DialogManager.showAlertDialog(context, '感謝您的評分！')},
+                    text: '送出'),
               ],
             ),
           ),
