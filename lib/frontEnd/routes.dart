@@ -75,6 +75,7 @@ class Routes {
     homePage: (context) => const HomePage(),
     settingPage: (context) => const SettingPage(),
     questionApplyPage: (context) => QuestionApplyPage(),
+    accountManagePage: (context) => AccountManagePage(),
     // add routes here
     // [route name]: (context) => const [page name](),
 
@@ -89,7 +90,7 @@ class Routes {
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? settingPage : login;
+      AccountManager.isLoggedIn() ? accountManagePage : login;
 
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];

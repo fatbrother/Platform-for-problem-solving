@@ -15,37 +15,39 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-      appBar: AppBar(
-        title: const BackButton(color: Colors.black),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      backgroundColor: const Color.fromARGB(198, 192, 220, 236),
-      body: HomePage(),
-    ));
+          appBar: AppBar(
+            title: const BackButton(color: Colors.black),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          backgroundColor: const Color.fromARGB(198, 192, 220, 236),
+          body: AccountManagePage(),
+        ));
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class AccountManagePage extends StatelessWidget {
+  const AccountManagePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget> [
+      children: <Widget>[
         Container(
           height: 64,
           decoration: new BoxDecoration(
             color: Colors.white,
             borderRadius: new BorderRadius.circular(20.0),
-          )
-          ,
+          ),
           margin: const EdgeInsets.all(10),
-          padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+          padding:
+              const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
           //color: Colors.white,
-          child: const Text('使用者帳號\nCatCat' ,style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal), textAlign: TextAlign.center),
+          child: const Text('使用者帳號\nCatCat',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+              textAlign: TextAlign.center),
         ),
         Container(
           height: 64,
@@ -53,11 +55,11 @@ class HomePage extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: TextButton.styleFrom(
-                primary: Colors.black,
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              primary: Colors.black,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,7 +68,10 @@ class HomePage extends StatelessWidget {
                   opacity: 0,
                   child: Icon(FeatherIcons.chevronsRight),
                 ),
-                Text('常用信箱\nCuteCat@gmail.com', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal), textAlign: TextAlign.center),
+                Text('常用信箱\nCuteCat@gmail.com',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.center),
                 Icon(FeatherIcons.chevronsRight),
               ],
             ),
@@ -78,11 +83,11 @@ class HomePage extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: TextButton.styleFrom(
-                primary: Colors.black,
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              primary: Colors.black,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,7 +96,10 @@ class HomePage extends StatelessWidget {
                   opacity: 0,
                   child: Icon(FeatherIcons.chevronsRight),
                 ),
-                Text('修改密碼', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal), textAlign: TextAlign.center),
+                Text('修改密碼',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.center),
                 Icon(FeatherIcons.chevronsRight),
               ],
             ),
@@ -100,26 +108,26 @@ class HomePage extends StatelessWidget {
         Container(
           height: 44,
           margin: const EdgeInsets.all(10),
-          child: TextButton(     // <-- TextButton
-            onPressed: () async {
-              final ConfirmAction? action = await confirmDialog(context);
-              //print("你選擇：$action");
-            },
-            style: TextButton.styleFrom(
+          child: TextButton(
+              // <-- TextButton
+              onPressed: () async {
+                final ConfirmAction? action = await confirmDialog(context);
+                //print("你選擇：$action");
+              },
+              style: TextButton.styleFrom(
                 primary: Colors.black,
                 backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                alignment: Alignment.center, 
-            ),
-            child: const Text('刪除帳號', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal), textAlign: TextAlign.center)
-          ),
-          
+                alignment: Alignment.center,
+              ),
+              child: const Text('刪除帳號',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                  textAlign: TextAlign.center)),
         ),
       ],
     );
-
   }
 }
 
