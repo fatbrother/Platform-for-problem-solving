@@ -22,6 +22,7 @@ import 'package:pops/frontEnd/pages/top_up_page.dart';
 import 'package:pops/frontEnd/pages/self_information_page.dart';
 import 'package:pops/frontEnd/pages/QuestionSearch(HomePage).dart';
 import 'package:pops/frontEnd/pages/question_appilcation_page.dart';
+import 'package:pops/frontEnd/pages/setting_page.dart';
 // import '../backEnd/user/account.dart';
 // import pages here
 // import 'pages/[page file name].dart';
@@ -50,6 +51,7 @@ class Routes {
 
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
+  static const String settingPage = '/settingPage';
   // add routes here
   // static const String [route name] = '/[route name]';
 
@@ -57,7 +59,7 @@ class Routes {
     login: (context) => const LoginPage(),
     register: (context) => const RegisterPage(),
     //userTagPage: (context) => const UserTagPage(),
-    systemTagPage: (context) => const SystemTagPage(),
+    //systemTagPage: (context) => const SystemTagPage(),
     auditFailedTagsPage: (context) => const AuditFailedTagsPage(),
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
@@ -69,6 +71,7 @@ class Routes {
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
     homePage: (context) => const HomePage(),
+    settingPage: (context) => const SettingPage(),
     questionApplyPage: (context) => QuestionApplyPage(),
     // add routes here
     // [route name]: (context) => const [page name](),
@@ -84,7 +87,7 @@ class Routes {
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? homePage : login;
+      AccountManager.isLoggedIn() ? settingPage : login;
 
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];

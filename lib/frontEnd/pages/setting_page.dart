@@ -15,27 +15,27 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-      appBar: AppBar(
-        title: const BackButton(color: Colors.black),
-        //bottomOpacity: 100, 
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      backgroundColor: const Color.fromARGB(198, 192, 220, 236),
-      body: const HomePage(),
-    ));
+          appBar: AppBar(
+            title: const BackButton(color: Colors.black),
+            //bottomOpacity: 100,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          backgroundColor: const Color.fromARGB(198, 192, 220, 236),
+          body: const SettingPage(),
+        ));
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class SettingPage extends StatelessWidget {
+  const SettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget> [
+      children: <Widget>[
         //BackButton(),
         Container(
           height: 44,
@@ -43,11 +43,11 @@ class HomePage extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,7 +56,10 @@ class HomePage extends StatelessWidget {
                   opacity: 0,
                   child: Icon(FeatherIcons.chevronsRight),
                 ),
-                Text('帳號管理', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal), textAlign: TextAlign.center),
+                Text('帳號管理',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.center),
                 Icon(FeatherIcons.chevronsRight),
               ],
             ),
@@ -83,11 +86,11 @@ class HomePage extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,7 +99,10 @@ class HomePage extends StatelessWidget {
                   opacity: 0,
                   child: Icon(FeatherIcons.chevronsRight),
                 ),
-                Text('個人身分驗證', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal), textAlign: TextAlign.center),
+                Text('個人身分驗證',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.center),
                 Icon(FeatherIcons.chevronsRight),
               ],
             ),
@@ -108,11 +114,11 @@ class HomePage extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -121,7 +127,10 @@ class HomePage extends StatelessWidget {
                   opacity: 0,
                   child: Icon(FeatherIcons.chevronsRight),
                 ),
-                Text('意見回饋', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal), textAlign: TextAlign.center),
+                Text('意見回饋',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.center),
                 Icon(FeatherIcons.chevronsRight),
               ],
             ),
@@ -133,11 +142,11 @@ class HomePage extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,7 +155,10 @@ class HomePage extends StatelessWidget {
                   opacity: 0,
                   child: Icon(FeatherIcons.chevronsRight),
                 ),
-                Text('聯絡客服', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal), textAlign: TextAlign.center),
+                Text('聯絡客服',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.center),
                 Icon(FeatherIcons.chevronsRight),
               ],
             ),
@@ -158,11 +170,11 @@ class HomePage extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,7 +183,10 @@ class HomePage extends StatelessWidget {
                   opacity: 0,
                   child: Icon(FeatherIcons.chevronsRight),
                 ),
-                Text('服務條款', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal), textAlign: TextAlign.center),
+                Text('服務條款',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.center),
                 Icon(FeatherIcons.chevronsRight),
               ],
             ),
@@ -180,18 +195,22 @@ class HomePage extends StatelessWidget {
         Container(
           height: 64,
           decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft:  Radius.circular(20.0),
-              topRight: Radius.circular(20.0),
-              bottomLeft: Radius.circular(20.0),
-              bottomRight: Radius.circular(20.0)
-            )
-          ),
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0),
+                  bottomLeft: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0))),
           margin: const EdgeInsets.all(10),
-          padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+          padding:
+              const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
           //color: Colors.white,
-          child: const Text('版本\n1.0.0' ,style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal), textAlign: TextAlign.center),
+          child: const Text('版本\n1.0.0',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black),
+              textAlign: TextAlign.center),
         )
       ],
       /*children: <Widget>[
@@ -265,6 +284,5 @@ class HomePage extends StatelessWidget {
         )
       ],*/
     );
-
   }
 }
