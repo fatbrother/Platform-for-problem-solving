@@ -80,7 +80,9 @@ class _HomePageState extends State<HomePage> {
     loadUnsolvedQ();
     //print(allProblems.length);
     return Scaffold(
-        appBar: AppBar(title: const Text('Infinite Scroll ListView')),
+        appBar: AppBar(
+            title: const Text('Infinite Scroll ListView'),
+            backgroundColor: Colors.blue),
         body: //RefreshIndicator(
             //onRefresh: refresh,
             /*child:*/ ListView.builder(
