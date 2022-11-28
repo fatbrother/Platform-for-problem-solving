@@ -23,6 +23,7 @@ import 'package:pops/frontEnd/pages/self_information_page.dart';
 import 'package:pops/frontEnd/pages/QuestionSearch(HomePage).dart';
 import 'package:pops/frontEnd/pages/question_appilcation_page.dart';
 import 'package:pops/frontEnd/pages/setting_page.dart';
+import 'package:pops/frontEnd/pages/account_manage_page.dart';
 // import '../backEnd/user/account.dart';
 // import pages here
 // import 'pages/[page file name].dart';
@@ -52,6 +53,7 @@ class Routes {
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
   static const String settingPage = '/settingPage';
+  static const String accountManagePage = 'accountManagerPage';
   // add routes here
   // static const String [route name] = '/[route name]';
 
