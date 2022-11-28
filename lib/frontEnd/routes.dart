@@ -93,7 +93,7 @@ class Routes {
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? questionApplyPage : login;
+      AccountManager.isLoggedIn() ? homePage : login;
 
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];

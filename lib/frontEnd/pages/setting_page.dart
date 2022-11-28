@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 
-void main() {
-  runApp(const MyApp());
-}
+///void main() {
+//  runApp(const MyApp());
+//}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SettingPage extends StatelessWidget {
+  const SettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +17,17 @@ class MyApp extends StatelessWidget {
         home: Scaffold(
           appBar: AppBar(
             title: const BackButton(color: Colors.black),
-            //bottomOpacity: 100,
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
           backgroundColor: const Color.fromARGB(198, 192, 220, 236),
-          body: const SettingPage(),
+          body: const MyCustomForm(),
         ));
   }
 }
 
-class SettingPage extends StatelessWidget {
-  const SettingPage({super.key});
+class MyCustomForm extends StatelessWidget {
+  const MyCustomForm({super.key});
 
   @override
   Widget build(BuildContext context) {

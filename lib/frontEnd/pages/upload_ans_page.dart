@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 
-void main() => runApp(const MyApp());
+//void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class UploadAnsPage extends StatelessWidget {
+  const UploadAnsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,23 +23,23 @@ class MyApp extends StatelessWidget {
               elevation: 0),
           resizeToAvoidBottomInset: false,
           backgroundColor: const Color.fromARGB(235, 217, 217, 217),
-          body: const UploadAnsPage()),
+          body: const MyCustomForm()),
     );
   }
 }
 
-class UploadAnsPage extends StatefulWidget {
+class MyCustomForm extends StatefulWidget {
   //const MyCustomForm({super.key});
-  const UploadAnsPage({super.key});
+  const MyCustomForm({super.key});
   //final String title;
 
   @override
-  MyCustomFormState createState() {
+  State<MyCustomForm> createState() {
     return MyCustomFormState();
   }
 }
 
-class MyCustomFormState extends State<UploadAnsPage> {
+class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime dateTime = DateTime.now();
   DateTime currentTime = DateTime.now();
