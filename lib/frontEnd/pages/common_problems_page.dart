@@ -1,11 +1,5 @@
-//常見問題
-import 'dart:ui';
-
 import 'package:pops/frontEnd/design.dart';
-import 'package:pops/frontEnd/pages/rate_page.dart';
-import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
-import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import 'package:pops/frontEnd/widgets/buttom_navigation_bar.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 
@@ -37,8 +31,7 @@ class CommonProblemPage extends StatelessWidget {
         //onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         //child:
         Scaffold(
-      bottomNavigationBar:
-          MyBottomNavigationBar(onTap: (int a) {}, currentIndex: 0),
+      bottomNavigationBar: MyBottomNavigationBar(currentIndex: 0),
       backgroundColor: Design.secondaryColor,
       body: Column(
         children: [

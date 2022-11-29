@@ -57,7 +57,6 @@ class Routes {
   static const String reportPage = '/reportPage';
   static const String reportFailPage = '/reportFailPage';
   static const String reportSuccessPage = '/reportSuccessPage';
-  static const String commonProblemPage = '/commonProblemPage';
 
   static const String ratePage = '/ratePage';
 
