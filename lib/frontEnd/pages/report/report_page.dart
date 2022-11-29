@@ -20,6 +20,7 @@ class _ReportPageState extends State<ReportPage> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        appBar: const SimpleAppBar(),
         backgroundColor: Design.backgroundColor,
         body: Container(
           margin: Design.spacing,
@@ -27,7 +28,6 @@ class _ReportPageState extends State<ReportPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const MyAppBar(),
                 const Text(
                   '請提出檢舉原因',
                   style: TextStyle(
@@ -88,7 +88,7 @@ class _ReportPageState extends State<ReportPage> {
                 SizedBox(height: Design.getScreenHeight(context) * 0.02),
                 SendButton(
                     onPressed: () {
-                      DialogManager.showAlertDialog(
+                      DialogManager.showInfoDialog(
                           context, '您的檢舉將進入審核，所需時間較長，請耐心等候。');
                     },
                     text: '送出'),

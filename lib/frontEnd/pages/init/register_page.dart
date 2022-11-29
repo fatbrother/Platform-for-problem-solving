@@ -4,8 +4,7 @@ import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
 import 'package:pops/backEnd/user/account.dart';
-
-import '../../routes.dart';
+import 'package:pops/frontEnd/routes.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -29,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         backgroundColor: Design.backgroundColor,
         appBar: AppBar(
           toolbarHeight: 0.1 * Design.getScreenHeight(context),
@@ -41,45 +40,48 @@ class _RegisterPageState extends State<RegisterPage> {
           title: const Text('Register Page'),
         ),
         body: Container(
-          margin: Design.spacing,
           padding: Design.spacing,
-          width: double.infinity,
-          height: double.infinity,
-          child: Container(
-            padding: Design.spacing,
-            decoration: const BoxDecoration(
-              color: Design.secondaryColor,
-              borderRadius: Design.outsideBorderRadius,
-            ),
-            child: Column(
-              children: [
-                InputField(
-                  hintText: 'Username',
-                  controller: userNameController,
+          child: Center(
+            child: Container(
+              padding: Design.spacing,
+              decoration: const BoxDecoration(
+                color: Design.secondaryColor,
+                borderRadius: Design.outsideBorderRadius,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: Design.getScreenHeight(context) * 0.01),
+                    InputField(
+                      hintText: 'Username',
+                      controller: userNameController,
+                    ),
+                    SizedBox(height: Design.getScreenHeight(context) * 0.03),
+                    InputField(
+                      hintText: 'Email',
+                      controller: emailController,
+                    ),
+                    SizedBox(height: Design.getScreenHeight(context) * 0.03),
+                    InputField(
+                      hintText: 'Password',
+                      controller: passwordController,
+                      obscureText: true,
+                    ),
+                    SizedBox(height: Design.getScreenHeight(context) * 0.03),
+                    InputField(
+                      hintText: 'Confirm Password',
+                      controller: confirmPasswordController,
+                      obscureText: true,
+                    ),
+                    SizedBox(height: Design.getScreenHeight(context) * 0.03),
+                    MainButton(
+                      onPressed: () => signUp(),
+                      text: 'Register',
+                    ),
+                    SizedBox(height: Design.getScreenHeight(context) * 0.01),
+                  ],
                 ),
-                const SizedBox(height: 20.0),
-                InputField(
-                  hintText: 'Email',
-                  controller: emailController,
-                ),
-                const SizedBox(height: 20.0),
-                InputField(
-                  hintText: 'Password',
-                  controller: passwordController,
-                  obscureText: true,
-                ),
-                const SizedBox(height: 20.0),
-                InputField(
-                  hintText: 'Confirm Password',
-                  controller: confirmPasswordController,
-                  obscureText: true,
-                ),
-                const SizedBox(height: 20.0),
-                MainButton(
-                  onPressed: () => signUp(),
-                  text: 'Register',
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -102,7 +104,8 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     if (verified) {
-      setState(() {});
+      // ignore: use_build_context_synchronously
+      Routes.pushReplacement(context, Routes.verifyPhone);
     }
   }
 }

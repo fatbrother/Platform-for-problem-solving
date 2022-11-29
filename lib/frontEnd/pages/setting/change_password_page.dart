@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
-import 'package:pops/frontEnd/widgets/app_bar.dart';
+import 'package:pops/frontEnd/widgets/scaffold.dart';
 
 class ChangePasswordPage extends StatelessWidget {
   const ChangePasswordPage({
@@ -12,9 +13,10 @@ class ChangePasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Design.secondaryColor,
+    return MyScaffold(
       body: const ChangePasswordView(),
+      backgroundColor: Design.secondaryColor,
+      currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.selfInformationPage),
     );
   }
 }
@@ -36,10 +38,9 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 35),
+      padding: Design.spacing,
       child: Column(
         children: <Widget>[
-          const MyAppBar(),
           //輸入舊密碼
           SingleInputField(
             controller: _resentPasswordController,
@@ -99,7 +100,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
     try {
       AccountManager.verifyPassword(resentPassword).then((value) {
         if (!value) {
-          DialogManager.showAlertDialog(
+          DialogManager.showInfoDialog(
             context,
             '請輸入正確的密碼',
           );
@@ -107,7 +108,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         }
       });
     } catch (e) {
-      DialogManager.showAlertDialog(
+      DialogManager.showInfoDialog(
         context,
         '請輸入正確的密碼',
       );
@@ -115,13 +116,13 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
     }
 
     if (newPassword != newPasswordCheck) {
-      DialogManager.showAlertDialog(context, '請確認新密碼是否正確');
+      DialogManager.showInfoDialog(context, '請確認新密碼是否正確');
     } else {
       try {
         AccountManager.resetPassword(newPassword)
-            .then((value) => DialogManager.showAlertDialog(context, '密碼修改成功'));
+            .then((value) => DialogManager.showInfoDialog(context, '密碼修改成功'));
       } catch (e) {
-        DialogManager.showAlertDialog(context, '密碼修改失敗');
+        DialogManager.showInfoDialog(context, '密碼修改失敗');
       }
     }
   }

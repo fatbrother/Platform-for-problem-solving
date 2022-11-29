@@ -14,6 +14,7 @@ class  AuditFailedTagsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      appBar: SimpleAppBar(),
       backgroundColor: Design.secondaryColor,
       body: AuditFailedTagsView(),
     );
@@ -38,7 +39,6 @@ class _AuditFailedTagsViewState extends State<AuditFailedTagsView> {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 35),
       child: Column(
         children: <Widget>[
-          const MyAppBar(),
           DateWidget(tag:_auditFailedTag),
           SizedBox(height: Design.getScreenHeight(context) * 0.03),
           Detailsidget(tag:_auditFailedTag),

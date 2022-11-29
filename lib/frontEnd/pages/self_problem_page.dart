@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/problem/problem.dart';
+import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
+import 'package:pops/frontEnd/widgets/app_bar.dart';
+import 'package:pops/frontEnd/widgets/buttom_navigation_bar.dart';
 
 class SelfProblemPage extends StatefulWidget {
   const SelfProblemPage({super.key});
@@ -11,105 +14,20 @@ class SelfProblemPage extends StatefulWidget {
 }
 
 class _SelfProblemPageState extends State<SelfProblemPage> {
-  final TextEditingController _textEditingController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Design.backgroundColor,
-      appBar: AppBar(
-          toolbarHeight: 80,
-          backgroundColor: const Color.fromRGBO(217, 217, 217, 10),
-          title: Container(
-            padding:
-                const EdgeInsets.only(top: 0, bottom: 0, left: 10, right: 0),
-            margin: const EdgeInsets.all(0),
-            //height: 45,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              color: Colors.white,
-            ),
-            child: SizedBox(
-              //  height: 20,
-              child: TextField(
-                controller: _textEditingController,
-                style: const TextStyle(
-                  fontSize: 25,
-                  height: 1.5,
-                  color: Colors.black,
-                ),
-                decoration: InputDecoration(
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                  icon: const Icon(
-                    Icons.search,
-                    color: Colors.black,
-                  ),
-                  suffix: IconButton(
-                      onPressed: _textEditingController.clear,
-                      icon: const Icon(
-                        Icons.clear,
-                        color: Colors.black,
-                      )),
-                  focusedBorder: InputBorder.none,
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          )),
-      //   backgroundColor: Color.fromRGBO(200, 217, 217, 100),
+      appBar: SearchBar(),
       body: const ProblemHomePage(),
-      bottomNavigationBar: SizedBox(
-        child: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          currentIndex: 0,
-          onTap: (int idx) {},
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  color: Colors.black,
-                  size: 24,
-                ),
-                label: '1'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.accessibility,
-                  color: Colors.black,
-                  size: 24,
-                ),
-                label: '2'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.accessibility,
-                  color: Colors.black,
-                  size: 24,
-                ),
-                label: '3'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.access_time,
-                  color: Colors.black,
-                  size: 24,
-                ),
-                label: '4'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.abc_rounded,
-                  color: Colors.black,
-                  size: 24,
-                ),
-                label: '5'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.ac_unit_outlined,
-                  color: Colors.black,
-                  size: 24,
-                ),
-                label: '6'),
-          ],
-        ),
+      bottomNavigationBar: MyBottomNavigationBar(
+        currentIndex:
+            Routes.bottomNavigationRoutes.indexOf(Routes.selfProblemPage),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Routes.push(context, Routes.addProblemPage),
+        backgroundColor: Design.primaryColor,
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -126,40 +44,44 @@ class ProblemHomePageState extends State<ProblemHomePage> {
   List<ProblemsModel> problems = [];
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     loadProblems();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> children = [];
+    for (var problem in problems) {
+      children.add(ProbelmBoxIcon(problem: problem));
+      children.add(const SizedBox(height: 10));
+    }
+
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: Design.spacing,
       decoration: const BoxDecoration(
         color: Design.secondaryColor,
       ),
       child: ListView(
-        children: problems
-            .map((e) => ProbelmBoxIcon(
-                problem: e,
-                onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(
-                      Routes.selfSingleProblemPage,
-                      arguments: e);
-                }))
-            .toList(),
+        children: children,
       ),
     );
   }
 
   void loadProblems() async {
-    problems = await ProblemsDatabase.queryAllProblems();
+    final user = await AccountManager.currentUser;
+    for (var problemId in user.askProblemIds) {
+      problems.add(await ProblemsDatabase.queryProblem(problemId));
+    }
     setState(() {});
   }
 }
 
 class ProbelmBoxIcon extends StatelessWidget {
   final ProblemsModel problem;
-  final void Function() onPressed;
 
   const ProbelmBoxIcon({
     super.key,
-    required this.onPressed,
     required this.problem,
   });
 
@@ -168,10 +90,8 @@ class ProbelmBoxIcon extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: onPressed,
+          onTap: () {},
           child: Container(
-            margin: const EdgeInsets.only(
-                left: 10.0, right: 10.0, top: 5, bottom: 5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
               color: Colors.white,
@@ -183,12 +103,12 @@ class ProbelmBoxIcon extends StatelessWidget {
                     constraints: const BoxConstraints(maxWidth: 350),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 15.0,
-                      vertical: 5.0,
+                      vertical: 3.0,
                     ),
                     margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: const Color.fromRGBO(79, 128, 155, 100),
+                    decoration: const BoxDecoration(
+                      borderRadius: Design.outsideBorderRadius,
+                      color: Design.secondaryColor,
                     ),
                     child: SizedBox(
                       width: double.infinity,
@@ -197,11 +117,14 @@ class ProbelmBoxIcon extends StatelessWidget {
                         maxLines: 1,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Container(
@@ -211,7 +134,11 @@ class ProbelmBoxIcon extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            const Icon(Icons.accessibility_new_rounded),
+                            const ImageIcon(
+                              AssetImage('assets/icon/users.png'),
+                              color: Colors.black,
+                            ),
+                            const SizedBox(width: 10),
                             Text(
                               problem.authorName,
                               style: const TextStyle(fontSize: 15),
@@ -227,6 +154,7 @@ class ProbelmBoxIcon extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             const Icon(Icons.access_time_rounded),
+                            const SizedBox(width: 10),
                             Text(
                               problem.existTimeString,
                               style: const TextStyle(fontSize: 15),
@@ -234,7 +162,6 @@ class ProbelmBoxIcon extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Icon(Icons.abc),
                     ],
                   )
                 ])

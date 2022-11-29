@@ -63,7 +63,7 @@ class _RatingPageState extends State<RatingPage> {
                 SizedBox(height: Design.getScreenHeight(context) * 0.02),
                 SendButton(
                     onPressed: () =>
-                        {DialogManager.showAlertDialog(context, '感謝您的評分！')},
+                        {DialogManager.showInfoDialog(context, '感謝您的評分！')},
                     text: '送出'),
               ],
             ),

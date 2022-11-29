@@ -12,6 +12,7 @@ class TopUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      appBar: SimpleAppBar(),
       backgroundColor: Design.secondaryColor,
       body: TopUpView(),
     );
@@ -49,8 +50,6 @@ class _TopUpView extends State<TopUpView> {
       padding: Design.spacing,
       child: Column(
         children: <Widget>[
-          const MyAppBar(),
-          //輸入儲值金額
           SizedBox(
             child: Container(
               padding: const EdgeInsets.fromLTRB(20, 2, 8, 2),
@@ -144,7 +143,7 @@ class _TopUpView extends State<TopUpView> {
             child: InkWell(
               onTap: () {
                 String message = judge(money);
-                DialogManager.showAlertDialog(context, message);
+                DialogManager.showInfoDialog(context, message);
               },
               child: Container(
                   decoration: BoxDecoration(

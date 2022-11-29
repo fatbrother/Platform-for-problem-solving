@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
-import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/suggest_field.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 
-class ReportFailPage extends StatefulWidget {
-  const ReportFailPage({super.key});
+class ReportSuccessPage extends StatefulWidget {
+  const ReportSuccessPage({super.key});
   @override
-  State<ReportFailPage> createState() => _ReportFailPageState();
+  State<ReportSuccessPage> createState() => _ReportSuccessPageState();
 }
 
-class _ReportFailPageState extends State<ReportFailPage> {
+class _ReportSuccessPageState extends State<ReportSuccessPage> {
   TextEditingController reportSuccessController = TextEditingController();
+  List<bool> checkList = [false, false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -26,25 +26,34 @@ class _ReportFailPageState extends State<ReportFailPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const MyAppBar(),
+                SizedBox(height: Design.getScreenHeight(context) * 0.05),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => {},
+                      icon: const Icon(Icons.arrow_back),
+                      iconSize: 35,
+                    ),
+                  ],
+                ),
                 const Text(
-                  '檢舉失敗',
+                  '檢舉成功',
                   style: TextStyle(
                     fontSize: 30.0,
                     color: Design.primaryColor,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.03),
+                SizedBox(height: Design.getScreenHeight(context) * 0.05),
                 const Text(
-                  '系統無法退還代幣，\n但您還是能對解題者評分評論。\n感謝您的使用。',
+                  '點選確定系統將歸還代幣。\n解題者會受到警告。\n感謝您的使用。',
                   style: TextStyle(
                     fontSize: 20.0,
                     color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.025),
+                SizedBox(height: Design.getScreenHeight(context) * 0.03),
                 ReportField(
                   maxline: 15,
                   hintTextFloating: '請提供您寶貴的意見...',
@@ -53,7 +62,7 @@ class _ReportFailPageState extends State<ReportFailPage> {
                 SizedBox(height: Design.getScreenHeight(context) * 0.05),
                 SendButton(
                     onPressed: () =>
-                        {DialogManager.showAlertDialog(context, '感謝您的建議。')},
+                        {DialogManager.showInfoDialog(context, '感謝您的建議。')},
                     text: '確認'),
               ],
             ),
