@@ -1,8 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/messagebox.dart';
+import 'package:pops/backEnd/other/chat_room.dart';
+import 'package:pops/frontEnd/routes.dart';
 
 // void _submitText(String text) {
 //   print(text);
@@ -19,14 +22,19 @@ class Chatroom extends StatefulWidget {
 
 class ChatroomState extends State<Chatroom> {
   final TextEditingController chatController = TextEditingController();
-  final List<Widget> message = [];
+  final List<Message> message = [
+    Message(text: "HI", isMe: true),
+    Message(text: "HI", isMe: false),
+    Message(text: "How is your day", isMe: true),
+    Message(text: "Not Bad", isMe: false)
+  ];
 
   void submitText(String text) {
     if (text == "") return;
 
     chatController.clear();
     setState(() {
-      message.insert(0, MessageBox(text: text));
+      message.insert(0, Message(text: text, isMe: true));
     });
   }
 
@@ -44,7 +52,9 @@ class ChatroomState extends State<Chatroom> {
             child: Row(
               children: <Widget>[
                 IconButton(
-                  onPressed: () => {},
+                  onPressed: () {
+                    Routes.back(context);
+                  },
                   icon: const Icon(Icons.arrow_back),
                 ),
               ],
@@ -54,9 +64,36 @@ class ChatroomState extends State<Chatroom> {
           Expanded(
             child: ListView.builder(
               reverse: true,
+              shrinkWrap: true,
               padding: Design.spacing,
-              itemBuilder: (context, index) => message[index],
               itemCount: message.length,
+              itemBuilder: (context, index) => Row(
+                  mainAxisAlignment: message[index].isMe
+                      ? MainAxisAlignment.end
+                      : MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      margin: const EdgeInsets.symmetric(vertical: 10.0),
+                      decoration: BoxDecoration(
+                        color: (message[index].isMe)
+                            ? Design.primaryColor
+                            : Colors.white,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: Text(
+                        message[index].text,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 5,
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    const Icon(Icons.person, size: 32)
+                  ]),
             ),
           ),
           //Bottom_TypingSquare_Design

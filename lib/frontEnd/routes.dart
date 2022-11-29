@@ -24,6 +24,7 @@ import 'package:pops/frontEnd/pages/setting/change_password_page.dart';
 import 'package:pops/frontEnd/pages/setting/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/setting/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/user/top_up_page.dart';
+import 'package:pops/frontEnd/pages/chatroom_page.dart';
 
 import 'pages/user/common_problems_page.dart';
 // import '../backEnd/user/account.dart';
@@ -63,6 +64,8 @@ class Routes {
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
   static const String addProblemPage = '/addProblemPage';
+  static const String chatroomPage = '/chatroomPage';
+
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];
 
@@ -98,6 +101,7 @@ class Routes {
     addLabelPage: (context) => const AddLabelPage(),
     generalLabelsPage: (context) => const GeneralLabelsPage(),
     systemLabelsPage: (context) => const SystemLabelsPage(),
+    chatroomPage: (context) => const Chatroom(),
     // add routes here
     // [route name]: (context) => const [page name](),
 
