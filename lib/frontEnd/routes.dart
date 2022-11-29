@@ -54,10 +54,12 @@ class Routes {
   static const String changePhoneNumberPage = '/changePhoneNumberPage';
   static const String auditFailedTagsPage = '/auditFailedTagsPage';
 
-  //static const String ratingPage = '/ratingPage';
+  static const String ratingPage = '/ratingPage';
   static const String reportPage = '/reportPage';
   static const String reportFailPage = '/reportFailPage';
   static const String reportSuccessPage = '/reportSuccessPage';
+
+  static const String ratePage = '/ratePage';
 
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
@@ -82,10 +84,11 @@ class Routes {
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
-    // ratingPage: (context) => const RatingPage(),
+    ratingPage: (context) => const RatingPage(),
     identificationPage: (context) => const IdentificationPage(),
     topUpPage: (context) => const TopUpPage(),
     reportPage: (context) => const ReportPage(),
+    ratePage: (context) => const RatePage(),
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
     homePage: (context) => const HomePage(),
