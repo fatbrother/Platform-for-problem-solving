@@ -42,54 +42,59 @@ class _LoginPageState extends State<LoginPage> {
           height: double.infinity,
           child: Stack(children: [
             Container(
-              margin: const EdgeInsets.only(top: 100.0),
+              margin: EdgeInsets.only(top: Design.getScreenHeight(context) * 0.12),
               padding: Design.spacing,
               decoration: const BoxDecoration(
                 color: Design.secondaryColor,
                 borderRadius: Design.outsideBorderRadius,
               ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 50.0),
-                  InputField(
-                    hintText: 'Email',
-                    controller: emailController,
-                  ),
-                  const SizedBox(height: 20.0),
-                  InputField(
-                    hintText: 'Password',
-                    controller: passwordController,
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 20.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SecondaryButton(
-                          onPressed: () {
-                            Routes.push(context, Routes.register);
-                          },
-                          text: 'Register'),
-                      const Text('/', textScaleFactor: 1.5),
-                      SecondaryButton(
-                        onPressed: () => forgotPassword(),
-                        text: 'Forgot Password',
+              child: Container(
+                padding: Design.spacing,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(height: Design.getScreenHeight(context) * 0.03),
+                    InputField(
+                      hintText: 'Email',
+                      controller: emailController,
+                    ),
+                    InputField(
+                      hintText: 'Password',
+                      controller: passwordController,
+                      obscureText: true,
+                    ),
+                    Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SecondaryButton(
+                              onPressed: () {
+                                Routes.push(context, Routes.register);
+                              },
+                              text: 'Register'),
+                          const Text('/', textScaleFactor: 1.5),
+                          SecondaryButton(
+                            onPressed: () => forgotPassword(),
+                            text: 'Forgot Password',
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  MainButton(
-                    onPressed: () => signIn(),
-                    text: 'Login',
-                  ),
-                ],
+                      MainButton(
+                        onPressed: () => signIn(),
+                        text: 'Login',
+                      ),
+                    ]),
+                    SizedBox(height: 0.05 * Design.getScreenHeight(context)),
+                  ],
+                ),
               ),
             ),
             Center(
               heightFactor: 1,
               child: CircleAvatar(
                 radius: 0.2 * Design.getScreenWidth(context),
-                backgroundColor: Design.primaryColor,
-                backgroundImage: const AssetImage('assets/Logo.png'),
+                backgroundColor: Design.insideColor,
+                backgroundImage: const AssetImage('assets/logoInLogin.png'),
               ),
             ),
           ]),
@@ -128,7 +133,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             onPressed: () async {
               try {
-                await AccountManager.resetPasswordBySendEmail(emailController.text);
+                await AccountManager.resetPasswordBySendEmail(
+                    emailController.text);
               } catch (e) {
                 DialogManager.showError(e, context);
               }

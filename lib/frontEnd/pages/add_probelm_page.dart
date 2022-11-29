@@ -1,74 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
+import 'package:pops/frontEnd/widgets/scaffold.dart';
 
-class AddProblemPage extends StatelessWidget{
+class AddProblemPage extends StatelessWidget {
+  AddProblemPage({super.key});
+
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromRGBO(217, 217, 217, 10),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    return MyScaffold(
+      backgroundColor: Design.backgroundColor,
+      body: ListView(
         children: [
-          IconButton(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(top: 35, left: 25, right: 25, bottom: 5),
-              onPressed:(){Navigator.pop(context);},
-              icon: const Icon(
-                Icons.keyboard_backspace,
+          Container(
+            margin: Design.spacing,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              color: Colors.white,
+            ),
+            child: const TextField(
+              style: TextStyle(
+                fontSize: 20,
                 color: Colors.black,
-                size: 30,
-              )
-          ),
-          SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  padding:
-                  const EdgeInsets.only(top: 0, bottom: 0, left: 10, right: 0),
-                  margin: const EdgeInsets.all(20),
-                  //height: 45,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    color: Colors.white,
-                  ),
-                  child: SizedBox(
-                    //  height: 20,
-                    child: TextField(
-                      style: const TextStyle(
-                        fontSize: 17,
-                      //  height: 1,
-                        color: Colors.black,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: '題目標題',
-                        hintStyle: TextStyle(color: Colors.grey, fontSize: 17),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                        focusedBorder: InputBorder.none,
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
+              decoration: InputDecoration(
+                hintText: '題目標題',
+                hintStyle: TextStyle(color: Colors.grey, fontSize: 17),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                focusedBorder: InputBorder.none,
+                border: InputBorder.none,
+              ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+            padding:
+                const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
             child: ElevatedButton(
-              onPressed: (){},
-              child: Text('確認選擇', style: TextStyle(color: Colors.black),),
+              onPressed: () {},
               style: ElevatedButton.styleFrom(
                   elevation: 0,
-                  backgroundColor: Color.fromRGBO(79, 128, 155, 100),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+                  backgroundColor: Design.primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+              child: const Text(
+                '確認選擇',
+                style: TextStyle(color: Colors.black),
               ),
             ),
           ),
         ],
       ),
+      currentIndex:
+          Routes.bottomNavigationRoutes.indexOf(Routes.selfInformationPage),
     );
   }
-
 }

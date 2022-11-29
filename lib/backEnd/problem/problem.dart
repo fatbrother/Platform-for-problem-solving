@@ -85,11 +85,6 @@ class ProblemsModel {
   });
 
   static fromMap(Map<String, dynamic> data) {
-    // show the data type
-    data.forEach((key, value) {
-      debugPrint('$key: ${value.runtimeType}');
-    });
-
     return ProblemsModel(
       id: data['id'] ?? '',
       title: data['title'] ?? '',

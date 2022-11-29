@@ -5,6 +5,7 @@ import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
+import 'package:pops/frontEnd/widgets/scaffold.dart';
 
 class IdentificationPage extends StatelessWidget {
   const IdentificationPage({
@@ -13,9 +14,10 @@ class IdentificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MyScaffold(
       backgroundColor: Design.secondaryColor,
       body: const IdentificationView(),
+      currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.selfInformationPage),
     );
   }
 }
@@ -32,22 +34,26 @@ class _IdentificationViewState extends State<IdentificationView> {
   String _personalState = "未啟用";
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     loadUserInfo();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 35),
+      padding: Design.spacing,
       child: Column(
         children: <Widget>[
-          const MyAppBar(),
           PhoneNumberWidget(phoneNumber: _phoneNumber == "" ? "未設定" : _phoneNumber),
-          SizedBox(height: Design.getScreenHeight(context) * 0.03),
+          const SizedBox(height: 10),
           PersonalStateWidget(personalState: _personalState),
-          SizedBox(height: Design.getScreenHeight(context) * 0.03),
+          const SizedBox(height: 10),
           const ChangePhoneNumberWiget(),
-          SizedBox(height: Design.getScreenHeight(context) * 0.03),
+          const SizedBox(height: 10),
           Vertification(
             onPressed: () {
-              DialogManager.showAlertDialog(context, "簡訊已發送");
+              DialogManager.showInfoDialog(context, "簡訊已發送");
             },
           ),
         ],

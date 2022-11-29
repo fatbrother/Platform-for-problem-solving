@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/user/account.dart';
-import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/scaffold.dart';
 import 'package:pops/frontEnd/widgets/tag.dart';
 
-class SystemTagPage extends StatelessWidget {
-  const SystemTagPage({
+class SystemLabelsPage extends StatelessWidget {
+  const SystemLabelsPage({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MyScaffold(
-      body: SystemLabelsView(),
+    return MyScaffold(
+      body: const SystemLabelsView(),
       backgroundColor: Design.secondaryColor,
-      currentIndex: 0,
-      // currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.systemLabelsPage),
+      currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.selfInformationPage),
     );
   }
 }
@@ -31,7 +30,6 @@ class SystemLabelsView extends StatefulWidget {
 }
 
 class _SystemLabelsViewState extends State<SystemLabelsView> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +60,9 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
     super.initState();
     loadTags();
   }
+  
   @override
   Widget build(BuildContext context) {
-    loadTags();//要有這行，不然只會loadTags一次？
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -157,11 +155,11 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                   tag: allTags['showingTags']![i],
                   leftButtonTitle: '隱藏',
                   leftButtonOnPressed: () {
-                      removeDisplayTagsToHideTags(i);
+                      // removeDisplayTagsToHideTags(i);
                   },
                   rightButtonTitle: '刪除',
                   rightButtonOnPressed: () {
-                      showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'showingTags', i);
+                      // showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'showingTags', i);
                   },
                 ),
               for (int i = 0; i < allTags['notShowingTags']!.length; i++)
@@ -169,12 +167,12 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                   tag: allTags['notShowingTags']![i],
                   leftButtonTitle: '顯示',
                   leftButtonOnPressed: () {
-                      removeHideTagsToDisplayTags(i);
+                      // removeHideTagsToDisplayTags(i);
                   },
                   rightButtonTitle: '刪除',
                   rightButtonOnPressed: () {
                     // removeHideTags(i);
-                    showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'notShowingTags', i);
+                    // showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'notShowingTags', i);
                   },
                 ),
             ],
@@ -204,7 +202,7 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                 tag: tag,
                 leftButtonTitle: '查看',
                 leftButtonOnPressed: () {
-                  DialogManager.showAlertDialog(
+                  DialogManager.showInfoDialog(
                     context,
                     "標籤需經由人工審核，可能花費較長時間，請耐心等候。"
                   );

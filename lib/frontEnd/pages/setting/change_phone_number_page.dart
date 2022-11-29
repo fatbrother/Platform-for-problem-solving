@@ -1,57 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
+import 'package:pops/frontEnd/widgets/scaffold.dart';
 
 class ChangePhoneNumberPage extends StatelessWidget {
   const ChangePhoneNumberPage({super.key});
   @override
   Widget build(BuildContext context) {
-    const appTitle = '修改手機號碼';
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: appTitle,
-      home: Scaffold(
-        backgroundColor: const Color.fromARGB(198, 192, 220, 236),
-        appBar: AppBar(
-          //build arrow_back
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.arrow_back),
-                color: const Color.fromARGB(255, 0, 0, 0),
-                onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-              );
-            },
-          ),
-          //AppBar color and word
-          backgroundColor: const Color.fromARGB(222, 255, 255, 255),
-          title: const Text(appTitle,  style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))), 
-          centerTitle: true,
-        ),
-
-        body: const ChangePasswordView(),
-      ),
+    return MyScaffold(
+      backgroundColor: Design.secondaryColor,
+      body: const ChangePasswordView(),
+      currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.selfInformationPage),
     );
   }
 }
 
-
-
-String judge(String againNewNumber, String firstNewNumber)
-{
+String judge(String againNewNumber, String firstNewNumber) {
   var message = "";
   //若輸入的InputOldPassword和資料庫存放的資料不同時，message = "舊密碼輸入錯誤";
   //密碼是否符合規則的判斷
-  if(firstNewNumber == againNewNumber)
-  {
+  if (firstNewNumber == againNewNumber) {
     message = "手機號碼修改成功";
-  }
-  else
-  {
+  } else {
     message = "兩次新號碼輸入不相同";
   }
   return message;
 }
-
-
 
 class ChangePasswordView extends StatefulWidget {
   const ChangePasswordView({super.key});
@@ -70,7 +44,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 35),
+      padding: Design.spacing,
       child: Column(
         children: <Widget>[
           //輸入新號碼
@@ -85,7 +59,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
               alignment: Alignment.center,
               child: TextField(
                 controller: _textController1,
-                onChanged: (text){
+                onChanged: (text) {
                   setState(() {
                     firstNewNumber = _textController1.text;
                   });
@@ -99,7 +73,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
               ),
             ),
           ),
-          const SizedBox(height: 19),//空
+          const SizedBox(height: 19), //空
           //確認新號碼
           SizedBox(
             height: 56,
@@ -112,7 +86,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
               alignment: Alignment.center,
               child: TextField(
                 controller: _textController2,
-                onChanged: (text){
+                onChanged: (text) {
                   setState(() {
                     againNewNumber = _textController2.text;
                   });
@@ -126,32 +100,32 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
               ),
             ),
           ),
-          const SizedBox(height: 19),//空
+          const SizedBox(height: 19), //空
           //確認修改按鈕
           SizedBox(
             height: 35,
             child: InkWell(
-                onTap:(){
-                  message = judge(againNewNumber, firstNewNumber);
-                  if(message == "手機號碼修改成功")oldNumber= againNewNumber;//修改手機號碼
-                  showAlertDialog(context, message);
-                },
+              onTap: () {
+                message = judge(againNewNumber, firstNewNumber);
+                if (message == "手機號碼修改成功") oldNumber = againNewNumber; //修改手機號碼
+                showInfoDialog(context, message);
+              },
               child: Container(
-              //padding: EdgeInsets.fromLTRB(2, 15, 2, 15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color:const Color.fromARGB(255, 255, 255, 255),
-              ),
-              alignment: Alignment.center,
-              child: const Text(
-                '確認修改',
-                textAlign: TextAlign.center,
-                style: TextStyle(//letterSpacing: 10,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 0, 0, 0)),
-              )
-            ),
+                  //padding: EdgeInsets.fromLTRB(2, 15, 2, 15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    '確認修改',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        //letterSpacing: 10,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 0, 0, 0)),
+                  )),
             ),
           ),
         ],
@@ -160,45 +134,40 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   }
 }
 
-
 //show AlertDialog
-showAlertDialog(BuildContext context, String message){
+showInfoDialog(BuildContext context, String message) {
   AlertDialog dialog = AlertDialog(
-    
     //title: const Text("Confirm Dialog"),
-    content: Text(message, textAlign: TextAlign.center, ),
-    actions: <Widget> [
+    content: Text(
+      message,
+      textAlign: TextAlign.center,
+    ),
+    actions: <Widget>[
       SizedBox(
         width: 600,
         height: 40,
         child: TextButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              const Color.fromARGB(198, 192, 220, 236)
-            ),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                )
-            )
-          ),
+              backgroundColor: MaterialStateProperty.all(
+                  const Color.fromARGB(198, 192, 220, 236)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ))),
           child: const Text("確認",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.black)),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black)),
           onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-          ),
+        ),
       )
     ],
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-
   );
-
 
   // Show the dialog
   showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return dialog;
-    }
-  );
+      context: context,
+      builder: (BuildContext context) {
+        return dialog;
+      });
 }

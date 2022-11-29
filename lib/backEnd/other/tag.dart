@@ -22,12 +22,12 @@ class TagsDatabase {
     return result;
   }
 
-  static Future<bool> queryTag(TagsModel tag) async {
-    return trieTree.search(tag.name);
+  static Future<bool> queryTag(String tag) async {
+    return trieTree.search(tag);
   }
 
-  static Future<List> querySimilarTags(TagsModel tag) async {
-    final List result = trieTree.startsWith(tag.name);
+  static Future<List> querySimilarTags(String tag) async {
+    final List result = trieTree.startsWith(tag);
     return result;
   }
 

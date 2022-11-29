@@ -53,6 +53,7 @@ class UsersModel {
   String name;
   String email;
   String phone;
+  String selfIntroduction;
   List<String> askProblemIds;
   List<String> pastExpertiseTags;
   List<String> expertiseTags;
@@ -71,6 +72,7 @@ class UsersModel {
     required this.name,
     required this.email,
     this.phone = '',
+    this.selfIntroduction = '',
     this.expertiseTags = const [],
     this.pastExpertiseTags = const [],
     this.displaySystemTags = const [],
@@ -90,6 +92,7 @@ class UsersModel {
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
+      selfIntroduction: data['selfIntroduction'] ?? '',
       askProblemIds: data['askProblemIds'] == null
           ? []
           : data['askProblemIds'].cast<String>(),
@@ -126,6 +129,7 @@ class UsersModel {
       'name': name,
       'email': email,
       'phone': phone,
+      'selfIntroduction': selfIntroduction,
       'askProblemIds': askProblemIds,
       'expertiseTags': expertiseTags,
       'pastExpertiseTags': pastExpertiseTags,

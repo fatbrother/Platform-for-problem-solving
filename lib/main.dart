@@ -4,6 +4,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:pops/backEnd/other/tag.dart';
 import 'backEnd/firebase_options.dart';
 import 'frontEnd/routes.dart';
 
@@ -13,7 +14,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-
+  TagsDatabase.init();
   runApp(const MyApp());
 }
 

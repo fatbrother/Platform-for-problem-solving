@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttom_navigation_bar.dart';
 
@@ -23,23 +22,16 @@ class _MyScaffoldState extends State<MyScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Design.secondaryColor,
+      appBar: const SimpleAppBar(),
+      backgroundColor: widget.backgroundColor,
       body: Column(
         children: [
-          SizedBox(height: Design.getScreenHeight(context) * 0.03),
-          SizedBox(
-            height: Design.getScreenHeight(context) * 0.1,
-            child: const MyAppBar(),
-          ),
           Expanded(
             child: widget.body,
           ),
         ],
       ),
       bottomNavigationBar: MyBottomNavigationBar(
-        onTap: (index) {
-          // Routes.pushReplacement(context, Routes.bottomNavigationRoutes[index]);
-        },
         currentIndex: widget.currentIndex,
       ),
     );
