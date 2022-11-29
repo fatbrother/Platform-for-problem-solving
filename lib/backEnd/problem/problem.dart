@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../database.dart';
 
 // control the database of the problem with problemsModel
@@ -83,6 +85,11 @@ class ProblemsModel {
   });
 
   static fromMap(Map<String, dynamic> data) {
+    // show the data type
+    data.forEach((key, value) {
+      debugPrint('$key: ${value.runtimeType}');
+    });
+
     return ProblemsModel(
       id: data['id'] ?? '',
       title: data['title'] ?? '',
@@ -97,7 +104,7 @@ class ProblemsModel {
           ? []
           : data['solveCommendIds'].cast<String>(),
       chooseSolveCommendId: data['chooseSolveCommendId'] ?? '',
-      createdAt: data['createdAt']
+      createdAt: data['createdAt'] == null
           ? DateTime.parse(data['createdAt'])
           : DateTime.now(),
       remainingDays: data['remainingDays'] ?? 3,

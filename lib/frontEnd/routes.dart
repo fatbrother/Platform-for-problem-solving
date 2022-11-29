@@ -9,19 +9,22 @@ import 'package:pops/frontEnd/pages/change_password_page.dart';
 import 'package:pops/frontEnd/pages/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/general_labels_page.dart';
 import 'package:pops/frontEnd/pages/identification_page.dart';
-import 'package:pops/frontEnd/pages/login_page.dart';
+import 'package:pops/frontEnd/pages/init/login_page.dart';
 import 'package:pops/frontEnd/pages/report_page.dart';
 import 'package:pops/frontEnd/pages/report_fail_page.dart';
 import 'package:pops/frontEnd/pages/report_success_page.dart';
 import 'package:pops/frontEnd/pages/self_problem_page.dart';
 import 'package:pops/frontEnd/pages/rating_page.dart';
-import 'package:pops/frontEnd/pages/register_page.dart';
+import 'package:pops/frontEnd/pages/init/register_page.dart';
 import 'package:pops/frontEnd/pages/self_single_problem_page.dart';
 import 'package:pops/frontEnd/pages/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/top_up_page.dart';
 import 'package:pops/frontEnd/pages/self_information_page.dart';
 import 'package:pops/frontEnd/pages/QuestionSearch(HomePage).dart';
 import 'package:pops/frontEnd/pages/question_appilcation_page.dart';
+import 'package:pops/frontEnd/pages/setting_page.dart';
+import 'package:pops/frontEnd/pages/account_manage_page.dart';
+import 'package:pops/frontEnd/pages/upload_ans_page.dart';
 // import '../backEnd/user/account.dart';
 // import pages here
 // import 'pages/[page file name].dart';
@@ -50,6 +53,9 @@ class Routes {
 
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
+  static const String settingPage = '/settingPage';
+  static const String accountManagePage = 'accountManagerPage';
+  static const String uploadAnsPage = 'uploadAnsPage';
   // add routes here
   // static const String [route name] = '/[route name]';
 
@@ -57,7 +63,7 @@ class Routes {
     login: (context) => const LoginPage(),
     register: (context) => const RegisterPage(),
     //userTagPage: (context) => const UserTagPage(),
-    systemTagPage: (context) => const SystemTagPage(),
+    //systemTagPage: (context) => const SystemTagPage(),
     auditFailedTagsPage: (context) => const AuditFailedTagsPage(),
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
@@ -69,7 +75,10 @@ class Routes {
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
     homePage: (context) => const HomePage(),
+    settingPage: (context) => const SettingPage(),
     questionApplyPage: (context) => QuestionApplyPage(),
+    accountManagePage: (context) => AccountManagePage(),
+    uploadAnsPage: (context) => UploadAnsPage(),
     // add routes here
     // [route name]: (context) => const [page name](),
 

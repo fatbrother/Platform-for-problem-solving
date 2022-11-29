@@ -5,7 +5,7 @@ import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/input_field.dart';
 import 'package:pops/backEnd/user/account.dart';
 
-import '../routes.dart';
+import '../../routes.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

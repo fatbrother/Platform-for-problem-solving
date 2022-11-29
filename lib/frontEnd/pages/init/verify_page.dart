@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:phonenumbers/phonenumbers.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 
-import '../routes.dart';
+import '../../routes.dart';
 
 class VerifyPage extends StatefulWidget {
   const VerifyPage({super.key});
@@ -18,6 +17,15 @@ class VerifyPage extends StatefulWidget {
 class _VerifyPageState extends State<VerifyPage> {
   PhoneNumberEditingController phoneNumberController =
       PhoneNumberEditingController();
+
+  @override
+  void initState()
+  {
+    super.initState();
+    if (AccountManager.isPhoneVerified()) {
+      Routes.back(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
