@@ -24,6 +24,7 @@ import 'package:pops/frontEnd/pages/setting/change_password_page.dart';
 import 'package:pops/frontEnd/pages/setting/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/setting/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/user/top_up_page.dart';
+import 'package:pops/frontEnd/pages/unsolved_problem_page.dart';
 
 import 'pages/user/common_problems_page.dart';
 // import '../backEnd/user/account.dart';
@@ -61,11 +62,12 @@ class Routes {
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
   static const String addProblemPage = '/addProblemPage';
+  static const String unsolvedPage = '/unsolnedPage';
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? homePage : login;
+      AccountManager.isLoggedIn() ? unsolvedPage : login;
 
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
@@ -95,6 +97,7 @@ class Routes {
     addLabelPage: (context) => const AddLabelPage(),
     generalLabelsPage: (context) => const GeneralLabelsPage(),
     systemLabelsPage: (context) => const SystemLabelsPage(),
+    unsolvedPage: (context) => const UnsolvedPage(),
     // add routes here
     // [route name]: (context) => const [page name](),
 
@@ -118,7 +121,7 @@ class Routes {
   ];
 
   static void back(BuildContext context) {
-      Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   static void push(BuildContext context, String routeName,
