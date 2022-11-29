@@ -22,7 +22,6 @@ class QuestionApplyPage extends StatelessWidget {
 }
 
 class MyCustomForm extends StatefulWidget {
-  //const MyCustomForm({super.key});
   const MyCustomForm({super.key, required this.title});
   final String title;
 

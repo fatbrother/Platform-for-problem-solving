@@ -1,69 +1,81 @@
-//import 'dart:html';
-
 import 'package:flutter/material.dart';
+import 'package:pops/frontEnd/design.dart';
 
-class AnswerPage extends StatelessWidget{
+class AnswerPage extends StatelessWidget {
+  const AnswerPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(217, 217, 217, 10),
+      backgroundColor: Design.backgroundColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           IconButton(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(top: 35, left: 25, right: 25, bottom: 5),
-              onPressed:(){Navigator.pop(context);},
+              padding: const EdgeInsets.only(
+                  top: 35, left: 25, right: 25, bottom: 5),
+              onPressed: () {
+                Navigator.pop(context);
+              },
               icon: const Icon(
                 Icons.keyboard_backspace,
                 color: Colors.black,
                 size: 30,
-              )
-          ),
+              )),
           SizedBox(
-            height: 690,
-            child:MediaQuery.removePadding(
-                removeTop: true,
-                context: context,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(right: 20, left: 20, top: 10, bottom: 5),
-                      padding: EdgeInsets.all(10),
-                      constraints: const BoxConstraints(
-                        minHeight: 42,
+              height: 690,
+              child: MediaQuery.removePadding(
+                  removeTop: true,
+                  context: context,
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(
+                            right: 20, left: 20, top: 10, bottom: 5),
+                        padding: Design.spacing,
+                        constraints: const BoxConstraints(
+                          minHeight: 42,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        child: Text(
+                          '題目標題',
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
+                      Container(
+                        margin: EdgeInsets.only(
+                            right: 20, left: 20, top: 5, bottom: 5),
+                        padding: Design.spacing,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        child: Text(
+                          '題目內容',
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ),
-                      child: Text('題目標題',style: TextStyle(fontSize: 20),),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
+                      Container(
+                        margin: EdgeInsets.only(
+                            right: 20, left: 20, top: 5, bottom: 0),
+                        padding: Design.spacing,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        child: Text(
+                          '答案內容',
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ),
-                      child: Text('題目內容', style: TextStyle(fontSize: 20),),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 0),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      child: Text('答案內容', style: TextStyle(fontSize: 20),),
-                    ),
-                  ],
-
-                )
-            )
-          ),
+                    ],
+                  ))),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,16 +86,20 @@ class AnswerPage extends StatelessWidget{
                 child: Padding(
                   padding: EdgeInsets.only(top: 10, left: 20, bottom: 20),
                   child: ElevatedButton(
-                      onPressed: (){
-                        ChooseReportDialog(context, '進入檢舉流程後便無法取消');
-                      },
-                      style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: const Color.fromRGBO(79, 128, 155, 100),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-                      ),
-                      child: const Text('檢舉', style: TextStyle(color: Colors.black, fontSize: 20),),
+                    onPressed: () {
+                      ChooseReportDialog(context, '進入檢舉流程後便無法取消');
+                    },
+                    style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor:
+                            const Color.fromRGBO(79, 128, 155, 100),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20))),
+                    child: const Text(
+                      '檢舉',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
+                  ),
                 ),
               ),
               SizedBox(
@@ -91,17 +107,21 @@ class AnswerPage extends StatelessWidget{
                 height: 70,
                 child: Padding(
                   padding: EdgeInsets.only(top: 10, right: 20, bottom: 20),
-                    child: ElevatedButton(
-                      onPressed: (){
-                        ChooseFinishDialog(context, '完成交易後便無法再提出檢舉，\n聊天室也將關閉。');
-                      },
-                      style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: const Color.fromRGBO(79, 128, 155, 100),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-                      ),
-                      child: const Text('完成交易', style: TextStyle(color: Colors.black, fontSize: 20),),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ChooseFinishDialog(context, '完成交易後便無法再提出檢舉，\n聊天室也將關閉。');
+                    },
+                    style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor:
+                            const Color.fromRGBO(79, 128, 155, 100),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20))),
+                    child: const Text(
+                      '完成交易',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
+                  ),
                 ),
               ),
             ],
@@ -109,24 +129,29 @@ class AnswerPage extends StatelessWidget{
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        backgroundColor: const Color.fromRGBO(166, 198, 222, 0.5254901960784314),
+        onPressed: () {},
+        backgroundColor:
+            const Color.fromRGBO(166, 198, 222, 0.5254901960784314),
         child: const Icon(Icons.chat),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
-
 }
 
-
-ChooseFinishDialog(BuildContext context, String message){
+ChooseFinishDialog(BuildContext context, String message) {
   AlertDialog dialog = AlertDialog(
-    title: const Text('完成交易', style: TextStyle(color: Colors.black, fontSize: 12),),
+    title: const Text(
+      '完成交易',
+      style: TextStyle(color: Colors.black, fontSize: 12),
+    ),
     actionsPadding: const EdgeInsets.symmetric(horizontal: 0.0),
     //title: const Text("Confirm Dialog"),
-    content: Text(message, textAlign: TextAlign.center, ),
-    actions: <Widget> [
+    content: Text(
+      message,
+      textAlign: TextAlign.center,
+    ),
+    actions: <Widget>[
       SizedBox(
         width: 600,
         height: 40,
@@ -144,21 +169,18 @@ ChooseFinishDialog(BuildContext context, String message){
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(0),
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(0),
-                          ),
-                        )
-                    )
-                ),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(0),
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(0),
+                      ),
+                    ))),
                 child: const Text("完成交易",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black)),
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).pop();
-                  
                 },
               ),
             ),
@@ -172,15 +194,13 @@ ChooseFinishDialog(BuildContext context, String message){
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(20),
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(0),
-                          ),
-                        )
-                    )
-                ),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(20),
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(0),
+                      ),
+                    ))),
                 child: const Text("取消",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black)),
@@ -199,17 +219,22 @@ ChooseFinishDialog(BuildContext context, String message){
       context: context,
       builder: (BuildContext context) {
         return dialog;
-      }
-  );
+      });
 }
 
-ChooseReportDialog(BuildContext context, String message){
+ChooseReportDialog(BuildContext context, String message) {
   AlertDialog dialog = AlertDialog(
-    title: const Text('提出檢舉', style: TextStyle(color: Colors.black, fontSize: 12),),
+    title: const Text(
+      '提出檢舉',
+      style: TextStyle(color: Colors.black, fontSize: 12),
+    ),
     actionsPadding: const EdgeInsets.symmetric(horizontal: 0.0),
     //title: const Text("Confirm Dialog"),
-    content: Text(message, textAlign: TextAlign.center, ),
-    actions: <Widget> [
+    content: Text(
+      message,
+      textAlign: TextAlign.center,
+    ),
+    actions: <Widget>[
       SizedBox(
         width: 600,
         height: 40,
@@ -227,21 +252,18 @@ ChooseReportDialog(BuildContext context, String message){
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(0),
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(0),
-                          ),
-                        )
-                    )
-                ),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(0),
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(0),
+                      ),
+                    ))),
                 child: const Text("提出檢舉",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black)),
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).pop();
-
                 },
               ),
             ),
@@ -255,15 +277,13 @@ ChooseReportDialog(BuildContext context, String message){
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(20),
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(0),
-                          ),
-                        )
-                    )
-                ),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(20),
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(0),
+                      ),
+                    ))),
                 child: const Text("取消",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black)),
@@ -281,6 +301,5 @@ ChooseReportDialog(BuildContext context, String message){
       context: context,
       builder: (BuildContext context) {
         return dialog;
-      }
-  );
+      });
 }

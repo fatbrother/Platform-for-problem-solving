@@ -27,7 +27,7 @@ class _RatePageState extends State<RatePage> {
             ],
           ),
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: Design.spacing,
             margin: const EdgeInsets.fromLTRB(15, 0, 15, 10),
             decoration: const BoxDecoration(
               color: Design.secondaryColor,

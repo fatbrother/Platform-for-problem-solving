@@ -4,6 +4,7 @@ import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/scaffold.dart';
 import 'package:pops/frontEnd/widgets/setting_bar.dart';
 
+
 class CommonProblemPage extends StatefulWidget {
   const CommonProblemPage({super.key});
 

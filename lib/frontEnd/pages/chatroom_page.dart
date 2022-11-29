@@ -1,12 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/messagebox.dart';
 
-// void _submitText(String text) {
-//   print(text);
-// }
 
 class Chatroom extends StatefulWidget {
   const Chatroom({
