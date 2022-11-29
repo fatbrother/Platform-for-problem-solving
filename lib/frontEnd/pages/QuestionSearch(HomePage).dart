@@ -45,8 +45,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    //print('Initiate call');
 
     loadUnsolvedQ();
+    //print(allProblems.length);
 
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -117,6 +119,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> loadUnsolvedQ() async {
+    //print("Load");
     ProblemsModel problem1 = ProblemsModel(
         id: "01",
         title: "Q1 title",
@@ -124,7 +127,7 @@ class _HomePageState extends State<HomePage> {
         authorName: "CatCat",
         authorId: "1019",
         imgIds: ["0"],
-        tagIds: [0],
+        tags: ["Good"],
         isSolved: false,
         baseToken: 0,
         solveCommendIds: ["abc"],
@@ -141,7 +144,7 @@ class _HomePageState extends State<HomePage> {
         authorName: "CatCat",
         authorId: "1019",
         imgIds: ["0"],
-        tagIds: [0],
+        tags: ["Good"],
         isSolved: false,
         baseToken: 0,
         solveCommendIds: ["abc"],
@@ -158,7 +161,7 @@ class _HomePageState extends State<HomePage> {
         authorName: "CatCat",
         authorId: "1019",
         imgIds: ["0"],
-        tagIds: [0],
+        tags: ["Good"],
         isSolved: false,
         baseToken: 0,
         solveCommendIds: ["abc"],

@@ -21,6 +21,7 @@ import 'package:pops/frontEnd/pages/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/top_up_page.dart';
 import 'package:pops/frontEnd/pages/self_information_page.dart';
 import 'package:pops/frontEnd/pages/QuestionSearch(HomePage).dart';
+import 'package:pops/frontEnd/pages/question_appilcation_page.dart';
 // import '../backEnd/user/account.dart';
 // import pages here
 // import 'pages/[page file name].dart';
@@ -41,13 +42,14 @@ class Routes {
   static const String changePhoneNumberPage = '/changePhoneNumberPage';
   static const String auditFailedTagsPage = '/auditFailedTagsPage';
 
-  static const String ratingPage = '/ratingPage';
+  //static const String ratingPage = '/ratingPage';
   static const String reportPage = '/reportPage';
   static const String reportFailPage = '/reportFailPage';
   static const String reportSuccessPage = '/reportSuccessPage';
   static const String selfInformationPage = '/selfInformationPage';
 
   static const String homePage = '/homePage';
+  static const String questionApplyPage = '/questionApplyPage';
   // add routes here
   // static const String [route name] = '/[route name]';
 
@@ -60,14 +62,14 @@ class Routes {
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
-    ratingPage: (context) => const RatingPage(),
+    // ratingPage: (context) => const RatingPage(),
     identificationPage: (context) => const IdentificationPage(),
     topUp: (context) => const TopUpPage(),
     reportPage: (context) => const ReportPage(),
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
-    selfInformationPage: ((context) => const SelfInformationPage()),
     homePage: (context) => const HomePage(),
+    questionApplyPage: (context) => QuestionApplyPage(),
     // add routes here
     // [route name]: (context) => const [page name](),
 
