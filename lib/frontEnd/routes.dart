@@ -88,7 +88,7 @@ class Routes {
     reportSuccessPage: (context) => const ReportSuccessPage(),
     homePage: (context) => const HomePage(),
     questionApplyPage: (context) => const QuestionApplyPage(),
-    addProblemPage: (context) => const AddProblemPage(),
+    addProblemPage: (context) => AddProblemPage(),
     commonProblemPage: (context) => const CommonProblemPage(),
     settingPage: (context) => const SettingPage(),
     accountSettingPage: (context) => const AccountSettingPage(),
