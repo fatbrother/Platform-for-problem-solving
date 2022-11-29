@@ -161,3 +161,54 @@ class CheckButton extends StatelessWidget {
         ));
   }
 }
+
+class LinkButton extends StatelessWidget {
+  final String text;
+  final Color backgroundColor;
+  final void Function() onPressed;
+
+  const LinkButton({
+    super.key,
+    required this.text,
+    required this.backgroundColor,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size(370, 60),
+        backgroundColor: Colors.white,
+        foregroundColor: Design.primaryTextColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ),
+        side: const BorderSide(
+          color: Design.secondaryColor,
+          width: 5,
+        ),
+      ),
+      child: Row(
+        children: [
+          Flexible(
+            fit: FlexFit.tight,
+            child: Text(
+              text,
+              style: const TextStyle(fontSize: 22),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const Align(
+            alignment: Alignment.centerRight,
+            child: Icon(
+              Icons.keyboard_double_arrow_right,
+              size: 30,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
