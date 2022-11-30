@@ -24,11 +24,11 @@ import 'package:pops/frontEnd/pages/setting/change_password_page.dart';
 import 'package:pops/frontEnd/pages/setting/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/setting/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/user/top_up_page.dart';
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import 'package:pops/frontEnd/pages/chatroom_page.dart';
-=======
+//=======
 import 'package:pops/frontEnd/pages/unsolved_problem_page.dart';
->>>>>>> 93e088b17f3a61b2ebc74d1719b81172a491170f
+//>>>>>>> 93e088b17f3a61b2ebc74d1719b81172a491170f
 
 import 'pages/user/common_problems_page.dart';
 // import '../backEnd/user/account.dart';
@@ -68,12 +68,12 @@ class Routes {
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
   static const String addProblemPage = '/addProblemPage';
-<<<<<<< HEAD
+//<<<<<<< HEAD
   static const String chatroomPage = '/chatroomPage';
 
-=======
+//=======
   static const String unsolvedPage = '/unsolnedPage';
->>>>>>> 93e088b17f3a61b2ebc74d1719b81172a491170f
+//>>>>>>> 93e088b17f3a61b2ebc74d1719b81172a491170f
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];
 
@@ -93,11 +93,11 @@ class Routes {
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
-    ratingPage: (context) => const RatingPage(),
+    //ratingPage: (context) => const RatingPage(),
     identificationPage: (context) => const IdentificationPage(),
     topUpPage: (context) => const TopUpPage(),
     reportPage: (context) => const ReportPage(),
-    ratePage: (context) => const RatePage(),
+    //ratePage: (context) => const RatePage(),
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
     homePage: (context) => const HomePage(),
@@ -109,11 +109,11 @@ class Routes {
     addLabelPage: (context) => const AddLabelPage(),
     generalLabelsPage: (context) => const GeneralLabelsPage(),
     systemLabelsPage: (context) => const SystemLabelsPage(),
-<<<<<<< HEAD
+//<<<<<<< HEAD
     chatroomPage: (context) => const Chatroom(),
-=======
+//=======
     unsolvedPage: (context) => const UnsolvedPage(),
->>>>>>> 93e088b17f3a61b2ebc74d1719b81172a491170f
+//>>>>>>> 93e088b17f3a61b2ebc74d1719b81172a491170f
     // add routes here
     // [route name]: (context) => const [page name](),
 
