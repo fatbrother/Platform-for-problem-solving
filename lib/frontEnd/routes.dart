@@ -24,6 +24,8 @@ import 'package:pops/frontEnd/pages/setting/change_password_page.dart';
 import 'package:pops/frontEnd/pages/setting/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/setting/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/user/top_up_page.dart';
+import 'package:pops/frontEnd/pages/user/rate_page.dart';
+import 'package:pops/frontEnd/pages/rating_page.dart';
 //<<<<<<< HEAD
 import 'package:pops/frontEnd/pages/chatroom_page.dart';
 //=======
@@ -78,7 +80,7 @@ class Routes {
       Routes()._routes[homeRouteName];
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? unsolvedPage : login;
+      AccountManager.isLoggedIn() ? ratingPage : login;
 
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
@@ -93,11 +95,11 @@ class Routes {
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
-    //ratingPage: (context) => const RatingPage(),
+    ratingPage: (context) => const RatingPage(),
     identificationPage: (context) => const IdentificationPage(),
     topUpPage: (context) => const TopUpPage(),
     reportPage: (context) => const ReportPage(),
-    //ratePage: (context) => const RatePage(),
+    ratePage: (context) => const RatePage(),
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
     homePage: (context) => const HomePage(),
