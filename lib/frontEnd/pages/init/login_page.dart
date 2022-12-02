@@ -19,9 +19,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (AccountManager.isLoggedIn()) {
-      Routes.pushReplacement(context, Routes.homeRouteName);
-    }
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -42,7 +39,8 @@ class _LoginPageState extends State<LoginPage> {
           height: double.infinity,
           child: Stack(children: [
             Container(
-              margin: EdgeInsets.only(top: Design.getScreenHeight(context) * 0.12),
+              margin:
+                  EdgeInsets.only(top: Design.getScreenHeight(context) * 0.12),
               padding: Design.spacing,
               decoration: const BoxDecoration(
                 color: Design.secondaryColor,
@@ -115,33 +113,25 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    setState(() {});
+    if (mounted) {
+      Routes.pushReplacement(context, Routes.homeRouteName);
+    }
   }
 
   Future<void> forgotPassword() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return InkWell(
-          child: Alert(
-            title: 'Forgot Password',
-            content: TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                hintText: 'Enter your email',
-              ),
-            ),
-            onPressed: () async {
-              try {
-                await AccountManager.resetPasswordBySendEmail(
-                    emailController.text);
-              } catch (e) {
-                DialogManager.showInfoDialog(context, e.toString());
-              }
-            },
+    DialogManager.showContentDialog(
+        context,
+        TextField(
+          controller: emailController,
+          decoration: const InputDecoration(
+            hintText: 'Enter your email',
           ),
-        );
-      },
-    );
+        ), () async {
+      try {
+        await AccountManager.resetPasswordBySendEmail(emailController.text);
+      } catch (e) {
+        DialogManager.showInfoDialog(context, e.toString());
+      }
+    });
   }
 }

@@ -39,12 +39,8 @@ class AccountManager {
     _auth.currentUser!.reload();
   }
 
-  static Future<bool> signUp(String name, String email, String password,
+  static Future<void> signUp(String name, String email, String password,
       String confirmPassword) async {
-    if (password != confirmPassword) {
-      throw Exception('Passwords do not match');
-    }
-
     try {
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -65,20 +61,19 @@ class AccountManager {
         timer++;
       }
 
-      await signIn(email, password);
-      UsersDatabase.addUser(UsersModel(
-        id: user.uid,
-        name: name,
-        email: email,
-      ));
-      await _auth.currentUser!.reload();
-
       if (!user.emailVerified) {
-        deleteAccount();
+        await user.delete();
         throw Exception('Email is not verified');
       }
 
-      return true;
+      signIn(email, password);
+      UsersDatabase.addUser(
+        UsersModel(
+          id: user.uid,
+          name: name,
+          email: email,
+        ),
+      );
     } catch (e) {
       rethrow;
     }

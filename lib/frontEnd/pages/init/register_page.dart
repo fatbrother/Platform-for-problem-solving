@@ -21,10 +21,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (AccountManager.isLoggedIn()) {
-      Routes.pushReplacement(context, Routes.homeRouteName);
-    }
-
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -90,9 +86,16 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> signUp() async {
-    bool verified = true;
+    if (passwordController.text != confirmPasswordController.text) {
+      DialogManager.showInfoDialog(
+        context,
+        'Passwords do not match',
+      );
+      return;
+    }
+
     try {
-      verified = await AccountManager.signUp(
+      await AccountManager.signUp(
         userNameController.text,
         emailController.text,
         passwordController.text,
@@ -103,8 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    if (verified) {
-      // ignore: use_build_context_synchronously
+    if (mounted) {
       Routes.pushReplacement(context, Routes.verifyPhone);
     }
   }
