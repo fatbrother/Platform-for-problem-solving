@@ -40,15 +40,12 @@ class _SelfInfoPageBodyState extends State<SelfInfoPageBody> {
 
   Future<void> loadUserInfo() async {
     user = await AccountManager.currentUser;
-    setState(() {
-      user = user;
-    });
+    setState(() {});
   }
 
   void changeUserName(String newName) async {
     user.name = newName;
     await AccountManager.updateCurrentUser(user);
-    setState(() {});
   }
 
   void logOut() async {
@@ -166,17 +163,11 @@ class SelfIntroductionBar extends StatefulWidget {
 }
 
 class _SelfIntroductionBarState extends State<SelfIntroductionBar> {
-  bool isEditable = true;
   final TextEditingController _controller = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    _controller.text = widget.user.selfIntroduction;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    _controller.text = widget.user.selfIntroduction;
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -243,7 +234,7 @@ class ScoreBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => Routes.push(context, Routes.ratePage),
       child: Container(
         width: double.infinity,
         height: Design.getScreenHeight(context) * 0.048,
@@ -263,7 +254,7 @@ class ScoreBar extends StatelessWidget {
                   color: Colors.black,
                 ),
                 const SizedBox(width: 10),
-                Text('0',
+                Text(user.reportNum.toString(),
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: Design.getScreenHeight(context) * 0.025,
@@ -277,11 +268,15 @@ class ScoreBar extends StatelessWidget {
                   color: Colors.black,
                 ),
                 const SizedBox(width: 10),
-                Text(user.score.toString(),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: Design.getScreenHeight(context) * 0.025,
-                    )),
+                Text(
+                  (user.score /
+                          (user.numberOfScores == 0 ? 1 : user.numberOfScores))
+                      .toStringAsFixed(1),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: Design.getScreenHeight(context) * 0.025,
+                  ),
+                ),
               ],
             ),
             const Icon(Icons.arrow_forward_ios_rounded, color: Colors.black),

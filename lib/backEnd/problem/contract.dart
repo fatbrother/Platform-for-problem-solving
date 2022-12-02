@@ -37,9 +37,10 @@ class ContractsDatabase {
     }
   }
 
-  static void addContract(ContractsModel contract) async {
+  static Future<String> addContract(ContractsModel contract) async {
     try {
-      await DB.addRow('contracts', contract.toMap());
+      final String id = await DB.addRow('contracts', contract.toMap());
+      return id;
     } catch (e) {
       rethrow;
     }
@@ -48,36 +49,36 @@ class ContractsDatabase {
 
 class ContractsModel {
   String id;
-  String requestId;
   String solverId;
-  String problemId;
+  String partialAns;
+  int price;
   DateTime deadline;
 
   ContractsModel({
     required this.id,
-    required this.requestId,
     required this.solverId,
-    required this.problemId,
     required this.deadline,
+    required this.partialAns,
+    required this.price,
   });
 
   factory ContractsModel.fromMap(Map<String, dynamic> map) {
     return ContractsModel(
       id: map['id'],
-      requestId: map['requestId'],
       solverId: map['solverId'],
-      problemId: map['problemId'],
       deadline: DateTime.parse(map['deadline']),
+      partialAns: map['partialAns'],
+      price: map['price'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'requestId': requestId,
       'solverId': solverId,
-      'problemId': problemId,
       'deadline': deadline.toIso8601String(),
+      'partialAns': partialAns,
+      'price': price,
     };
   }
 

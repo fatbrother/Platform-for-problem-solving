@@ -3,7 +3,6 @@ import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
-import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/scaffold.dart';
 

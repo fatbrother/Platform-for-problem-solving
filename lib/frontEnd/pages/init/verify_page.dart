@@ -19,8 +19,7 @@ class _VerifyPageState extends State<VerifyPage> {
       PhoneNumberEditingController();
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
     if (AccountManager.isPhoneVerified()) {
       Routes.back(context);
@@ -80,7 +79,7 @@ class _VerifyPageState extends State<VerifyPage> {
     try {
       verificationId = await AccountManager.sendSms(phoneNumber);
     } catch (e) {
-      DialogManager.showError(e, context);
+      DialogManager.showInfoDialog(context, e.toString());
       return;
     }
 
@@ -100,7 +99,7 @@ class _VerifyPageState extends State<VerifyPage> {
           try {
             AccountManager.verifyPhoneNumber(verificationId, smsCode);
           } catch (e) {
-            DialogManager.showError(e, context);
+            DialogManager.showInfoDialog(context, e.toString());
           }
         },
       ),

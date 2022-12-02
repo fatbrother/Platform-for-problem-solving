@@ -64,13 +64,17 @@ class DB {
   }
 
   // add the row of the databases
-  static Future<void> addRow(String tableName, Map<String, dynamic> row) async {
+  static Future<String> addRow(String tableName, Map<String, dynamic> row) async {
     try {
       // if the row has an id, use it
       if (row.containsKey('id') && row['id'] != null) {
         await db.collection(tableName).doc(row['id']).set(row);
+        return row['id'];
       } else {
-        await db.collection(tableName).add(row);
+        // if the row has no id, generate one
+        final DocumentReference<Map<String, dynamic>> docRef =
+            await db.collection(tableName).add(row);
+        return docRef.id;
       }
     } catch (e) {
       rethrow;

@@ -54,6 +54,8 @@ class UsersModel {
   String email;
   String phone;
   String selfIntroduction;
+  int reportNum;
+  List<String> commandProblemIds;
   List<String> askProblemIds;
   List<String> pastExpertiseTags;
   List<String> expertiseTags;
@@ -61,6 +63,8 @@ class UsersModel {
   List<String> hideSystemTags;
   List<String> auditFailedTags;
   List<String> audittingTags;
+  List<String> notices;
+  List<FeedbacksModel> feedbacks;
 
   List<dynamic> chatRoomsIds;
   int tokens;
@@ -71,7 +75,9 @@ class UsersModel {
     required this.id,
     required this.name,
     required this.email,
+    this.reportNum = 0,
     this.phone = '',
+    this.commandProblemIds = const [],
     this.selfIntroduction = '',
     this.expertiseTags = const [],
     this.pastExpertiseTags = const [],
@@ -81,6 +87,8 @@ class UsersModel {
     this.audittingTags = const [],
     this.askProblemIds = const [],
     this.chatRoomsIds = const [],
+    this.feedbacks = const [],  
+    this.notices = const [],
     this.tokens = 0,
     this.score = 0,
     this.numberOfScores = 0,
@@ -92,7 +100,11 @@ class UsersModel {
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
+      reportNum: data['reportNum'] ?? 0,
       selfIntroduction: data['selfIntroduction'] ?? '',
+      commandProblemIds: data['commandProblemIds'] == null
+          ? []
+          : data['commandProblemIds'].cast<String>(),
       askProblemIds: data['askProblemIds'] == null
           ? []
           : data['askProblemIds'].cast<String>(),
@@ -120,6 +132,12 @@ class UsersModel {
       tokens: data['tokens'] ?? 0,
       score: data['score'] ?? 0.0,
       numberOfScores: data['numberOfScores'] ?? 0,
+      feedbacks: data['feedbacks'] == null
+          ? []
+          : data['feedbacks'].map((e) => FeedbacksModel.fromMap(e)).toList(),
+      notices: data['notices'] == null 
+          ? []
+          : data['notices'].cast<String>(),
     );
   }
 
@@ -129,6 +147,8 @@ class UsersModel {
       'name': name,
       'email': email,
       'phone': phone,
+      'reportNum': reportNum,
+      'commandProblemIds': commandProblemIds,
       'selfIntroduction': selfIntroduction,
       'askProblemIds': askProblemIds,
       'expertiseTags': expertiseTags,
@@ -141,10 +161,39 @@ class UsersModel {
       'tokens': tokens,
       'score': score,
       'numberOfScores': numberOfScores,
+      'feedbacks': feedbacks.map((e) => e.toMap()).toList(),
     };
   }
 
   bool isVerified() {
     return phone != "";
+  }
+}
+
+class FeedbacksModel {
+  String userName;
+  String feedback;
+  int score;
+
+  FeedbacksModel({
+    required this.userName,
+    required this.feedback,
+    required this.score,
+  });
+
+  static fromMap(Map<String, dynamic> data) {
+    return FeedbacksModel(
+      userName: data['userName'] ?? '',
+      feedback: data['feedback'] ?? '',
+      score: data['score'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'userName': userName,
+      'feedback': feedback,
+      'score': score,
+    };
   }
 }

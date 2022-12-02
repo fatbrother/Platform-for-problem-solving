@@ -1,36 +1,64 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:pops/backEnd/other/img.dart';
+import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
-import 'package:pops/frontEnd/widgets/messagebox.dart';
 import 'package:pops/backEnd/other/chat_room.dart';
 import 'package:pops/frontEnd/routes.dart';
 
+class ChatRoomPage extends StatefulWidget {
+  final String chatRoomId;
 
-class Chatroom extends StatefulWidget {
-  const Chatroom({
+  const ChatRoomPage({
     Key? key,
+    required this.chatRoomId,
   }) : super(key: key);
 
   @override
-  ChatroomState createState() => ChatroomState();
+  ChatRoomPageState createState() => ChatRoomPageState();
 }
 
-class ChatroomState extends State<Chatroom> {
+class ChatRoomPageState extends State<ChatRoomPage> {
   final TextEditingController chatController = TextEditingController();
-  final List<Message> message = [
-    Message(text: "HI", isMe: true),
-    Message(text: "HI", isMe: false),
-    Message(text: "How is your day", isMe: true),
-    Message(text: "Not Bad", isMe: false)
-  ];
+  Stream<QuerySnapshot> chatRoomListener = const Stream.empty();
+  UsersModel user = UsersModel(id: '', name: '', email: '');
+  List<Messeage> messages = [];
 
-  void submitText(String text) {
-    if (text == "") return;
+  Future<void> submitText(String text) async {
+    if (text == '') {
+      return;
+    }
+    final Messeage message = Messeage(
+      id: user.id,
+      message: text,
+    );
+    messages.add(message);
 
-    chatController.clear();
-    setState(() {
-      message.insert(0, Message(text: text, isMe: true));
+    var chatRoom = await ChatRoomDatabase.getChatRoom(widget.chatRoomId);
+    chatRoom.messages = messages;
+    ChatRoomDatabase.updateChatRoom(chatRoom);
+  }
+
+  void listenChatRoom() {
+    chatRoomListener = ChatRoomDatabase.getChatRoomListener(widget.chatRoomId);
+    chatRoomListener.listen((event) {
+      messages = event.docs
+          .map((e) => Messeage.fromMap(e.data() as Map<String, dynamic>))
+          .toList();
+      setState(() {});
     });
+  }
+
+  Future<void> loadUserInfo() async {
+    user = await AccountManager.currentUser;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserInfo();
+    listenChatRoom();
   }
 
   @override
@@ -61,37 +89,49 @@ class ChatroomState extends State<Chatroom> {
               reverse: true,
               shrinkWrap: true,
               padding: Design.spacing,
-              itemCount: message.length,
+              itemCount: messages.length,
               itemBuilder: (context, index) => Row(
-                  mainAxisAlignment: message[index].isMe
+                  mainAxisAlignment: messages[index].id == user.id
                       ? MainAxisAlignment.end
                       : MainAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      margin: const EdgeInsets.symmetric(vertical: 10.0),
-                      decoration: BoxDecoration(
-                        color: (message[index].isMe)
-                            ? Design.primaryColor
-                            : Colors.white,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      child: Text(
-                        message[index].text,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 5,
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    messages[index].type == 0
+                        ? Container(
+                            padding: const EdgeInsets.all(10.0),
+                            margin: const EdgeInsets.symmetric(vertical: 10.0),
+                            decoration: BoxDecoration(
+                              color: (messages[index].id == user.id)
+                                  ? Design.primaryColor
+                                  : Colors.white,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                            child: Text(
+                              messages[index].message,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 5,
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            padding: const EdgeInsets.all(10.0),
+                            margin: const EdgeInsets.symmetric(vertical: 10.0),
+                            decoration: BoxDecoration(
+                              color: (messages[index].id == user.id)
+                                  ? Design.primaryColor
+                                  : Colors.white,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                            child: Image.network(messages[index].message),
+                          ),
                     const Icon(Icons.person, size: 32)
                   ]),
             ),
           ),
-          //Bottom_TypingSquare_Design
           Center(
             child: Container(
               width: Design.getScreenWidth(context) * 0.95,

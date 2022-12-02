@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
@@ -27,7 +29,6 @@ class TopUpView extends StatefulWidget {
 }
 
 class _TopUpView extends State<TopUpView> {
-  var money = 0;
   final TextEditingController _controller = TextEditingController();
   bool seeMiddle = true;
   bool seeDown = false;
@@ -44,12 +45,37 @@ class _TopUpView extends State<TopUpView> {
     });
   }
 
+  UsersModel user = UsersModel(id: '', name: '', email: '');
+
+  Future<void> loadUserInfo() async {
+    user = await AccountManager.currentUser;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: Design.spacing,
       child: Column(
         children: <Widget>[
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Design.insideColor,
+              borderRadius: Design.outsideBorderRadius,
+            ),
+            padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+            child: Text('目前餘額：${user.tokens}',
+                style: const TextStyle(
+                    fontSize: 20, color: Design.secondaryTextColor)),
+          ),
+          const SizedBox(height: 20),
           SizedBox(
             child: Container(
               padding: const EdgeInsets.fromLTRB(20, 2, 8, 2),
@@ -59,13 +85,8 @@ class _TopUpView extends State<TopUpView> {
               ),
               alignment: Alignment.center,
               child: TextField(
+                keyboardType: TextInputType.number,
                 controller: _controller,
-                onChanged: (text) {
-                  setState(() {
-                    money =
-                        int.parse(_controller.text); //string converts to int
-                  });
-                },
                 maxLines: 1,
                 decoration: const InputDecoration(
                   hintText: '輸入儲值金額',
@@ -141,9 +162,17 @@ class _TopUpView extends State<TopUpView> {
           SizedBox(
             height: Design.getScreenHeight(context) * 0.07,
             child: InkWell(
-              onTap: () {
-                String message = judge(money);
-                DialogManager.showInfoDialog(context, message);
+              onTap: () async {
+                int money = int.parse(_controller.text);
+                _controller.clear();
+
+                if (money < 0) {
+                  DialogManager.showInfoDialog(context, '請輸入正確金額');
+                } else {
+                  DialogManager.showInfoDialog(context, '儲值成功');
+                  user.tokens += money;
+                  await AccountManager.updateCurrentUser(user);
+                }
               },
               child: Container(
                   decoration: BoxDecoration(
@@ -164,15 +193,5 @@ class _TopUpView extends State<TopUpView> {
         ],
       ),
     );
-  }
-
-  String judge(int money) {
-    String message;
-    if (money < 0) {
-      message = "金額有誤，儲值失敗";
-    } else {
-      message = "代幣增加" "$money";
-    }
-    return message;
   }
 }
