@@ -80,11 +80,7 @@ class Routes {
       Routes()._routes[homeRouteName];
 
   static String get homeRouteName =>
-<<<<<<< HEAD
-      AccountManager.isLoggedIn() ? ratingPage : login;
-=======
       AccountManager.isLoggedIn() ? homePage : login;
->>>>>>> 625c68e1566224b69f92cb11e58b1f9cba7e9a20
 
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
