@@ -5,7 +5,6 @@ import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/frontEnd/pages/bottom/notification_page.dart';
 import 'package:pops/frontEnd/pages/bottom/sort_problem_page.dart';
-import 'package:pops/frontEnd/pages/rating_page.dart';
 import 'package:pops/frontEnd/pages/setting/general_labels_page.dart';
 import 'package:pops/frontEnd/pages/bottom/home_page.dart';
 import 'package:pops/frontEnd/pages/problem/add_probelm_page.dart';
@@ -20,7 +19,6 @@ import 'package:pops/frontEnd/pages/report/report_success_page.dart';
 import 'package:pops/frontEnd/pages/setting/account_setting_page.dart';
 import 'package:pops/frontEnd/pages/bottom/unsolved_problem_page.dart';
 import 'package:pops/frontEnd/pages/user/add_label_page.dart';
-import 'package:pops/frontEnd/pages/user/rate_page.dart';
 import 'package:pops/frontEnd/pages/user/setting_page.dart';
 import 'package:pops/frontEnd/pages/bottom/self_information_page.dart';
 import 'package:pops/frontEnd/pages/bottom/self_problem_page.dart';
@@ -71,7 +69,6 @@ class Routes {
   static const String questionApplyPage = '/questionApplyPage';
   static const String addProblemPage = '/addProblemPage';
   static const String chatRoomPage = '/chatRoomPage';
-
   static const String unsolvedPage = '/unsolnedPage';
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];
@@ -92,12 +89,12 @@ class Routes {
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
-    ratingPage: (context) => const RatingPage(),
+    //ratingPage: (context) => const RatingPage(),
     identificationPage: (context) => const IdentificationPage(),
     notificationPage: (context) => const NotificationPage(),
     topUpPage: (context) => const TopUpPage(),
     reportPage: (context) => const ReportPage(),
-    ratePage: (context) => const RatePage(),
+    //ratePage: (context) => const RatePage(),
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
     homePage: (context) => const HomePage(),
