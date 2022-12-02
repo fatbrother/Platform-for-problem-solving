@@ -4,6 +4,7 @@ import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/suggest_field.dart';
 import 'package:pops/frontEnd/widgets/star_plate.dart';
+import 'package:pops/frontEnd/routes.dart';
 
 class RatingPage extends StatefulWidget {
   const RatingPage({super.key});
@@ -31,7 +32,7 @@ class _RatingPageState extends State<RatingPage> {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () => {},
+                      onPressed: () => {Routes.back(context)},
                       icon: const Icon(Icons.arrow_back),
                       iconSize: 35,
                     ),
