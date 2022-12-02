@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
+import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttom_navigation_bar.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,80 +11,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: SearchBar(),
       backgroundColor: Design.backgroundColor,
-      body: Column(
-        children: [
-          SizedBox(height: Design.getScreenHeight(context) * 0.06),
-          const SearchBar(),
-          const HomePageBody(),
-        ],
-      ),
+      body: const HomePageBody(),
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.homePage),
       ),
     );
-  }
-}
-
-class SearchBar extends StatefulWidget {
-  const SearchBar({super.key});
-
-  @override
-  State<SearchBar> createState() => _SearchBarState();
-}
-
-class _SearchBarState extends State<SearchBar> {
-  List<String> autofillHints = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
-          color: Design.backgroundColor,
-        ),
-        child: Container(
-          height: Design.getScreenHeight(context) * 0.05,
-          width: Design.getScreenWidth(context) * 0.9,
-          decoration: BoxDecoration(
-            color: Design.insideColor,
-            borderRadius:
-                BorderRadius.circular(Design.getScreenHeight(context) * 0.05),
-          ),
-          child: AutofillGroup(
-            child: Row(
-              children: [
-                const SizedBox(width: 10),
-                const Icon(Icons.search),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Search',
-                    ),
-                    onChanged: onChanged,
-                    autofillHints: autofillHints,
-                    keyboardType: TextInputType.text,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future<void> onChanged(String value) async {
-    for (var item in await TagsDatabase.querySimilarTags(value)) {
-      autofillHints.add(item);
-      debugPrint(item);
-    }
-
-    setState(() {});
   }
 }
 
@@ -117,13 +50,12 @@ class _HomePageBodyState extends State<HomePageBody> {
       children.add(const SizedBox(height: 10));
     }
 
-    return Expanded(
-      child: Container(
-        decoration: const BoxDecoration(color: Design.secondaryColor),
-        child: ListView(
-          padding: Design.spacing,
-          children: children,
-        ),
+    return Container(
+      height: double.infinity,
+      decoration: const BoxDecoration(color: Design.secondaryColor),
+      child: ListView(
+        padding: Design.spacing,
+        children: children,
       ),
     );
   }
@@ -183,7 +115,7 @@ class ProblemCard extends StatelessWidget {
                     color: Design.secondaryColor,
                     borderRadius: Design.outsideBorderRadius,
                   ),
-                  width: Design.getScreenWidth(context) * 0.4,
+                  width: Design.getScreenWidth(context) * 0.5,
                   child: Center(
                     child: Text(
                       '底價: ${problem.baseToken}',
@@ -197,7 +129,7 @@ class ProblemCard extends StatelessWidget {
         ),
       ),
       onTap: () {
-        // Routes.push(context, Routes.problemPage, arguments: problem);
+        Routes.push(context, Routes.questionApplyPage, arguments: problem);
       },
     );
   }

@@ -99,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
         confirmPasswordController.text,
       );
     } catch (e) {
-      DialogManager.showError(e, context);
+      DialogManager.showInfoDialog(context, e.toString());
       return;
     }
 

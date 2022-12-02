@@ -3,6 +3,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/frontEnd/pages/bottom/notification_page.dart';
+import 'package:pops/frontEnd/pages/bottom/sort_problem_page.dart';
+import 'package:pops/frontEnd/pages/rating_page.dart';
 import 'package:pops/frontEnd/pages/setting/general_labels_page.dart';
 import 'package:pops/frontEnd/pages/bottom/home_page.dart';
 import 'package:pops/frontEnd/pages/problem/add_probelm_page.dart';
@@ -10,12 +13,14 @@ import 'package:pops/frontEnd/pages/audit_failed_lables_page.dart';
 import 'package:pops/frontEnd/pages/setting/identification_page.dart';
 import 'package:pops/frontEnd/pages/init/login_page.dart';
 import 'package:pops/frontEnd/pages/init/register_page.dart';
-import 'package:pops/frontEnd/pages/question_appilcation_page.dart';
+import 'package:pops/frontEnd/pages/problem/question_apply_page.dart';
 import 'package:pops/frontEnd/pages/report/report_fail_page.dart';
 import 'package:pops/frontEnd/pages/report/report_page.dart';
 import 'package:pops/frontEnd/pages/report/report_success_page.dart';
 import 'package:pops/frontEnd/pages/setting/account_setting_page.dart';
+import 'package:pops/frontEnd/pages/bottom/unsolved_problem_page.dart';
 import 'package:pops/frontEnd/pages/user/add_label_page.dart';
+import 'package:pops/frontEnd/pages/user/rate_page.dart';
 import 'package:pops/frontEnd/pages/user/setting_page.dart';
 import 'package:pops/frontEnd/pages/bottom/self_information_page.dart';
 import 'package:pops/frontEnd/pages/bottom/self_problem_page.dart';
@@ -24,13 +29,8 @@ import 'package:pops/frontEnd/pages/setting/change_password_page.dart';
 import 'package:pops/frontEnd/pages/setting/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/setting/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/user/top_up_page.dart';
-<<<<<<< HEAD
 import 'package:pops/frontEnd/pages/chatroom_page.dart';
-=======
-import 'package:pops/frontEnd/pages/unsolved_problem_page.dart';
->>>>>>> 93e088b17f3a61b2ebc74d1719b81172a491170f
-
-import 'pages/user/common_problems_page.dart';
+import 'package:pops/frontEnd/pages/user/common_problems_page.dart';
 // import '../backEnd/user/account.dart';
 // import pages here
 // import 'pages/[page file name].dart';
@@ -49,6 +49,8 @@ class Routes {
   static const String commonProblemPage = '/commonProblemPage';
   static const String settingPage = '/settingPage';
   static const String addLabelPage = '/addLabelPage';
+  static const String notificationPage = '/notificationPage';
+  static const String sortProblemPage = '/sortProblemPage';
 
   static const String accountSettingPage = '/accountSettingPage';
   static const String generalLabelsPage = '/generalLabelsPage';
@@ -68,17 +70,14 @@ class Routes {
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
   static const String addProblemPage = '/addProblemPage';
-<<<<<<< HEAD
-  static const String chatroomPage = '/chatroomPage';
+  static const String chatRoomPage = '/chatRoomPage';
 
-=======
   static const String unsolvedPage = '/unsolnedPage';
->>>>>>> 93e088b17f3a61b2ebc74d1719b81172a491170f
   static Widget Function(BuildContext context)? get homeRoute =>
       Routes()._routes[homeRouteName];
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? unsolvedPage : login;
+      AccountManager.isLoggedIn() ? homePage : login;
 
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
@@ -95,25 +94,26 @@ class Routes {
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
     ratingPage: (context) => const RatingPage(),
     identificationPage: (context) => const IdentificationPage(),
+    notificationPage: (context) => const NotificationPage(),
     topUpPage: (context) => const TopUpPage(),
     reportPage: (context) => const ReportPage(),
     ratePage: (context) => const RatePage(),
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
     homePage: (context) => const HomePage(),
-    questionApplyPage: (context) => const QuestionApplyPage(),
-    addProblemPage: (context) => AddProblemPage(),
+    addProblemPage: (context) => const AddProblemPage(),
     commonProblemPage: (context) => const CommonProblemPage(),
     settingPage: (context) => const SettingPage(),
     accountSettingPage: (context) => const AccountSettingPage(),
     addLabelPage: (context) => const AddLabelPage(),
     generalLabelsPage: (context) => const GeneralLabelsPage(),
     systemLabelsPage: (context) => const SystemLabelsPage(),
-<<<<<<< HEAD
-    chatroomPage: (context) => const Chatroom(),
-=======
     unsolvedPage: (context) => const UnsolvedPage(),
->>>>>>> 93e088b17f3a61b2ebc74d1719b81172a491170f
+    sortProblemPage: (context) => const SortProblemPage(),
+    chatRoomPage: (context) {
+      final String chatRoomId = ModalRoute.of(context)!.settings.arguments as String;
+      return ChatRoomPage(chatRoomId: chatRoomId);
+    },
     // add routes here
     // [route name]: (context) => const [page name](),
 
@@ -123,16 +123,22 @@ class Routes {
           ModalRoute.of(context)!.settings.arguments as ProblemsModel;
       return SelSinglefProblemPage(problem: problem);
     },
+    
+    questionApplyPage: (context) {
+      final ProblemsModel problem =
+          ModalRoute.of(context)!.settings.arguments as ProblemsModel;
+      return QuestionApplyPage(problem: problem);
+    },
 
     selfInformationPage: (context) => const SelfInformationPage(),
   };
 
   static List<String> bottomNavigationRoutes = [
     homePage,
-    '',
+    unsolvedPage,
     selfProblemPage,
-    '',
-    '',
+    notificationPage,
+    sortProblemPage,
     selfInformationPage,
   ];
 

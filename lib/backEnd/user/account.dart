@@ -65,11 +65,6 @@ class AccountManager {
         timer++;
       }
 
-      if (!user.emailVerified) {
-        user.delete();
-        throw Exception('Email is not verified');
-      }
-
       await signIn(email, password);
       UsersDatabase.addUser(UsersModel(
         id: user.uid,
@@ -77,6 +72,11 @@ class AccountManager {
         email: email,
       ));
       await _auth.currentUser!.reload();
+
+      if (!user.emailVerified) {
+        deleteAccount();
+        throw Exception('Email is not verified');
+      }
 
       return true;
     } catch (e) {

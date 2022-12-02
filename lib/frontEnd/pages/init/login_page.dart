@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await AccountManager.signIn(email, password);
     } catch (e) {
-      DialogManager.showError(e, context);
+      DialogManager.showInfoDialog(context, e.toString());
       passwordController.clear();
       return;
     }
@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                 await AccountManager.resetPasswordBySendEmail(
                     emailController.text);
               } catch (e) {
-                DialogManager.showError(e, context);
+                DialogManager.showInfoDialog(context, e.toString());
               }
             },
           ),

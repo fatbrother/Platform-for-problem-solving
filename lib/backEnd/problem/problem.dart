@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 import '../database.dart';
 
 // control the database of the problem with problemsModel
@@ -64,7 +62,6 @@ class ProblemsModel {
   List<String> solveCommendIds;
   String chooseSolveCommendId;
   DateTime createdAt;
-  int remainingDays;
   int rewardToken;
 
   ProblemsModel({
@@ -80,7 +77,6 @@ class ProblemsModel {
     required this.solveCommendIds,
     required this.chooseSolveCommendId,
     required this.createdAt,
-    required this.remainingDays,
     required this.rewardToken,
   });
 
@@ -102,7 +98,6 @@ class ProblemsModel {
       createdAt: data['createdAt'] == null
           ? DateTime.parse(data['createdAt'])
           : DateTime.now(),
-      remainingDays: data['remainingDays'] ?? 3,
       rewardToken: data['rewardToken'] ?? 0,
     );
   }
@@ -120,21 +115,13 @@ class ProblemsModel {
       'baseToken': baseToken,
       'solveCommendIds': solveCommendIds,
       'createdAt': createdAt.toIso8601String(),
-      'remainingDays': remainingDays,
       'rewardToken': rewardToken,
     };
   }
 
-  bool get isOverdue {
-    return createdAt
-        .add(Duration(days: remainingDays))
-        .isBefore(DateTime.now());
-  }
-
   String get existTimeString {
     final DateTime now = DateTime.now();
-    final DateTime deadline = createdAt.add(Duration(days: remainingDays));
-    final Duration existTime = deadline.difference(now);
+    final Duration existTime = now.difference(createdAt);
     final int days = existTime.inDays;
     final int hours = existTime.inHours - days * 24;
     final int minutes = existTime.inMinutes - days * 24 * 60 - hours * 60;

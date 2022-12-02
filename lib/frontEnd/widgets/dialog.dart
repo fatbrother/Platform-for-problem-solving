@@ -3,28 +3,8 @@ import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 
 class DialogManager {
-  static void showError(Object e, BuildContext context) {
-    String message = 'An error occurred';
-    try {
-      message = e.toString();
-      message = message.substring(message.indexOf(':') + 1);
-    } catch (e) {
-      // ignore
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) => Alert(
-        title: 'Error',
-        content: Text(message),
-        onPressed: () {
-          Routes.back(context);
-        },
-      ),
-    );
-  }
-
-  static void showInfoDialog(BuildContext context, String message) {
+  static void showInfoDialog(BuildContext context, String message,
+      {void Function()? onOk}) {
     AlertDialog dialog = AlertDialog(
       actionsPadding: const EdgeInsets.symmetric(horizontal: 0.0),
       content: Text(
@@ -51,7 +31,12 @@ class DialogManager {
             child: const Text("確認",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.black)),
-            onPressed: () => Routes.back(context),
+            onPressed: () {
+              Routes.back(context);
+              if (onOk != null) {
+                onOk();
+              }
+            },
           ),
         )
       ],
@@ -93,8 +78,8 @@ class DialogManager {
                         ),
                       ))),
                   onPressed: () {
-                    onPressed();
                     Routes.back(context);
+                    onPressed();
                   },
                   child: const Text("確認",
                       textAlign: TextAlign.center,
