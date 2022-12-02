@@ -134,10 +134,11 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
               Wrap(
                 alignment: WrapAlignment.start,
                 runAlignment: WrapAlignment.start,
+                runSpacing: 10,
+                spacing: 10,
                 children: [
                   for (final tag in tags)
                     Container(
-                      margin: const EdgeInsets.all(5),
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
@@ -206,21 +207,19 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
         authorName: user.name,
         imgIds: imageIdList,
         tags: tags,
-        isSolved: false,
         baseToken: rewardToken,
         solveCommendIds: [],
-        chooseSolveCommendId: '',
         createdAt: DateTime.now(),
-        rewardToken: 0,
       );
       if (user.tokens < 10 + rewardToken) {
         DialogManager.showInfoDialog(context, '代幣不足');
       } else {
-        ProblemsDatabase.addProblem(problem);
+        DialogManager.showInfoDialog(context, '上架成功', onOk: () async {
+          Routes.back(context);
+        String id = await ProblemsDatabase.addProblem(problem);
+        user.askProblemIds.add(id);
         user.tokens -= 10 + rewardToken;
         AccountManager.updateCurrentUser(user);
-        DialogManager.showInfoDialog(context, '上架成功', onOk: () {
-          Routes.back(context);
         });
       }
     });

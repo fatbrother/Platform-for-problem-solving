@@ -40,6 +40,7 @@ class _SelfInfoPageBodyState extends State<SelfInfoPageBody> {
 
   Future<void> loadUserInfo() async {
     user = await AccountManager.currentUser;
+    debugPrint(user.name);
     setState(() {});
   }
 

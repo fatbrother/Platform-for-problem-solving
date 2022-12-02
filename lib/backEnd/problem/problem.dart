@@ -40,9 +40,10 @@ class ProblemsDatabase {
     }
   }
 
-  static void addProblem(ProblemsModel problem) async {
+  static Future<String> addProblem(ProblemsModel problem) async {
     try {
-      await DB.addRow('problems', problem.toMap());
+      String id = await DB.addRow('problems', problem.toMap());
+      return id;
     } catch (e) {
       rethrow;
     }
@@ -67,17 +68,17 @@ class ProblemsModel {
   ProblemsModel({
     required this.id,
     required this.title,
-    required this.description,
     required this.authorName,
     required this.authorId,
-    required this.imgIds,
-    required this.tags,
-    required this.isSolved,
-    required this.baseToken,
-    required this.solveCommendIds,
-    required this.chooseSolveCommendId,
     required this.createdAt,
-    required this.rewardToken,
+    this.description = '',
+    this.imgIds = const [],
+    this.tags = const [],
+    this.isSolved = false,
+    this.baseToken = 0,
+    this.solveCommendIds = const [],
+    this.chooseSolveCommendId = '',
+    this.rewardToken = 0,
   });
 
   static fromMap(Map<String, dynamic> data) {
@@ -123,12 +124,9 @@ class ProblemsModel {
     final DateTime now = DateTime.now();
     final Duration existTime = now.difference(createdAt);
     final int days = existTime.inDays;
-    final int hours = existTime.inHours - days * 24;
-    final int minutes = existTime.inMinutes - days * 24 * 60 - hours * 60;
-    final int seconds = existTime.inSeconds -
-        days * 24 * 60 * 60 -
-        hours * 60 * 60 -
-        minutes * 60;
+    final int hours = existTime.inHours;
+    final int minutes = existTime.inMinutes;
+    final int seconds = existTime.inSeconds;
 
     if (days > 0) {
       return '$days days';

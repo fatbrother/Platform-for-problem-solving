@@ -95,6 +95,11 @@ class UsersModel {
   });
 
   static fromMap(Map<String, dynamic> data) {
+    List<FeedbacksModel> feedbacks = [];
+    for (var feedback in data['feedbacks']) {
+      feedbacks.add(FeedbacksModel.fromMap(feedback));
+    }
+
     return UsersModel(
       id: data['id'] ?? '',
       name: data['name'] ?? '',
@@ -132,9 +137,7 @@ class UsersModel {
       tokens: data['tokens'] ?? 0,
       score: data['score'] ?? 0.0,
       numberOfScores: data['numberOfScores'] ?? 0,
-      feedbacks: data['feedbacks'] == null
-          ? []
-          : data['feedbacks'].map((e) => FeedbacksModel.fromMap(e)).toList(),
+      feedbacks: feedbacks,
       notices: data['notices'] == null 
           ? []
           : data['notices'].cast<String>(),
@@ -181,7 +184,7 @@ class FeedbacksModel {
     required this.score,
   });
 
-  static fromMap(Map<String, dynamic> data) {
+  static FeedbacksModel fromMap(Map<String, dynamic> data) {
     return FeedbacksModel(
       userName: data['userName'] ?? '',
       feedback: data['feedback'] ?? '',

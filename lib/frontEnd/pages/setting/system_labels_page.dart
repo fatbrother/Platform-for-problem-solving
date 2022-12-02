@@ -17,7 +17,8 @@ class SystemLabelsPage extends StatelessWidget {
     return MyScaffold(
       body: const SystemLabelsView(),
       backgroundColor: Design.secondaryColor,
-      currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.selfInformationPage),
+      currentIndex:
+          Routes.bottomNavigationRoutes.indexOf(Routes.selfInformationPage),
     );
   }
 }
@@ -30,7 +31,6 @@ class SystemLabelsView extends StatefulWidget {
 }
 
 class _SystemLabelsViewState extends State<SystemLabelsView> {
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -60,15 +60,13 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
     super.initState();
     loadTags();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: Design.insideColor
-          ),
+          borderRadius: BorderRadius.circular(25), color: Design.insideColor),
       width: double.infinity,
       constraints: BoxConstraints(
         minHeight: Design.getScreenHeight(context) * 0.15,
@@ -129,7 +127,12 @@ class ShowSystemTableWidget extends StatefulWidget {
 }
 
 class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
-  Map<String, List<String>> allTags = <String, List<String>>{};
+  Map<String, List<String>> allTags = <String, List<String>>{
+    'audittingTags': <String>[],
+    'auditFailedTags': <String>[],
+    'notShowingTags': <String>[],
+    'showingTags': <String>[],
+  };
 
   @override
   void initState() {
@@ -155,11 +158,11 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                   tag: allTags['showingTags']![i],
                   leftButtonTitle: '隱藏',
                   leftButtonOnPressed: () {
-                      // removeDisplayTagsToHideTags(i);
+                    // removeDisplayTagsToHideTags(i);
                   },
                   rightButtonTitle: '刪除',
                   rightButtonOnPressed: () {
-                      // showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'showingTags', i);
+                    // showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'showingTags', i);
                   },
                 ),
               for (int i = 0; i < allTags['notShowingTags']!.length; i++)
@@ -167,7 +170,7 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                   tag: allTags['notShowingTags']![i],
                   leftButtonTitle: '顯示',
                   leftButtonOnPressed: () {
-                      // removeHideTagsToDisplayTags(i);
+                    // removeHideTagsToDisplayTags(i);
                   },
                   rightButtonTitle: '刪除',
                   rightButtonOnPressed: () {
@@ -203,9 +206,7 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
                 leftButtonTitle: '查看',
                 leftButtonOnPressed: () {
                   DialogManager.showInfoDialog(
-                    context,
-                    "標籤需經由人工審核，可能花費較長時間，請耐心等候。"
-                  );
+                      context, "標籤需經由人工審核，可能花費較長時間，請耐心等候。");
                   //or 顯示該標籤內容
                 },
                 rightButtonTitle: '刪除',

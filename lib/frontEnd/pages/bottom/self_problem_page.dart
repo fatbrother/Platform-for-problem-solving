@@ -5,6 +5,7 @@ import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttom_navigation_bar.dart';
+import 'package:pops/frontEnd/widgets/problem_box.dart';
 
 class SelfProblemPage extends StatefulWidget {
   const SelfProblemPage({super.key});
@@ -41,7 +42,35 @@ class ProblemHomePage extends StatefulWidget {
 }
 
 class ProblemHomePageState extends State<ProblemHomePage> {
-  List<ProblemsModel> problems = [];
+  List<ProblemsModel> problems = [
+    ProblemsModel(
+      id: '1',
+      title: 'Problem 1',
+      description: 'Description 1',
+      tags: ['tag1', 'tag2'],
+      authorId: '1',
+      authorName: 'Author 1',
+      createdAt: DateTime.now(),
+    ),
+    ProblemsModel(
+      id: '2',
+      title: 'Problem 2',
+      description: 'Description 2',
+      tags: ['tag1', 'tag2'],
+      authorId: '1',
+      authorName: 'Author 1',
+      createdAt: DateTime.now(),
+    ),
+    ProblemsModel(
+      id: '3',
+      title: 'Problem 3',
+      description: 'Description 3',
+      tags: ['tag1', 'tag2'],
+      authorId: '1',
+      authorName: 'Author 1',
+      createdAt: DateTime.now(),
+    ),
+  ];
 
   @override
   void initState() {
@@ -53,7 +82,7 @@ class ProblemHomePageState extends State<ProblemHomePage> {
   Widget build(BuildContext context) {
     List<Widget> children = [];
     for (var problem in problems) {
-      children.add(ProbelmBoxIcon(problem: problem));
+      children.add(ProbelmBoxIcon(problem: problem, onTap: () {}));
       children.add(const SizedBox(height: 10));
     }
 
@@ -74,102 +103,5 @@ class ProblemHomePageState extends State<ProblemHomePage> {
       problems.add(await ProblemsDatabase.queryProblem(problemId));
     }
     setState(() {});
-  }
-}
-
-class ProbelmBoxIcon extends StatelessWidget {
-  final ProblemsModel problem;
-
-  const ProbelmBoxIcon({
-    super.key,
-    required this.problem,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                Column(children: [
-                  Container(
-                    constraints: const BoxConstraints(maxWidth: 350),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0,
-                      vertical: 3.0,
-                    ),
-                    margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    decoration: const BoxDecoration(
-                      borderRadius: Design.outsideBorderRadius,
-                      color: Design.secondaryColor,
-                    ),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        problem.title,
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.only(
-                            right: 15, left: 20, top: 10, bottom: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            const ImageIcon(
-                              AssetImage('assets/icon/users.png'),
-                              color: Colors.black,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              problem.authorName,
-                              style: const TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                            left: 15, right: 20, top: 10, bottom: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            const Icon(Icons.access_time_rounded),
-                            const SizedBox(width: 10),
-                            Text(
-                              problem.existTimeString,
-                              style: const TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                ])
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

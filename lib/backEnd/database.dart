@@ -67,7 +67,7 @@ class DB {
   static Future<String> addRow(String tableName, Map<String, dynamic> row) async {
     try {
       // if the row has an id, use it
-      if (row.containsKey('id') && row['id'] != null) {
+      if (row.containsKey('id') && row['id'] != null && row['id'] != '') {
         await db.collection(tableName).doc(row['id']).set(row);
         return row['id'];
       } else {

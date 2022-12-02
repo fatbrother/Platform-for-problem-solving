@@ -11,7 +11,7 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Design.secondaryColor,
       body: const NotificationPageBody(),
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex:
