@@ -96,9 +96,7 @@ class ProblemsModel {
           ? []
           : data['solveCommendIds'].cast<String>(),
       chooseSolveCommendId: data['chooseSolveCommendId'] ?? '',
-      createdAt: data['createdAt'] == null
-          ? DateTime.parse(data['createdAt'])
-          : DateTime.now(),
+      createdAt: DateTime.parse(data['createdAt']),
       rewardToken: data['rewardToken'] ?? 0,
     );
   }

@@ -5,48 +5,44 @@ class TagsDatabase {
   static TrieTree trieTree = TrieTree();
 
   static void init() async {
-    trieTree = TrieTree();
     try {
-      await DB.getTable('tags').then((value) {
-        for (final tag in value) {
-          trieTree.insert(tag['name']);
-        }
-      });
+      final List<Map<String, dynamic>> tags =
+          await DB.getTable('tags');
+      
+      for (final Map<String, dynamic> tag in tags) {
+        trieTree.insert(TagsModel.fromMap(tag));
+      }
     } catch (e) {
       rethrow;
     }
   }
 
-  static Future<List> queryAllTags() async {
-    final List result = await trieTree.queryAll();
-    return result;
+  static Future<List<TagsModel>> queryAllTags() async {
+    return await trieTree.queryAll();
   }
 
-  static Future<bool> queryTag(String tag) async {
+  static Future<TagsModel?> queryTag(String tag) async {
     return trieTree.search(tag);
   }
 
-  static Future<List> querySimilarTags(String tag) async {
-    final List result = trieTree.startsWith(tag);
-    return result;
+  static Future<List<TagsModel>> querySimilarTags(String tag) async {
+    return trieTree.startsWith(tag);
   }
 
-  static void updateTag(TagsModel tag) async {
+  static Future<void> updateTag(TagsModel tag) async {
     try {
-      await DB.getRow('tags', tag.id).then((value) {
-        trieTree.delete(value['name']);
-      });
-    } catch (e) {
+      TagsModel tmp = TagsModel.fromMap(await DB.getRow('tags', tag.id));
+      DB.updateRow('tags', tag.id, tag.toMap());
+      if (tmp.id != tag.id) {
+        trieTree.insert(tag);
+      } else {
+        trieTree.delete(tmp.name);
+        trieTree.insert(tag);
+      }
+    }
+    catch (e) {
       rethrow;
     }
-
-    try {
-      await DB.updateRow('tags', tag.id, tag.toMap());
-    } catch (e) {
-      rethrow;
-    }
-
-    trieTree.insert(tag.name);
   }
 
   static void deleteTag(TagsModel tag) async {
@@ -61,12 +57,12 @@ class TagsDatabase {
 
   static void addTag(TagsModel tag) async {
     try {
-      await DB.addRow('tags', tag.toMap());
+      String id = await DB.addRow('tags', tag.toMap());
+      tag.id = id;
+      trieTree.insert(tag);
     } catch (e) {
       rethrow;
     }
-
-    trieTree.insert(tag.name);
   }
 }
 
@@ -103,62 +99,60 @@ class TagsModel {
 
 class TrieNode {
   Map<String, TrieNode> children = {};
-  bool isEnd = false;
-  String word = '';
+  TagsModel? tag;
 }
 
 class TrieTree {
   TrieNode root = TrieNode();
 
-  void insert(String word) {
+  void insert(TagsModel tag) {
+    TrieNode current = root;
+    for (int i = 0; i < tag.name.length; i++) {
+      final String char = tag.name[i];
+      if (!current.children.containsKey(char)) {
+        current.children[char] = TrieNode();
+      }
+      current = current.children[char]!;
+    }
+    current.tag = tag;
+  }
+
+  TagsModel? search(String word) {
     TrieNode node = root;
     for (int i = 0; i < word.length; i++) {
       if (!node.children.containsKey(word[i])) {
-        node.children[word[i]] = TrieNode();
+        return null;
       }
       node = node.children[word[i]]!;
     }
-    node.isEnd = true;
+    return node.tag;
   }
 
-  bool search(String word) {
+  List<TagsModel> startsWith(String prefix) {
     TrieNode node = root;
-    for (int i = 0; i < word.length; i++) {
-      if (!node.children.containsKey(word[i])) {
-        return false;
-      }
-      node = node.children[word[i]]!;
-    }
-    return node.isEnd;
-  }
-
-  List<String> startsWith(String prefix) {
-    TrieNode node = root;
-    List<String> result = [];
     for (int i = 0; i < prefix.length; i++) {
       if (!node.children.containsKey(prefix[i])) {
-        return result;
+        return [];
       }
       node = node.children[prefix[i]]!;
     }
-    _getAllWordsBelow(node, result);
-    return result;
+    return _getAllTagsBelow(node);
   }
 
-  Future<List<String>> queryAll() async {
-    List<String> result = [];
-    _getAllWordsBelow(root, result);
-    return result;
+  Future<List<TagsModel>> queryAll() async {
+    return _getAllTagsBelow(root);
   }
 
-  void _getAllWordsBelow(TrieNode root, List<String> result) {
-    if (root.isEnd) {
-      result.add(root.word);
+  List<TagsModel> _getAllTagsBelow(TrieNode root) {
+    List<TagsModel> result = [];
+    if (root.tag != null) {
+      result.add(root.tag!);
     }
     for (var key in root.children.keys) {
-      root.children[key]!.word = root.word + key;
-      _getAllWordsBelow(root.children[key]!, result);
+      result.addAll(_getAllTagsBelow(root.children[key]!));
     }
+
+    return result;
   }
 
   void delete(String word) {
@@ -169,6 +163,7 @@ class TrieTree {
       }
       node = node.children[word[i]]!;
     }
-    node.isEnd = false;
+
+    node.tag = null;
   }
 }

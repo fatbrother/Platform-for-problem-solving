@@ -34,6 +34,7 @@ class SearchBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       toolbarHeight: 90,
       backgroundColor: Design.backgroundColor,
       title: Container(

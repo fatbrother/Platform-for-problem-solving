@@ -100,7 +100,7 @@ class ProblemCard extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: Text(
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 problem.description,
                 style: const TextStyle(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/other/img.dart';
+import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
@@ -216,10 +217,25 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
       } else {
         DialogManager.showInfoDialog(context, '上架成功', onOk: () async {
           Routes.back(context);
-        String id = await ProblemsDatabase.addProblem(problem);
-        user.askProblemIds.add(id);
-        user.tokens -= 10 + rewardToken;
-        AccountManager.updateCurrentUser(user);
+          String id = await ProblemsDatabase.addProblem(problem);
+          user.askProblemIds.add(id);
+          user.tokens -= 10 + rewardToken;
+          for (final tag in tags) {
+            if (await TagsDatabase.queryTag(tag) == null) {
+              TagsModel tagModel = TagsModel(
+                id: '',
+                name: tag,
+                problemsWithTag: [id],
+              );
+              TagsDatabase.addTag(tagModel);
+            }
+            else {
+              TagsModel? tagModel = await TagsDatabase.queryTag(tag);
+              tagModel!.problemsWithTag.add(id);
+              TagsDatabase.updateTag(tagModel);
+            }
+          }
+          AccountManager.updateCurrentUser(user);
         });
       }
     });

@@ -65,6 +65,7 @@ class UsersModel {
   List<String> audittingTags;
   List<String> notices;
   List<FeedbacksModel> feedbacks;
+  List<FolderModel> folders;
 
   List<dynamic> chatRoomsIds;
   int tokens;
@@ -89,6 +90,7 @@ class UsersModel {
     this.chatRoomsIds = const [],
     this.feedbacks = const [],  
     this.notices = const [],
+    this.folders = const [],
     this.tokens = 0,
     this.score = 0,
     this.numberOfScores = 0,
@@ -96,8 +98,16 @@ class UsersModel {
 
   static fromMap(Map<String, dynamic> data) {
     List<FeedbacksModel> feedbacks = [];
-    for (var feedback in data['feedbacks']) {
-      feedbacks.add(FeedbacksModel.fromMap(feedback));
+    if (data.containsKey('feedbacks')) {
+      for (final Map<String, dynamic> feedback in data['feedbacks']) {
+        feedbacks.add(FeedbacksModel.fromMap(feedback));
+      }
+    }
+    List<FolderModel> folders = [];
+    if (data.containsKey('folders')) {
+      for (final Map<String, dynamic> folder in data['folders']) {
+        folders.add(FolderModel.fromMap(folder));
+      }
     }
 
     return UsersModel(
@@ -138,6 +148,7 @@ class UsersModel {
       score: data['score'] ?? 0.0,
       numberOfScores: data['numberOfScores'] ?? 0,
       feedbacks: feedbacks,
+      folders: folders,
       notices: data['notices'] == null 
           ? []
           : data['notices'].cast<String>(),
@@ -164,6 +175,7 @@ class UsersModel {
       'tokens': tokens,
       'score': score,
       'numberOfScores': numberOfScores,
+      'folders': folders.map((e) => e.toMap()).toList(),
       'feedbacks': feedbacks.map((e) => e.toMap()).toList(),
     };
   }
@@ -197,6 +209,32 @@ class FeedbacksModel {
       'userName': userName,
       'feedback': feedback,
       'score': score,
+    };
+  }
+}
+
+class FolderModel {
+  String name;
+  List<String> problemIds;
+
+  FolderModel({
+    required this.name,
+    this.problemIds = const [],
+  });
+
+  static FolderModel fromMap(Map<String, dynamic> data) {
+    return FolderModel(
+      name: data['name'] ?? '',
+      problemIds: data['problemIds'] == null
+          ? []
+          : data['problemIds'].cast<String>(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'problemIds': problemIds,
     };
   }
 }

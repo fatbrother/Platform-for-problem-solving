@@ -33,7 +33,7 @@ class AnswerPage extends StatelessWidget {
                     shrinkWrap: true,
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.only(
+                        margin: const EdgeInsets.only(
                             right: 20, left: 20, top: 10, bottom: 5),
                         padding: Design.spacing,
                         constraints: const BoxConstraints(
@@ -43,33 +43,33 @@ class AnswerPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.white,
                         ),
-                        child: Text(
+                        child: const Text(
                           '題目標題',
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(
+                        margin: const EdgeInsets.only(
                             right: 20, left: 20, top: 5, bottom: 5),
                         padding: Design.spacing,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.white,
                         ),
-                        child: Text(
+                        child: const Text(
                           '題目內容',
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(
+                        margin: const EdgeInsets.only(
                             right: 20, left: 20, top: 5, bottom: 0),
                         padding: Design.spacing,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.white,
                         ),
-                        child: Text(
+                        child: const Text(
                           '答案內容',
                           style: TextStyle(fontSize: 20),
                         ),
@@ -84,10 +84,10 @@ class AnswerPage extends StatelessWidget {
                 width: 190,
                 height: 70,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 10, left: 20, bottom: 20),
+                  padding: const EdgeInsets.only(top: 10, left: 20, bottom: 20),
                   child: ElevatedButton(
                     onPressed: () {
-                      ChooseReportDialog(context, '進入檢舉流程後便無法取消');
+                      chooseReportDialog(context, '進入檢舉流程後便無法取消');
                     },
                     style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -106,10 +106,10 @@ class AnswerPage extends StatelessWidget {
                 width: 190,
                 height: 70,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 10, right: 20, bottom: 20),
+                  padding: const EdgeInsets.only(top: 10, right: 20, bottom: 20),
                   child: ElevatedButton(
                     onPressed: () {
-                      ChooseFinishDialog(context, '完成交易後便無法再提出檢舉，\n聊天室也將關閉。');
+                      chooseFinishDialog(context, '完成交易後便無法再提出檢舉，\n聊天室也將關閉。');
                     },
                     style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -139,7 +139,7 @@ class AnswerPage extends StatelessWidget {
   }
 }
 
-ChooseFinishDialog(BuildContext context, String message) {
+chooseFinishDialog(BuildContext context, String message) {
   AlertDialog dialog = AlertDialog(
     title: const Text(
       '完成交易',
@@ -222,7 +222,7 @@ ChooseFinishDialog(BuildContext context, String message) {
       });
 }
 
-ChooseReportDialog(BuildContext context, String message) {
+chooseReportDialog(BuildContext context, String message) {
   AlertDialog dialog = AlertDialog(
     title: const Text(
       '提出檢舉',

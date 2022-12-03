@@ -71,7 +71,7 @@ class AccountManager {
         UsersModel(
           id: user.uid,
           name: name,
-          email: email,
+          email: user.email!,
         ),
       );
     } catch (e) {

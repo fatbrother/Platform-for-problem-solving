@@ -13,12 +13,12 @@ class DB {
   static final db = FirebaseFirestore.instance;
   
   // get the table of the database
-  static Future<List> getTable(String tableName) async { 
+  static Future<List<Map<String, dynamic>>> getTable(String tableName) async { 
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await db.collection(tableName).get();
       return querySnapshot.docs.isEmpty
-          ? throw Exception('No data found')
+          ? []
           : querySnapshot.docs
               .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
                   doc.data())
@@ -74,6 +74,7 @@ class DB {
         // if the row has no id, generate one
         final DocumentReference<Map<String, dynamic>> docRef =
             await db.collection(tableName).add(row);
+        db.collection(tableName).doc(docRef.id).update({'id': docRef.id});
         return docRef.id;
       }
     } catch (e) {

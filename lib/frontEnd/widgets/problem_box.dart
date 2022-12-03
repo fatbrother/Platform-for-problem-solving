@@ -5,11 +5,13 @@ import 'package:pops/frontEnd/design.dart';
 class ProbelmBoxIcon extends StatelessWidget {
   final ProblemsModel problem;
   final void Function() onTap;
+  final bool isColorReversed;
 
   const ProbelmBoxIcon({
     super.key,
     required this.problem,
     required this.onTap,
+    this.isColorReversed = false,
   });
 
   @override
@@ -17,11 +19,13 @@ class ProbelmBoxIcon extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {},
+          onTap: onTap,
           child: Container(
+            padding: Design.spacing,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
-              color: Colors.white,
+              color:
+                  isColorReversed ? Design.secondaryColor : Design.insideColor,
             ),
             child: Column(
               children: [
@@ -32,10 +36,11 @@ class ProbelmBoxIcon extends StatelessWidget {
                       horizontal: 15.0,
                       vertical: 3.0,
                     ),
-                    margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       borderRadius: Design.outsideBorderRadius,
-                      color: Design.secondaryColor,
+                      color: isColorReversed
+                          ? Design.insideColor
+                          : Design.secondaryColor,
                     ),
                     child: SizedBox(
                       width: double.infinity,
@@ -47,6 +52,7 @@ class ProbelmBoxIcon extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
+                          color: Design.primaryTextColor,
                         ),
                       ),
                     ),
@@ -63,12 +69,13 @@ class ProbelmBoxIcon extends StatelessWidget {
                           children: [
                             const ImageIcon(
                               AssetImage('assets/icon/users.png'),
-                              color: Colors.black,
+                              color: Design.primaryTextColor,
                             ),
                             const SizedBox(width: 10),
                             Text(
                               problem.authorName,
-                              style: const TextStyle(fontSize: 15),
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.black),
                             ),
                           ],
                         ),
@@ -84,7 +91,8 @@ class ProbelmBoxIcon extends StatelessWidget {
                             const SizedBox(width: 10),
                             Text(
                               problem.existTimeString,
-                              style: const TextStyle(fontSize: 15),
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.black),
                             ),
                           ],
                         ),

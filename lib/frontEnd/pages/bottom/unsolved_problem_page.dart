@@ -33,35 +33,7 @@ class UnsolvedPageBody extends StatefulWidget {
 }
 
 class _UnsolvedPageBodyState extends State<UnsolvedPageBody> {
-  List<ProblemsModel> problems = [
-    ProblemsModel(
-      id: '1',
-      title: 'Problem 1',
-      description: 'Description 1',
-      tags: ['tag1', 'tag2'],
-      authorId: '1',
-      authorName: 'Author 1',
-      createdAt: DateTime.now(),
-    ),
-    ProblemsModel(
-      id: '2',
-      title: 'Problem 2',
-      description: 'Description 2',
-      tags: ['tag1', 'tag2'],
-      authorId: '1',
-      authorName: 'Author 1',
-      createdAt: DateTime.now(),
-    ),
-    ProblemsModel(
-      id: '3',
-      title: 'Problem 3',
-      description: 'Description 3',
-      tags: ['tag1', 'tag2'],
-      authorId: '1',
-      authorName: 'Author 1',
-      createdAt: DateTime.now(),
-    ),
-  ];
+  List<ProblemsModel> problems = [];
 
   UsersModel user = UsersModel(id: '', name: '', email: '');
 

@@ -149,7 +149,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             ],
             maxLines: 1,
             decoration: InputDecoration(
-              hintText: '應徵價格 (底價NT\$5)',
+              hintText: '應徵價格 (底價NT\$${widget.problem.baseToken})',
               hintStyle: const TextStyle(color: Colors.grey, fontSize: 20),
               filled: true,
               fillColor: Design.insideColor,
@@ -168,7 +168,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             ),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
-              if (value == null || value.isEmpty || int.parse(value) < 5) {
+              if (value == null || value.isEmpty || int.parse(value) < widget.problem.baseToken) {
                 return "請輸入比底價高的價格";
               }
               return null;
