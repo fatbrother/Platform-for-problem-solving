@@ -17,10 +17,18 @@ class SortProblemPage extends StatefulWidget {
 class _SortProblemPage extends State<SortProblemPage> {
   UsersModel user = UsersModel(id: '', name: '', email: '');
   List<FolderModel> folderList = [];
+  final TextEditingController _textEditingController = TextEditingController();
+  String folderName = '';
 
   Future<void> loadFolder() async {
     user = await AccountManager.currentUser;
-    folderList = user.folders;
+    if (folderName == '') {
+      folderList = user.folders;
+    } else {
+      folderList = user.folders
+          .where((element) => element.name.contains(folderName))
+          .toList();
+    }
     setState(() {});
   }
 
@@ -67,7 +75,26 @@ class _SortProblemPage extends State<SortProblemPage> {
         ),
       ),
       backgroundColor: Design.secondaryColor,
-      appBar: SearchBar(),
+      appBar: SearchBar(
+        textEditingController: _textEditingController,
+        onSelected: () {
+          folderName = _textEditingController.text;
+          loadFolder();
+        },
+        getSuggestions: (String text) {
+          if (text == '') {
+            return [];
+          } else {
+            List<String> res = [];
+            for (final folder in folderList) {
+              if (folder.name.contains(text)) {
+                res.add(folder.name);
+              }
+            }
+            return res;
+          }
+        },
+      ),
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex:
             Routes.bottomNavigationRoutes.indexOf(Routes.sortProblemPage),

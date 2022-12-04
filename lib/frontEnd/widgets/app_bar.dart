@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 
-class SimpleAppBar extends StatelessWidget with PreferredSizeWidget{
+class SimpleAppBar extends StatelessWidget with PreferredSizeWidget {
   const SimpleAppBar({super.key});
 
   @override
@@ -27,9 +28,16 @@ class SimpleAppBar extends StatelessWidget with PreferredSizeWidget{
 }
 
 class SearchBar extends StatelessWidget with PreferredSizeWidget {
-  final TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController textEditingController;
+  final void Function() onSelected;
+  final List<String> Function(String text) getSuggestions;
 
-  SearchBar({super.key});
+  SearchBar({
+    super.key,
+    required this.textEditingController,
+    required this.onSelected,
+    required this.getSuggestions,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,26 +52,10 @@ class SearchBar extends StatelessWidget with PreferredSizeWidget {
           borderRadius: BorderRadius.circular(20.0),
           color: Design.insideColor,
         ),
-        child: Row(
-          children: [
-            const Icon(Icons.search, color: Colors.black),
-            const SizedBox(width: 10),
-            Expanded(
-              child: TextField(
-                controller: _textEditingController,
-                decoration: const InputDecoration(
-                  hintText: 'Search',
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                _textEditingController.clear();
-              },
-              icon: const Icon(Icons.close, color: Colors.black),
-            ),
-          ],
+        child: AutoCompleteField(
+          controller: textEditingController,
+          onSelected: onSelected,
+          getSuggestions: getSuggestions,
         ),
       ),
     );
@@ -71,4 +63,97 @@ class SearchBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class AutoCompleteField extends StatefulWidget {
+  final TextEditingController controller;
+  final void Function() onSelected;
+  final List<String> Function(String text) getSuggestions;
+
+  const AutoCompleteField({
+    super.key,
+    required this.controller,
+    required this.onSelected,
+    required this.getSuggestions,
+  });
+
+  @override
+  State<AutoCompleteField> createState() => _AutoCompleteFieldState();
+}
+
+class _AutoCompleteFieldState extends State<AutoCompleteField> {
+  List<String> _suggestions = [];
+
+  Future<void> findSuggestions(String text) async {
+    _suggestions = widget.getSuggestions(text);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text == '') {
+          return const Iterable<String>.empty();
+        }
+        await findSuggestions(textEditingValue.text);
+        return _suggestions;
+      },
+      onSelected: (String selection) {
+        widget.controller.text = selection;
+        widget.onSelected();
+      },
+      fieldViewBuilder: (context, controller, FocusNode fieldFocusNode,
+          VoidCallback onFieldSubmitted) {
+        return Row(
+          children: [
+            const Icon(Icons.search, color: Colors.black),
+            const SizedBox(width: 10),
+            Expanded(
+                child: TextFormField(
+              controller: controller,
+              focusNode: fieldFocusNode,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Search',
+                hintStyle: TextStyle(color: Colors.black),
+              ),
+              onFieldSubmitted: (String value) {
+                onFieldSubmitted();
+              },
+            )),
+            IconButton(
+              onPressed: () {
+                controller.clear();
+              },
+              icon: const Icon(Icons.close, color: Colors.black),
+            ),
+          ],
+        );
+      },
+      optionsViewBuilder: (context, onSelected, options) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            color: Design.insideColor,
+            borderRadius: Design.outsideBorderRadius,
+            child: SizedBox(
+              height: 200,
+              width: Design.getScreenWidth(context) * 0.87,
+              child: ListView(padding: const EdgeInsets.all(0), children: [
+                for (final option in options)
+                  ListTile(
+                    title: Text(option),
+                    onTap: () {
+                      onSelected(option);
+                    },
+                  ),
+              ]),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

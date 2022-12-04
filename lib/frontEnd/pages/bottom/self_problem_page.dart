@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/frontEnd/design.dart';
@@ -16,6 +17,8 @@ class SelfProblemPage extends StatefulWidget {
 
 class _SelfProblemPageState extends State<SelfProblemPage> {
   List<ProblemsModel> problems = [];
+  final TextEditingController _textEditingController = TextEditingController();
+  String tag = '';
 
   @override
   void initState() {
@@ -27,7 +30,22 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Design.backgroundColor,
-      appBar: SearchBar(),
+      appBar: SearchBar(
+        textEditingController: _textEditingController,
+        onSelected: () {
+          tag = _textEditingController.text;
+          loadProblems();
+        },
+        getSuggestions: (String text) {
+          if (text == '') {
+            return [];
+          } else {
+            return TagsDatabase.querySimilarTags(text)
+                .map((e) => e.name)
+                .toList();
+          }
+        },
+      ),
       body: ProblemHomePage(
         problems: problems,
         onPop: () {
@@ -55,8 +73,17 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
   Future<void> loadProblems() async {
     final user = await AccountManager.currentUser;
     problems = [];
-    for (var problemId in user.askProblemIds) {
-      problems.add(await ProblemsDatabase.queryProblem(problemId));
+    if (tag == '') {
+      for (var problemId in user.askProblemIds) {
+        problems.add(await ProblemsDatabase.queryProblem(problemId));
+      }
+    } else {
+      for (var problemId in user.askProblemIds) {
+        final problem = await ProblemsDatabase.queryProblem(problemId);
+        if (problem.tags.contains(tag)) {
+          problems.add(problem);
+        }
+      }
     }
     setState(() {});
   }

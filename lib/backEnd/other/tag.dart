@@ -17,15 +17,15 @@ class TagsDatabase {
     }
   }
 
-  static Future<List<TagsModel>> queryAllTags() async {
-    return await trieTree.queryAll();
+  static List<TagsModel> queryAllTags() {
+    return trieTree.queryAll();
   }
 
-  static Future<TagsModel?> queryTag(String tag) async {
+  static TagsModel? queryTag(String tag) {
     return trieTree.search(tag);
   }
 
-  static Future<List<TagsModel>> querySimilarTags(String tag) async {
+  static List<TagsModel> querySimilarTags(String tag) {
     return trieTree.startsWith(tag);
   }
 
@@ -108,62 +108,79 @@ class TrieTree {
   void insert(TagsModel tag) {
     TrieNode current = root;
     for (int i = 0; i < tag.name.length; i++) {
-      final String char = tag.name[i];
-      if (!current.children.containsKey(char)) {
-        current.children[char] = TrieNode();
+      String c = tag.name[i];
+      if (!current.children.containsKey(c)) {
+        current.children[c] = TrieNode();
       }
-      current = current.children[char]!;
+      current = current.children[c]!;
     }
     current.tag = tag;
   }
 
   TagsModel? search(String word) {
-    TrieNode node = root;
+    TrieNode current = root;
     for (int i = 0; i < word.length; i++) {
-      if (!node.children.containsKey(word[i])) {
+      String c = word[i];
+      if (!current.children.containsKey(c)) {
         return null;
       }
-      node = node.children[word[i]]!;
+      current = current.children[c]!;
     }
-    return node.tag;
+    return current.tag;
   }
 
-  List<TagsModel> startsWith(String prefix) {
-    TrieNode node = root;
+  List<TagsModel> queryAll()  {
+    List<TagsModel> tags = [];
+    _queryAll(root, tags);
+    return tags;
+  }
+
+  void _queryAll(TrieNode node, List<TagsModel> tags) {
+    if (node.tag != null) {
+      tags.add(node.tag!);
+    }
+    for (final String key in node.children.keys) {
+      _queryAll(node.children[key]!, tags);
+    }
+  }
+
+  List<TagsModel> startsWith(String prefix)  {
+    TrieNode current = root;
     for (int i = 0; i < prefix.length; i++) {
-      if (!node.children.containsKey(prefix[i])) {
+      String c = prefix[i];
+      if (!current.children.containsKey(c)) {
         return [];
       }
-      node = node.children[prefix[i]]!;
+      current = current.children[c]!;
     }
-    return _getAllTagsBelow(node);
-  }
-
-  Future<List<TagsModel>> queryAll() async {
-    return _getAllTagsBelow(root);
-  }
-
-  List<TagsModel> _getAllTagsBelow(TrieNode root) {
-    List<TagsModel> result = [];
-    if (root.tag != null) {
-      result.add(root.tag!);
-    }
-    for (var key in root.children.keys) {
-      result.addAll(_getAllTagsBelow(root.children[key]!));
-    }
-
-    return result;
+    List<TagsModel> tags = [];
+    _queryAll(current, tags);
+    return tags;
   }
 
   void delete(String word) {
-    TrieNode node = root;
-    for (int i = 0; i < word.length; i++) {
-      if (!node.children.containsKey(word[i])) {
-        return;
-      }
-      node = node.children[word[i]]!;
-    }
+    _delete(root, word, 0);
+  }
 
-    node.tag = null;
+  bool _delete(TrieNode node, String word, int index) {
+    if (index == word.length) {
+      if (node.children.isNotEmpty) {
+        node.tag = null;
+        return false;
+      } else {
+        return true;
+      }
+    }
+    String c = word[index];
+    if (!node.children.containsKey(c)) {
+      return false;
+    }
+    bool shouldDeleteCurrentNode = _delete(node.children[c]!, word, index + 1);
+
+    if (shouldDeleteCurrentNode) {
+      node.children.remove(c);
+      return node.children.isEmpty;
+    }
+    return false;
   }
 }

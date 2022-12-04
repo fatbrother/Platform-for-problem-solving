@@ -1,19 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttom_navigation_bar.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final TextEditingController _textEditingController = TextEditingController();
+  String tag = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SearchBar(),
+      appBar: SearchBar(
+        textEditingController: _textEditingController,
+        onSelected: () => setState(() {
+          tag = _textEditingController.text;
+        }),
+        getSuggestions: (String text) {
+          if (text == '') {
+            return [];
+          } else {
+            return TagsDatabase.querySimilarTags(text)
+                .map((e) => e.name)
+                .toList();
+          }
+        },
+      ),
       backgroundColor: Design.backgroundColor,
-      body: const HomePageBody(),
+      body: HomePageBody(tag: tag),
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.homePage),
       ),
@@ -22,7 +45,9 @@ class HomePage extends StatelessWidget {
 }
 
 class HomePageBody extends StatefulWidget {
-  const HomePageBody({super.key});
+  final String tag;
+
+  const HomePageBody({super.key, required this.tag});
 
   @override
   State<HomePageBody> createState() => _HomePageBodyState();
@@ -38,7 +63,14 @@ class _HomePageBodyState extends State<HomePageBody> {
   }
 
   void loadProblems() async {
-    problems = await ProblemsDatabase.queryAllProblems();
+    var tmp = await ProblemsDatabase.queryAllProblems();
+    if (widget.tag == '') {
+      problems = tmp;
+    } else {
+      problems = tmp
+          .where((ProblemsModel problem) => problem.tags.contains(widget.tag))
+          .toList();
+    }
     setState(() {});
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
@@ -8,15 +9,37 @@ import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttom_navigation_bar.dart';
 import 'package:pops/frontEnd/widgets/problem_box.dart';
 
-class UnsolvedPage extends StatelessWidget {
+class UnsolvedPage extends StatefulWidget {
   const UnsolvedPage({super.key});
+
+  @override
+  State<UnsolvedPage> createState() => _UnsolvedPageState();
+}
+
+class _UnsolvedPageState extends State<UnsolvedPage> {
+  final TextEditingController _textEditingController = TextEditingController();
+  String tag = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SearchBar(),
+      appBar: SearchBar(
+        textEditingController: _textEditingController,
+        onSelected: () => setState(() {
+          tag = _textEditingController.text;
+        }),
+        getSuggestions: (String text) {
+          if (text == '') {
+            return [];
+          } else {
+            return TagsDatabase.querySimilarTags(text)
+                .map((e) => e.name)
+                .toList();
+          }
+        },
+      ),
       backgroundColor: Design.secondaryColor,
-      body: const UnsolvedPageBody(),
+      body: UnsolvedPageBody(tag: tag),
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex:
             Routes.bottomNavigationRoutes.indexOf(Routes.unsolvedPage),
@@ -26,7 +49,9 @@ class UnsolvedPage extends StatelessWidget {
 }
 
 class UnsolvedPageBody extends StatefulWidget {
-  const UnsolvedPageBody({super.key});
+  final String tag;
+
+  const UnsolvedPageBody({super.key, required this.tag});
 
   @override
   State<UnsolvedPageBody> createState() => _UnsolvedPageBodyState();
@@ -39,9 +64,18 @@ class _UnsolvedPageBodyState extends State<UnsolvedPageBody> {
 
   Future<void> loadProblems() async {
     user = await AccountManager.currentUser;
-    for (final id in user.commandProblemIds) {
-      final problem = await ProblemsDatabase.queryProblem(id);
-      problems.add(problem);
+    if (widget.tag == '') {
+      for (final id in user.commandProblemIds) {
+        final problem = await ProblemsDatabase.queryProblem(id);
+        problems.add(problem);
+      }
+    } else {
+      for (final id in user.commandProblemIds) {
+        final problem = await ProblemsDatabase.queryProblem(id);
+        if (problem.tags.contains(widget.tag)) {
+          problems.add(problem);
+        }
+      }
     }
     setState(() {});
   }
