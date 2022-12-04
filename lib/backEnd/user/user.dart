@@ -19,7 +19,7 @@ class UsersDatabase {
     }
   }
 
-  static void updateUser(UsersModel usersModel) async {
+  static Future<void> updateUser(UsersModel usersModel) async {
     try {
       await DB.updateRow('users', usersModel.id, usersModel.toMap());
     } catch (e) {
@@ -27,7 +27,7 @@ class UsersDatabase {
     }
   }
 
-  static void deleteUser(String userId) async {
+  static Future<void> deleteUser(String userId) async {
     try {
       await DB.deleteRow('users', userId);
     } catch (e) {
@@ -35,7 +35,7 @@ class UsersDatabase {
     }
   }
 
-  static void addUser(UsersModel usersModel) async {
+  static Future<void> addUser(UsersModel usersModel) async {
     if (usersModel.id == '') {
       throw Exception('User ID cannot be empty');
     }
@@ -66,8 +66,7 @@ class UsersModel {
   List<String> notices;
   List<FeedbacksModel> feedbacks;
   List<FolderModel> folders;
-
-  List<dynamic> chatRoomsIds;
+  List<String> chatRoomsIds;
   int tokens;
   double score;
   int numberOfScores;
@@ -162,8 +161,8 @@ class UsersModel {
       'email': email,
       'phone': phone,
       'reportNum': reportNum,
-      'commandProblemIds': commandProblemIds,
       'selfIntroduction': selfIntroduction,
+      'commandProblemIds': commandProblemIds,
       'askProblemIds': askProblemIds,
       'expertiseTags': expertiseTags,
       'pastExpertiseTags': pastExpertiseTags,
@@ -175,8 +174,9 @@ class UsersModel {
       'tokens': tokens,
       'score': score,
       'numberOfScores': numberOfScores,
-      'folders': folders.map((e) => e.toMap()).toList(),
       'feedbacks': feedbacks.map((e) => e.toMap()).toList(),
+      'folders': folders.map((e) => e.toMap()).toList(),
+      'notices': notices,
     };
   }
 

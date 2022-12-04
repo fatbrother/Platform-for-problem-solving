@@ -1,3 +1,6 @@
+import 'package:pops/backEnd/other/img.dart';
+import 'package:pops/backEnd/problem/contract.dart';
+
 import '../database.dart';
 
 // control the database of the problem with problemsModel
@@ -34,6 +37,13 @@ class ProblemsDatabase {
 
   static void deleteProblem(String problemId) async {
     try {
+      ProblemsModel problem = await queryProblem(problemId);
+      for (final contractId in problem.solveCommendIds) {
+        ContractsDatabase.deleteContract(contractId);
+      }
+      for (final imgId in problem.imgIds) {
+        ImgManager.deleteImage(imgId);
+      }
       await DB.deleteRow('problems', problemId);
     } catch (e) {
       rethrow;
@@ -105,14 +115,15 @@ class ProblemsModel {
     return {
       'id': id,
       'title': title,
-      'tagIds': tags,
       'description': description,
       'authorName': authorName,
       'authorId': authorId,
       'imgIds': imgIds,
+      'tags': tags,
       'isSolved': isSolved,
       'baseToken': baseToken,
       'solveCommendIds': solveCommendIds,
+      'chooseSolveCommendId': chooseSolveCommendId,
       'createdAt': createdAt.toIso8601String(),
       'rewardToken': rewardToken,
     };

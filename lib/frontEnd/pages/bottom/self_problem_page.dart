@@ -28,7 +28,14 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
     return Scaffold(
       backgroundColor: Design.backgroundColor,
       appBar: SearchBar(),
-      body: ProblemHomePage(problems: problems),
+      body: ProblemHomePage(
+        problems: problems,
+        onPop: () {
+          Future.delayed(const Duration(seconds: 1), () {
+            loadProblems();
+          });
+        },
+      ),
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex:
             Routes.bottomNavigationRoutes.indexOf(Routes.selfProblemPage),
@@ -57,8 +64,10 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
 
 class ProblemHomePage extends StatefulWidget {
   final List<ProblemsModel> problems;
+  final void Function() onPop;
 
-  const ProblemHomePage({super.key, required this.problems});
+  const ProblemHomePage(
+      {super.key, required this.problems, required this.onPop});
 
   @override
   ProblemHomePageState createState() => ProblemHomePageState();
@@ -73,7 +82,7 @@ class ProblemHomePageState extends State<ProblemHomePage> {
           problem: problem,
           onTap: () {
             Routes.push(context, Routes.selfSingleProblemPage,
-                arguments: problem);
+                arguments: problem, onPop: widget.onPop);
           }));
       children.add(const SizedBox(height: 10));
     }

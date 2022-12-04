@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
+import 'package:pops/frontEnd/pages/problem/application_profile.dart';
 import 'package:pops/frontEnd/pages/audit_failed_lables_page.dart';
 import 'package:pops/frontEnd/pages/bottom/home_page.dart';
 import 'package:pops/frontEnd/pages/bottom/notification_page.dart';
@@ -66,6 +67,7 @@ class Routes {
   static const String reportSuccessPage = '/reportSuccessPage';
 
   static const String ratePage = '/ratePage';
+  static const String applicationProfilePage = '/applicationProfilePage';
 
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
@@ -116,6 +118,14 @@ class Routes {
     unsolvedPage: (context) => const UnsolvedPage(),
     sortProblemPage: (context) => const SortProblemPage(),
     selfInformationPage: (context) => const SelfInformationPage(),
+    applicationProfilePage: (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map;
+      return ApplicationProfilePage(
+        solver: args['user'],
+        contract: args['contract'],
+        problem: args['problem'],
+      );
+    },
     folderPage: (context) {
       final FolderModel folder =
           ModalRoute.of(context)!.settings.arguments as FolderModel;

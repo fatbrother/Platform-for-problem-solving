@@ -11,6 +11,9 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Design.backgroundColor,
+      ),
       backgroundColor: Design.secondaryColor,
       body: const NotificationPageBody(),
       bottomNavigationBar: MyBottomNavigationBar(
@@ -46,29 +49,58 @@ class _NotificationPageBodyState extends State<NotificationPageBody> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> notifications = [];
+    for (final notice in user.notices.reversed) {
+      notifications.add(NotificationCard(
+        notice: notice,
+      ));
+      notifications.add(const SizedBox(height: 10));
+    }
+
     return ListView(
       padding: Design.spacing,
-      children: [
-        for (final notice in user.notices)
-          Container(
-            padding: Design.spacing,
-            width: double.infinity,
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.notifications,
-                  color: Design.primaryColor,
-                ),
-                Text(
-                  notice,
-                  style: const TextStyle(
-                      color: Design.secondaryTextColor, fontSize: 16),
-                  maxLines: 3,
-                ),
-              ],
+      children: notifications,
+    );
+  }
+}
+
+class NotificationCard extends StatelessWidget {
+  const NotificationCard({
+    Key? key,
+    required this.notice,
+  }) : super(key: key);
+
+  final String notice;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Design.insideColor,
+        borderRadius: Design.outsideBorderRadius,
+      ),
+      padding: Design.spacing,
+      child: Row(
+        children: [
+          const CircleAvatar(
+            backgroundColor: Design.secondaryColor,
+            child: Icon(
+              size: 30,
+              Icons.notifications_none_outlined,
+              color: Design.primaryColor,
             ),
           ),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              notice,
+              style: const TextStyle(
+                  color: Design.secondaryTextColor, fontSize: 16),
+              maxLines: 3,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

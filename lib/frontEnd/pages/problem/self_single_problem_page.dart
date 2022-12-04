@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/problem/contract.dart';
 import 'package:pops/backEnd/problem/problem.dart';
+import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/tag.dart';
@@ -14,28 +18,68 @@ class SelfSinglefProblemPage extends StatefulWidget {
 }
 
 class _SelfSinglefProblemPage extends State<SelfSinglefProblemPage> {
-  List<WidgetBuilder> applicationBoxList = [
-    (context) => const ApplicationBox()
-  ];
+  List<ContractsModel> contracts = [];
+
+  Future<void> loadApplications() async {
+    for (final id in widget.problem.solveCommendIds) {
+      contracts.add(await ContractsDatabase.queryContract(id));
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadApplications();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const SimpleAppBar(),
         backgroundColor: Design.backgroundColor,
-        body: SingleProblemPageBody(applicationBoxList: applicationBoxList));
+        body: SingleProblemPageBody(
+          contracts: contracts,
+          problem: widget.problem,
+        ));
   }
 }
 
-class SingleProblemPageBody extends StatelessWidget {
+class SingleProblemPageBody extends StatefulWidget {
   const SingleProblemPageBody({
     Key? key,
-    required this.applicationBoxList,
+    required this.contracts,
+    required this.problem,
   }) : super(key: key);
 
-  final List<WidgetBuilder> applicationBoxList;
+  final List<ContractsModel> contracts;
+  final ProblemsModel problem;
+
+  @override
+  State<SingleProblemPageBody> createState() => _SingleProblemPageBodyState();
+}
+
+class _SingleProblemPageBodyState extends State<SingleProblemPageBody> {
+  UsersModel user = UsersModel(id: '', name: '', email: '');
+
+  Future<void> loadUser() async {
+    user = await AccountManager.currentUser;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> children = [];
+    for (final contract in widget.contracts) {
+      children.add(ApplicationBox(contract: contract, problem: widget.problem));
+    }
+
     return Container(
       height: double.infinity,
       padding: Design.spacing,
@@ -48,14 +92,7 @@ class SingleProblemPageBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              child: ListView(
-                padding: Design.spacing,
-                children: applicationBoxList
-                    .map((WidgetBuilder applicationBox) =>
-                        applicationBox(context))
-                    .toList(),
-              ),
-            ),
+                child: ListView(padding: Design.spacing, children: children)),
             Container(
               height: 40,
               decoration: const BoxDecoration(
@@ -72,7 +109,13 @@ class SingleProblemPageBody extends StatelessWidget {
                         DialogManager.showContentDialog(
                           context,
                           const Text('刪除後不會歸還上架金額！'),
-                          () {},
+                          () {
+                            user.tokens += widget.problem.baseToken;
+                            user.askProblemIds.remove(widget.problem.id);
+                            AccountManager.updateCurrentUser(user);
+                            ProblemsDatabase.deleteProblem(widget.problem.id);
+                            Routes.back(context);
+                          },
                         );
                       },
                       icon: const Icon(Icons.delete)),
@@ -95,8 +138,34 @@ class SingleProblemPageBody extends StatelessWidget {
   }
 }
 
-class ApplicationBox extends StatelessWidget {
-  const ApplicationBox({super.key});
+class ApplicationBox extends StatefulWidget {
+  final ContractsModel contract;
+  final ProblemsModel problem;
+
+  const ApplicationBox({
+    super.key,
+    required this.contract,
+    required this.problem,
+  });
+
+  @override
+  State<ApplicationBox> createState() => _ApplicationBoxState();
+}
+
+class _ApplicationBoxState extends State<ApplicationBox> {
+  UsersModel user = UsersModel(id: '', name: '', email: '');
+
+  Future<void> loadUser() async {
+    user = await UsersDatabase.queryUser(widget.contract.solverId);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -105,7 +174,11 @@ class ApplicationBox extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            // Routes.push(context, Routes.applicationProfile);
+            Routes.push(context, Routes.applicationProfilePage, arguments: {
+              'user': user,
+              'contract': widget.contract,
+              'problem': widget.problem,
+            });
           },
           child: Container(
             padding: Design.spacing,
@@ -123,30 +196,31 @@ class ApplicationBox extends StatelessWidget {
                     borderRadius: Design.outsideBorderRadius,
                     color: Design.secondaryColor,
                   ),
-                  child: const Text(
-                    'name',
+                  child: Text(
+                    user.name,
                     maxLines: 1,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: const TextStyle(color: Colors.black, fontSize: 18),
                   ),
                 ),
                 const SizedBox(height: 10),
                 Row(
-                  children: const [
-                    Icon(Icons.attach_money),
-                    Text('price'),
+                  children: [
+                    const Icon(Icons.attach_money),
+                    Text(widget.contract.price.toString()),
                   ],
                 ),
                 const SizedBox(height: 10),
                 Wrap(
                   runSpacing: 10,
                   spacing: 10,
-                  children: const [
-                    Icon(Icons.discount_outlined),
-                    ShowTagsWidget(title: '123', isGeneral: true),
-                    ShowTagsWidget(title: '123', isGeneral: true),
-                    ShowTagsWidget(title: '123', isGeneral: false),
+                  children: [
+                    const Icon(Icons.discount_outlined),
+                    for (final tag in user.displaySystemTags)
+                      ShowTagsWidget(title: tag, isGeneral: false),
+                    for (final tag in user.expertiseTags)
+                      ShowTagsWidget(title: tag, isGeneral: true),
                   ],
                 )
               ],
