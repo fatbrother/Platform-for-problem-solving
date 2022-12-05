@@ -17,10 +17,9 @@ class SortProblemPage extends StatefulWidget {
 class _SortProblemPage extends State<SortProblemPage> {
   UsersModel user = UsersModel(id: '', name: '', email: '');
   List<FolderModel> folderList = [];
-  final TextEditingController _textEditingController = TextEditingController();
   String folderName = '';
 
-  Future<void> loadFolder() async {
+  Future<void> loadFolder(String folderName) async {
     user = await AccountManager.currentUser;
     if (folderName == '') {
       folderList = user.folders;
@@ -35,7 +34,7 @@ class _SortProblemPage extends State<SortProblemPage> {
   @override
   void initState() {
     super.initState();
-    loadFolder();
+    loadFolder('');
   }
 
   @override
@@ -76,11 +75,7 @@ class _SortProblemPage extends State<SortProblemPage> {
       ),
       backgroundColor: Design.secondaryColor,
       appBar: SearchBar(
-        textEditingController: _textEditingController,
-        onSelected: () {
-          folderName = _textEditingController.text;
-          loadFolder();
-        },
+        onSelected: loadFolder,
         getSuggestions: (String text) {
           if (text == '') {
             return [];
@@ -111,25 +106,19 @@ class _SortProblemPage extends State<SortProblemPage> {
                     for (final folder in folderList)
                       FolderBox(
                         folder: folder,
-                        onTap: () {
-                          Routes.push(
-                            context,
-                            Routes.folderPage,
-                            arguments: folder,
-                          );
-                        },
+                        onTap: () => Routes.push(context, Routes.folderPage,
+                            arguments: folder),
                         onLongPress: () {
                           TextEditingController titleController =
                               TextEditingController();
                           DialogManager.showContentDialog(
                             context,
                             TextField(
-                              controller: titleController,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: '請輸入資料夾名稱',
-                              ),
-                            ),
+                                controller: titleController,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: '請輸入資料夾新名稱',
+                                )),
                             () => setState(() {
                               // check if the folder name already exists
                               if (folderList.any((FolderModel folder) =>
@@ -156,7 +145,7 @@ class _SortProblemPage extends State<SortProblemPage> {
   }
 }
 
-class FolderBox extends StatefulWidget {
+class FolderBox extends StatelessWidget {
   final FolderModel folder;
   final void Function() onTap;
   final void Function() onLongPress;
@@ -168,15 +157,10 @@ class FolderBox extends StatefulWidget {
     required this.onLongPress,
   });
   @override
-  State<FolderBox> createState() => _FolderBox();
-}
-
-class _FolderBox extends State<FolderBox> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onTap,
-      onLongPress: widget.onLongPress,
+      onTap: onTap,
+      onLongPress: onLongPress,
       child: SizedBox(
         width: Design.getScreenWidth(context) * 0.5,
         height: Design.getScreenWidth(context) * 0.5,
@@ -188,7 +172,7 @@ class _FolderBox extends State<FolderBox> {
               fit: BoxFit.contain,
             ),
             Text(
-              widget.folder.name,
+              folder.name,
               style: const TextStyle(fontSize: 20),
             ),
           ],

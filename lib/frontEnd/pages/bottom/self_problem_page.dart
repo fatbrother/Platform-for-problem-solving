@@ -17,7 +17,6 @@ class SelfProblemPage extends StatefulWidget {
 
 class _SelfProblemPageState extends State<SelfProblemPage> {
   List<ProblemsModel> problems = [];
-  final TextEditingController _textEditingController = TextEditingController();
   String tag = '';
 
   @override
@@ -26,14 +25,31 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
     loadProblems();
   }
 
+  Future<void> loadProblems() async {
+    final user = await AccountManager.currentUser;
+    problems = [];
+    if (tag == '') {
+      for (var problemId in user.askProblemIds) {
+        problems.add(await ProblemsDatabase.queryProblem(problemId));
+      }
+    } else {
+      for (var problemId in user.askProblemIds) {
+        final problem = await ProblemsDatabase.queryProblem(problemId);
+        if (problem.tags.contains(tag)) {
+          problems.add(problem);
+        }
+      }
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Design.backgroundColor,
       appBar: SearchBar(
-        textEditingController: _textEditingController,
-        onSelected: () {
-          tag = _textEditingController.text;
+        onSelected: (String text) {
+          tag = text;
           loadProblems();
         },
         getSuggestions: (String text) {
@@ -69,47 +85,27 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
       ),
     );
   }
-
-  Future<void> loadProblems() async {
-    final user = await AccountManager.currentUser;
-    problems = [];
-    if (tag == '') {
-      for (var problemId in user.askProblemIds) {
-        problems.add(await ProblemsDatabase.queryProblem(problemId));
-      }
-    } else {
-      for (var problemId in user.askProblemIds) {
-        final problem = await ProblemsDatabase.queryProblem(problemId);
-        if (problem.tags.contains(tag)) {
-          problems.add(problem);
-        }
-      }
-    }
-    setState(() {});
-  }
 }
 
-class ProblemHomePage extends StatefulWidget {
+class ProblemHomePage extends StatelessWidget {
   final List<ProblemsModel> problems;
   final void Function() onPop;
 
-  const ProblemHomePage(
-      {super.key, required this.problems, required this.onPop});
+  const ProblemHomePage({
+    super.key,
+    required this.problems,
+    required this.onPop,
+  });
 
-  @override
-  ProblemHomePageState createState() => ProblemHomePageState();
-}
-
-class ProblemHomePageState extends State<ProblemHomePage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
-    for (var problem in widget.problems) {
+    for (var problem in problems) {
       children.add(ProbelmBoxIcon(
           problem: problem,
           onTap: () {
             Routes.push(context, Routes.selfSingleProblemPage,
-                arguments: problem, onPop: widget.onPop);
+                arguments: problem, onPop: onPop);
           }));
       children.add(const SizedBox(height: 10));
     }

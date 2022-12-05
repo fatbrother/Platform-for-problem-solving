@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 
@@ -10,8 +9,8 @@ class SimpleAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: 90,
+      elevation: 0,
       backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-      shadowColor: const Color.fromRGBO(0, 0, 0, 0),
       leading: SizedBox(
         height: kToolbarHeight * 0.7,
         child: IconButton(
@@ -28,13 +27,11 @@ class SimpleAppBar extends StatelessWidget with PreferredSizeWidget {
 }
 
 class SearchBar extends StatelessWidget with PreferredSizeWidget {
-  final TextEditingController textEditingController;
-  final void Function() onSelected;
+  final void Function(String text) onSelected;
   final List<String> Function(String text) getSuggestions;
 
   SearchBar({
     super.key,
-    required this.textEditingController,
     required this.onSelected,
     required this.getSuggestions,
   });
@@ -53,7 +50,6 @@ class SearchBar extends StatelessWidget with PreferredSizeWidget {
           color: Design.insideColor,
         ),
         child: AutoCompleteField(
-          controller: textEditingController,
           onSelected: onSelected,
           getSuggestions: getSuggestions,
         ),
@@ -65,46 +61,24 @@ class SearchBar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class AutoCompleteField extends StatefulWidget {
-  final TextEditingController controller;
-  final void Function() onSelected;
+class AutoCompleteField extends StatelessWidget {
+  final void Function(String text) onSelected;
   final List<String> Function(String text) getSuggestions;
 
   const AutoCompleteField({
     super.key,
-    required this.controller,
     required this.onSelected,
     required this.getSuggestions,
   });
 
   @override
-  State<AutoCompleteField> createState() => _AutoCompleteFieldState();
-}
-
-class _AutoCompleteFieldState extends State<AutoCompleteField> {
-  List<String> _suggestions = [];
-
-  Future<void> findSuggestions(String text) async {
-    _suggestions = widget.getSuggestions(text);
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Autocomplete<String>(
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if (textEditingValue.text == '') {
-          return const Iterable<String>.empty();
-        }
-        await findSuggestions(textEditingValue.text);
-        return _suggestions;
-      },
-      onSelected: (String selection) {
-        widget.controller.text = selection;
-        widget.onSelected();
-      },
-      fieldViewBuilder: (context, controller, FocusNode fieldFocusNode,
-          VoidCallback onFieldSubmitted) {
+      optionsBuilder: (TextEditingValue textEditingValue) =>
+          getSuggestions(textEditingValue.text),
+      onSelected: onSelected,
+      fieldViewBuilder:
+          (context, controller, fieldFocusNode, onFieldSubmitted) {
         return Row(
           children: [
             const Icon(Icons.search, color: Colors.black),
@@ -121,10 +95,16 @@ class _AutoCompleteFieldState extends State<AutoCompleteField> {
               onFieldSubmitted: (String value) {
                 onFieldSubmitted();
               },
+              onChanged: (String value) {
+                if (value == '') {
+                  onSelected(value);
+                }
+              },
             )),
             IconButton(
               onPressed: () {
                 controller.clear();
+                onSelected('');
               },
               icon: const Icon(Icons.close, color: Colors.black),
             ),
@@ -139,17 +119,20 @@ class _AutoCompleteFieldState extends State<AutoCompleteField> {
             color: Design.insideColor,
             borderRadius: Design.outsideBorderRadius,
             child: SizedBox(
-              height: 200,
               width: Design.getScreenWidth(context) * 0.87,
-              child: ListView(padding: const EdgeInsets.all(0), children: [
-                for (final option in options)
-                  ListTile(
-                    title: Text(option),
-                    onTap: () {
-                      onSelected(option);
-                    },
-                  ),
-              ]),
+              child: ListView(
+                padding: const EdgeInsets.all(0),
+                shrinkWrap: true,
+                children: [
+                  for (final option in options)
+                    ListTile(
+                      title: Text(option),
+                      onTap: () {
+                        onSelected(option);
+                      },
+                    ),
+                ],
+              ),
             ),
           ),
         );

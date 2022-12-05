@@ -14,17 +14,33 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final TextEditingController _textEditingController = TextEditingController();
-  String tag = '';
+  List<ProblemsModel> problems = [];
+  
+  @override
+  void initState() {
+    super.initState();
+    loadProblems('');
+  }
+
+  void loadProblems(String tag) async {
+    var tmp = await ProblemsDatabase.queryAllProblems();
+    if (tag == '') {
+      problems = tmp;
+    } else {
+      problems = tmp
+          .where((ProblemsModel problem) => problem.tags.contains(tag))
+          .toList();
+    }
+    // suffle the problems
+    problems.shuffle();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: SearchBar(
-        textEditingController: _textEditingController,
-        onSelected: () => setState(() {
-          tag = _textEditingController.text;
-        }),
+        onSelected: loadProblems,
         getSuggestions: (String text) {
           if (text == '') {
             return [];
@@ -36,7 +52,7 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       backgroundColor: Design.backgroundColor,
-      body: HomePageBody(tag: tag),
+      body: HomePageBody(problems: problems),
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.homePage),
       ),
@@ -44,35 +60,9 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class HomePageBody extends StatefulWidget {
-  final String tag;
-
-  const HomePageBody({super.key, required this.tag});
-
-  @override
-  State<HomePageBody> createState() => _HomePageBodyState();
-}
-
-class _HomePageBodyState extends State<HomePageBody> {
-  List<ProblemsModel> problems = [];
-
-  @override
-  void initState() {
-    super.initState();
-    loadProblems();
-  }
-
-  void loadProblems() async {
-    var tmp = await ProblemsDatabase.queryAllProblems();
-    if (widget.tag == '') {
-      problems = tmp;
-    } else {
-      problems = tmp
-          .where((ProblemsModel problem) => problem.tags.contains(widget.tag))
-          .toList();
-    }
-    setState(() {});
-  }
+class HomePageBody extends StatelessWidget {
+  final List<ProblemsModel> problems;
+  const HomePageBody({super.key, required this.problems});
 
   @override
   Widget build(BuildContext context) {

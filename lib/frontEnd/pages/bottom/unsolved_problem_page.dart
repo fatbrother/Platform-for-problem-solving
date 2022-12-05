@@ -17,17 +17,37 @@ class UnsolvedPage extends StatefulWidget {
 }
 
 class _UnsolvedPageState extends State<UnsolvedPage> {
-  final TextEditingController _textEditingController = TextEditingController();
-  String tag = '';
+  List<ProblemsModel> problems = [];
+
+  Future<void> loadProblems(String tag) async {
+    var user = await AccountManager.currentUser;
+    if (tag == '') {
+      for (final id in user.commandProblemIds) {
+        final problem = await ProblemsDatabase.queryProblem(id);
+        problems.add(problem);
+      }
+    } else {
+      for (final id in user.commandProblemIds) {
+        final problem = await ProblemsDatabase.queryProblem(id);
+        if (problem.tags.contains(tag)) {
+          problems.add(problem);
+        }
+      }
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadProblems('');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: SearchBar(
-        textEditingController: _textEditingController,
-        onSelected: () => setState(() {
-          tag = _textEditingController.text;
-        }),
+        onSelected: loadProblems,
         getSuggestions: (String text) {
           if (text == '') {
             return [];
@@ -39,7 +59,7 @@ class _UnsolvedPageState extends State<UnsolvedPage> {
         },
       ),
       backgroundColor: Design.secondaryColor,
-      body: UnsolvedPageBody(tag: tag),
+      body: UnsolvedPageBody(problems: problems),
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex:
             Routes.bottomNavigationRoutes.indexOf(Routes.unsolvedPage),
@@ -48,43 +68,10 @@ class _UnsolvedPageState extends State<UnsolvedPage> {
   }
 }
 
-class UnsolvedPageBody extends StatefulWidget {
-  final String tag;
-
-  const UnsolvedPageBody({super.key, required this.tag});
-
-  @override
-  State<UnsolvedPageBody> createState() => _UnsolvedPageBodyState();
-}
-
-class _UnsolvedPageBodyState extends State<UnsolvedPageBody> {
-  List<ProblemsModel> problems = [];
-
-  UsersModel user = UsersModel(id: '', name: '', email: '');
-
-  Future<void> loadProblems() async {
-    user = await AccountManager.currentUser;
-    if (widget.tag == '') {
-      for (final id in user.commandProblemIds) {
-        final problem = await ProblemsDatabase.queryProblem(id);
-        problems.add(problem);
-      }
-    } else {
-      for (final id in user.commandProblemIds) {
-        final problem = await ProblemsDatabase.queryProblem(id);
-        if (problem.tags.contains(widget.tag)) {
-          problems.add(problem);
-        }
-      }
-    }
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadProblems();
-  }
+class UnsolvedPageBody extends StatelessWidget {
+  final List<ProblemsModel> problems;
+  
+  const UnsolvedPageBody({super.key, required this.problems});
 
   @override
   Widget build(BuildContext context) {
