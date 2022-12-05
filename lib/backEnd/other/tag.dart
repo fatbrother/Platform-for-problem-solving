@@ -45,14 +45,14 @@ class TagsDatabase {
     }
   }
 
-  static void deleteTag(TagsModel tag) async {
+  static void deleteTag(String tag) async {
+    TagsModel tmp = trieTree.search(tag)!;
     try {
-      await DB.deleteRow('tags', tag.id);
+      await DB.deleteRow('tags', tmp.id);
     } catch (e) {
       rethrow;
     }
-
-    trieTree.delete(tag.name);
+    trieTree.delete(tmp.name);
   }
 
   static void addTag(TagsModel tag) async {
