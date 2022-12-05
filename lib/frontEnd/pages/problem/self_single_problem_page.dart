@@ -83,56 +83,54 @@ class _SingleProblemPageBodyState extends State<SingleProblemPageBody> {
     return Container(
       height: double.infinity,
       padding: Design.spacing,
-      child: Container(
-        decoration: const BoxDecoration(
-            color: Design.secondaryColor,
-            borderRadius: Design.outsideBorderRadius),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-                child: ListView(padding: Design.spacing, children: children)),
-            Container(
-              height: 40,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        DialogManager.showContentDialog(
-                          context,
-                          const Text('刪除後不會歸還上架金額！'),
-                          () {
-                            user.tokens += widget.problem.baseToken;
-                            user.askProblemIds.remove(widget.problem.id);
-                            AccountManager.updateCurrentUser(user);
-                            ProblemsDatabase.deleteProblem(widget.problem.id);
-                            Routes.back(context);
-                          },
-                        );
-                      },
-                      icon: const Icon(Icons.delete)),
-                  IconButton(
-                      onPressed: () {
-                        DialogManager.showContentDialog(
-                          context,
-                          const Text('加價15代幣以增加平台推廣'),
-                          () {},
-                        );
-                      },
-                      icon: const Icon(Icons.monetization_on_outlined)),
-                ],
-              ),
-            )
-          ],
-        ),
+      decoration: const BoxDecoration(
+          color: Design.secondaryColor,
+          borderRadius: Design.outsideBorderRadius),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+              child: ListView(padding: Design.spacing, children: children)),
+          Container(
+            height: 40,
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      DialogManager.showContentDialog(
+                        context,
+                        const Text('刪除後不會歸還上架金額！'),
+                        () {
+                          user.tokens += widget.problem.baseToken;
+                          user.askProblemIds.remove(widget.problem.id);
+                          AccountManager.updateCurrentUser(user);
+                          ProblemsDatabase.deleteProblem(widget.problem.id);
+                          Routes.back(context);
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.delete)),
+                IconButton(
+                    onPressed: () {
+                      DialogManager.showContentDialog(
+                        context,
+                        const Text('加價15代幣以增加平台推廣'),
+                        () {},
+                      );
+                    },
+                    icon: const Icon(Icons.monetization_on_outlined)),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

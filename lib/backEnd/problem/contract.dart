@@ -55,12 +55,12 @@ class ContractsModel {
   DateTime deadline;
 
   ContractsModel({
-    required this.id,
-    required this.solverId,
-    required this.deadline,
-    required this.partialAns,
-    required this.price,
-  });
+    this.id = '',
+    this.solverId = '',
+    DateTime? deadline,
+    this.partialAns = '',
+    this.price = 0,
+  }) : deadline = deadline ?? DateTime.now();
 
   factory ContractsModel.fromMap(Map<String, dynamic> map) {
     return ContractsModel(

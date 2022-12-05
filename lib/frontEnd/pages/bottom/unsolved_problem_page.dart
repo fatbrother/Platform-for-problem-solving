@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
-import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
@@ -80,7 +79,9 @@ class UnsolvedPageBody extends StatelessWidget {
       children.add(
         ProbelmBoxIcon(
           problem: problem,
-          onTap: () {},
+          onTap: () {
+            Routes.push(context, Routes.uploadAnsPage, arguments: problem);
+          },
         ),
       );
       children.add(const SizedBox(height: 10));

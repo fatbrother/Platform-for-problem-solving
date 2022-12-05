@@ -3,7 +3,6 @@ export 'problem/problem.dart';
 export 'user/user.dart';
 export 'user/report.dart';
 export 'other/tag.dart';
-export 'problem/solve_commend.dart';
 
 // we use this class to control the database
 // not suspect to use this class directly

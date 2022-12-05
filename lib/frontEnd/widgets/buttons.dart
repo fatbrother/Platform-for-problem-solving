@@ -225,18 +225,21 @@ class ConfirmButtom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        padding: Design.spacing,
-        elevation: 0,
-        backgroundColor: Design.secondaryColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
-      ),
-      child: Text(
-        name,
-        style: const TextStyle(color: Colors.black, fontSize: 20),
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          padding: Design.spacing,
+          elevation: 0,
+          backgroundColor: Design.secondaryColor,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)),
+        ),
+        child: Text(
+          name,
+          style: const TextStyle(color: Colors.black, fontSize: 20),
+        ),
       ),
     );
   }

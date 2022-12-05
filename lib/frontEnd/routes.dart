@@ -18,6 +18,7 @@ import 'package:pops/frontEnd/pages/init/register_page.dart';
 import 'package:pops/frontEnd/pages/problem/add_probelm_page.dart';
 import 'package:pops/frontEnd/pages/problem/question_apply_page.dart';
 import 'package:pops/frontEnd/pages/problem/self_single_problem_page.dart';
+import 'package:pops/frontEnd/pages/problem/upload_ans_page.dart';
 import 'package:pops/frontEnd/pages/rating_page.dart';
 import 'package:pops/frontEnd/pages/report/report_fail_page.dart';
 import 'package:pops/frontEnd/pages/report/report_page.dart';
@@ -74,6 +75,7 @@ class Routes {
   static const String addProblemPage = '/addProblemPage';
   static const String chatRoomPage = '/chatRoomPage';
   static const String unsolvedPage = '/unsolnedPage';
+  static const String uploadAnsPage = '/uploadAnsPage';
   static List<String> bottomNavigationRoutes = [
     homePage,
     unsolvedPage,
@@ -118,6 +120,11 @@ class Routes {
     unsolvedPage: (context) => const UnsolvedPage(),
     sortProblemPage: (context) => const SortProblemPage(),
     selfInformationPage: (context) => const SelfInformationPage(),
+    uploadAnsPage: (context) {
+      final ProblemsModel problem =
+          ModalRoute.of(context)!.settings.arguments as ProblemsModel;
+      return UploadAnsPage(problem: problem);
+    },
     applicationProfilePage: (context) {
       final args = ModalRoute.of(context)!.settings.arguments as Map;
       return ApplicationProfilePage(
