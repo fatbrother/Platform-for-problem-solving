@@ -41,9 +41,23 @@ class ProblemsDatabase {
       for (final contractId in problem.solveCommendIds) {
         ContractsDatabase.deleteContract(contractId);
       }
+      ContractsDatabase.deleteContract(problem.chooseSolveCommendId);
+      for (final tag in problem.tags) {
+        TagsModel? tmp = TagsDatabase.queryTag(tag);
+        tmp!.problemsWithTag.remove(problemId);
+        TagsDatabase.updateTag(tmp);
+      }
       for (final imgId in problem.imgIds) {
         ImgManager.deleteImage(imgId);
       }
+      var user = await UsersDatabase.queryUser(problem.authorId);
+      for (final folder in user.folders) {
+        if (folder.problemIds.contains(problemId)) {
+          folder.problemIds.remove(problemId);
+        }
+      }
+      user.askProblemIds.remove(problemId);
+      UsersDatabase.updateUser(user);
       await DB.deleteRow('problems', problemId);
     } catch (e) {
       rethrow;

@@ -129,7 +129,7 @@ class Routes {
     folderPage: (context) {
       final FolderModel folder =
           ModalRoute.of(context)!.settings.arguments as FolderModel;
-      return FolderPage(folder: folder);
+      return FilesPage(folder: folder);
     },
     chatRoomPage: (context) {
       final String chatRoomId =

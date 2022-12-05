@@ -221,7 +221,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
           user.askProblemIds.add(id);
           user.tokens -= 10 + rewardToken;
           for (final tag in tags) {
-            if (await TagsDatabase.queryTag(tag) == null) {
+            if (TagsDatabase.queryTag(tag) == null) {
               TagsModel tagModel = TagsModel(
                 id: '',
                 name: tag,
@@ -230,7 +230,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
               TagsDatabase.addTag(tagModel);
             }
             else {
-              TagsModel? tagModel = await TagsDatabase.queryTag(tag);
+              TagsModel? tagModel = TagsDatabase.queryTag(tag);
               tagModel!.problemsWithTag.add(id);
               TagsDatabase.updateTag(tagModel);
             }

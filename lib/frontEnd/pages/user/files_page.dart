@@ -3,34 +3,36 @@ import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/problem_box.dart';
 
-class FolderPage extends StatefulWidget {
+class FilesPage extends StatefulWidget {
   final FolderModel folder;
 
-  const FolderPage({super.key, required this.folder});
+  const FilesPage({super.key, required this.folder});
 
   @override
-  State<FolderPage> createState() => _FolderPage();
+  State<FilesPage> createState() => _FilesPage();
 }
 
-class _FolderPage extends State<FolderPage> {
+class _FilesPage extends State<FilesPage> {
   bool _isSnackBarActive = false;
 
   UsersModel user = UsersModel(id: '', name: '', email: '');
   List<ProblemsModel> problemInFolder = [];
   List<ProblemsModel> problems = [];
 
-
   Future<void> loadInfo() async {
     user = await AccountManager.currentUser;
+    problemInFolder.clear();
+    problems.clear();
     for (final id in user.askProblemIds) {
-      // check if id in  widget.folder.problemIds
+      // check if id in widget.folder.problemIds
       if (widget.folder.problemIds.contains(id)) {
         problemInFolder.add(await ProblemsDatabase.queryProblem(id));
-      }
-      else {
+      } else {
         problems.add(await ProblemsDatabase.queryProblem(id));
       }
     }
@@ -47,10 +49,35 @@ class _FolderPage extends State<FolderPage> {
   Widget build(BuildContext context) {
     List<Widget> children = [];
     for (final problem in problemInFolder) {
-      children.add(ProbelmBoxIcon(
-        problem: problem,
-        onTap: () {},
-      ));
+      children.add(
+        ProbelmBoxIcon(
+          problem: problem,
+          onTap: () {
+            Routes.push(
+              context,
+              Routes.selfSingleProblemPage,
+              arguments: problem,
+              onPop: loadInfo,
+            );
+          },
+          onLongPress: () {
+            DialogManager.showContentDialog(
+                context, Text('確定從資料夾中移除${problem.title}?'), () {
+              widget.folder.problemIds.remove(problem.id);
+              for (final folder in user.folders) {
+                if (folder.name == widget.folder.name) {
+                  folder.problemIds = widget.folder.problemIds;
+                  break;
+                }
+              }
+              AccountManager.updateCurrentUser(user);
+              problemInFolder.remove(problem);
+              problems.add(problem);
+              setState(() {});
+            });
+          },
+        ),
+      );
       children.add(const SizedBox(height: 10));
     }
 
@@ -60,13 +87,9 @@ class _FolderPage extends State<FolderPage> {
       body: Column(
         children: [
           Expanded(
-            child: MediaQuery.removePadding(
-              removeTop: true,
-              context: context,
-              child: ListView(
-                padding: Design.spacing,
-                children: children,
-              ),
+            child: ListView(
+              padding: Design.spacing,
+              children: children,
             ),
           ),
         ],
@@ -90,14 +113,18 @@ class _FolderPage extends State<FolderPage> {
   }
 
   void showSnackBar() {
-    setState(() {
-      _isSnackBarActive = true;
-    });
     List<Widget> children = [];
     for (final problem in problems) {
       children.add(ProbelmBoxIcon(
         problem: problem,
-        onTap: () {},
+        onTap: () async {
+          widget.folder.problemIds.add(problem.id);
+          user.folders = user.folders
+              .map((e) => e.name == widget.folder.name ? widget.folder : e)
+              .toList();
+          await AccountManager.updateCurrentUser(user);
+          setState(() {});
+        },
         isColorReversed: true,
       ));
       children.add(const SizedBox(height: 10));
@@ -124,5 +151,8 @@ class _FolderPage extends State<FolderPage> {
         ),
       ),
     );
+    setState(() {
+      _isSnackBarActive = true;
+    });
   }
 }

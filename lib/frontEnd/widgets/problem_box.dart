@@ -5,22 +5,25 @@ import 'package:pops/frontEnd/design.dart';
 class ProbelmBoxIcon extends StatelessWidget {
   final ProblemsModel problem;
   final void Function() onTap;
+  final void Function()? onLongPress;
   final bool isColorReversed;
 
   const ProbelmBoxIcon({
     super.key,
     required this.problem,
     required this.onTap,
+    this.onLongPress,
     this.isColorReversed = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
+    return GestureDetector(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      child: Column(
+        children: [
+          Container(
             padding: Design.spacing,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
@@ -103,8 +106,8 @@ class ProbelmBoxIcon extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
