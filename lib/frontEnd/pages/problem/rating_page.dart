@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/problem/contract.dart';
+import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
+import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/suggest_field.dart';
 import 'package:pops/frontEnd/widgets/star_plate.dart';
-import 'package:pops/frontEnd/routes.dart';
 
 class RatingPage extends StatefulWidget {
-  const RatingPage({super.key});
+  final String contractId;
+
+  const RatingPage({super.key, required this.contractId});
   @override
   State<RatingPage> createState() => _RatingPageState();
 }
@@ -15,29 +21,34 @@ class RatingPage extends StatefulWidget {
 class _RatingPageState extends State<RatingPage> {
   var numOfStars = 0;
   TextEditingController ratingController = TextEditingController();
+  UsersModel ratingUser = UsersModel(id: '', name: '', email: '');
+  UsersModel currentUser = UsersModel(id: '', name: '', email: '');
+
+  Future<void> loadUser() async {
+    final contract = await ContractsDatabase.queryContract(widget.contractId);
+    ratingUser = await UsersDatabase.queryUser(contract.solverId);
+    currentUser = await AccountManager.currentUser;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        appBar: const SimpleAppBar(),
         backgroundColor: Design.backgroundColor,
         body: Container(
-          margin: Design.spacing,
           padding: Design.spacing,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: Design.getScreenHeight(context) * 0.025),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => {Routes.back(context)},
-                      icon: const Icon(Icons.arrow_back),
-                      iconSize: 35,
-                    ),
-                  ],
-                ),
                 const Text(
                   '請給予解題者評分評語',
                   style: TextStyle(
@@ -63,8 +74,23 @@ class _RatingPageState extends State<RatingPage> {
                 ),
                 SizedBox(height: Design.getScreenHeight(context) * 0.02),
                 SendButton(
-                    onPressed: () =>
-                        {DialogManager.showInfoDialog(context, '感謝您的評分！')},
+                    onPressed: () {
+                      if (ratingController.text == '') {
+                        DialogManager.showInfoDialog(context, '請輸入評語');
+                        return;
+                      }
+                      FeedbacksModel feedback = FeedbacksModel(
+                        userName: currentUser.name,
+                        feedback: ratingController.text,
+                        score: numOfStars,
+                      );
+                      ratingUser.feedbacks.add(feedback);
+                      ratingUser.score += numOfStars;
+                      ratingUser.numberOfScores++;
+                      UsersDatabase.updateUser(ratingUser);
+                      DialogManager.showInfoDialog(context, '感謝您的評分！');
+                      Routes.pushReplacement(context, Routes.homePage);
+                    },
                     text: '送出'),
               ],
             ),

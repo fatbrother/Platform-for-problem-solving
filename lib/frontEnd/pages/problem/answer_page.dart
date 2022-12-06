@@ -150,7 +150,9 @@ class AnswerPage extends StatelessWidget {
                           DialogManager.showContentDialog(
                             context,
                             const Text('完成交易後便無法再提出檢舉，\n聊天室也將關閉。'),
-                            () {},
+                            () {
+                              Routes.push(context, Routes.ratingPage, arguments: problem.chooseSolveCommendId);
+                            },
                           );
                         },
                         style: ElevatedButton.styleFrom(

@@ -1,12 +1,13 @@
 // When we are adding a new page, we need to add it to the routes map.
 
 import 'package:flutter/cupertino.dart';
+import 'package:pops/backEnd/problem/contract.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/pages/problem/answer_page.dart';
 import 'package:pops/frontEnd/pages/problem/application_profile.dart';
-import 'package:pops/frontEnd/pages/audit_failed_lables_page.dart';
+import 'package:pops/frontEnd/pages/user/audit_failed_lables_page.dart';
 import 'package:pops/frontEnd/pages/bottom/home_page.dart';
 import 'package:pops/frontEnd/pages/bottom/notification_page.dart';
 import 'package:pops/frontEnd/pages/bottom/self_information_page.dart';
@@ -20,7 +21,7 @@ import 'package:pops/frontEnd/pages/problem/add_probelm_page.dart';
 import 'package:pops/frontEnd/pages/problem/question_apply_page.dart';
 import 'package:pops/frontEnd/pages/problem/self_single_problem_page.dart';
 import 'package:pops/frontEnd/pages/problem/upload_ans_page.dart';
-import 'package:pops/frontEnd/pages/rating_page.dart';
+import 'package:pops/frontEnd/pages/problem/rating_page.dart';
 import 'package:pops/frontEnd/pages/report/report_fail_page.dart';
 import 'package:pops/frontEnd/pages/report/report_page.dart';
 import 'package:pops/frontEnd/pages/report/report_success_page.dart';
@@ -103,7 +104,6 @@ class Routes {
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
-    ratingPage: (context) => const RatingPage(),
     identificationPage: (context) => const IdentificationPage(),
     notificationPage: (context) => const NotificationPage(),
     topUpPage: (context) => const TopUpPage(),
@@ -122,6 +122,11 @@ class Routes {
     unsolvedPage: (context) => const UnsolvedPage(),
     sortProblemPage: (context) => const SortProblemPage(),
     selfInformationPage: (context) => const SelfInformationPage(),
+    ratingPage: (context) {
+      final String contractId =
+          ModalRoute.of(context)!.settings.arguments as String;
+      return RatingPage(contractId: contractId);
+    },
     answerPage: (context) {
       final ProblemsModel problem =
           ModalRoute.of(context)!.settings.arguments as ProblemsModel;
