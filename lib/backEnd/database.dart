@@ -34,7 +34,7 @@ class DB {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await db.collection(tableName).get();
       return querySnapshot.docs.isEmpty
-          ? throw Exception('No data found')
+          ? {}
           : querySnapshot.docs
               .firstWhere((element) => element.id == rowId)
               .data();

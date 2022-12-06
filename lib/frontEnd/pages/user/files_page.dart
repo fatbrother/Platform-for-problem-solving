@@ -81,27 +81,37 @@ class _FilesPage extends State<FilesPage> {
       children.add(const SizedBox(height: 10));
     }
 
-    return Scaffold(
-      appBar: const SimpleAppBar(),
-      backgroundColor: Design.secondaryColor,
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: Design.spacing,
-              children: children,
+    return WillPopScope(
+      child: Scaffold(
+        appBar: SimpleAppBar(onPop: () {
+          if (_isSnackBarActive) {
+            closeSnackBar();
+          }
+        }),
+        backgroundColor: Design.secondaryColor,
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: Design.spacing,
+                children: children,
+              ),
             ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _isSnackBarActive ? closeSnackBar : showSnackBar,
+          backgroundColor: Design.primaryColor,
+          child: const ImageIcon(
+            AssetImage('assets/icon/fileAdd.png'),
+            color: Colors.black,
           ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _isSnackBarActive ? closeSnackBar : showSnackBar,
-        backgroundColor: Design.primaryColor,
-        child: const ImageIcon(
-          AssetImage('assets/icon/fileAdd.png'),
-          color: Colors.black,
         ),
       ),
+      onWillPop: () async {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        return true;
+      },
     );
   }
 
@@ -113,6 +123,9 @@ class _FilesPage extends State<FilesPage> {
   }
 
   void showSnackBar() {
+    setState(() {
+      _isSnackBarActive = true;
+    });
     List<Widget> children = [];
     for (final problem in problems) {
       children.add(ProbelmBoxIcon(
@@ -151,8 +164,5 @@ class _FilesPage extends State<FilesPage> {
         ),
       ),
     );
-    setState(() {
-      _isSnackBarActive = true;
-    });
   }
 }

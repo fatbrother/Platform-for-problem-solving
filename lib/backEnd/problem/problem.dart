@@ -1,3 +1,4 @@
+import 'package:pops/backEnd/other/chat_room.dart';
 import 'package:pops/backEnd/other/img.dart';
 import 'package:pops/backEnd/problem/contract.dart';
 
@@ -88,6 +89,8 @@ class ProblemsModel {
   String chooseSolveCommendId;
   DateTime createdAt;
   int rewardToken;
+  String answer;
+  String chatRoomId;
 
   ProblemsModel({
     required this.id,
@@ -103,25 +106,35 @@ class ProblemsModel {
     this.solveCommendIds = const [],
     this.chooseSolveCommendId = '',
     this.rewardToken = 0,
+    this.answer = '',
+    this.chatRoomId = '',
   });
 
   static fromMap(Map<String, dynamic> data) {
     return ProblemsModel(
-      id: data['id'] ?? '',
-      title: data['title'] ?? '',
-      tags: data['tags'] == null ? [] : data['tags'].cast<String>(),
-      description: data['description'] ?? '',
-      authorName: data['authorName'] ?? '',
-      authorId: data['authorId'] ?? '',
-      imgIds: data['imgIds'] == null ? [] : data['imgIds'].cast<String>(),
-      isSolved: data['isSolved'] ?? false,
-      baseToken: data['baseToken'] ?? 10,
-      solveCommendIds: data['solveCommendIds'] == null
-          ? []
-          : data['solveCommendIds'].cast<String>(),
-      chooseSolveCommendId: data['chooseSolveCommendId'] ?? '',
-      createdAt: DateTime.parse(data['createdAt']),
-      rewardToken: data['rewardToken'] ?? 0,
+      id: data.containsKey('id') ? data['id'] : '',
+      title: data.containsKey('title') ? data['title'] : '',
+      description: data.containsKey('description') ? data['description'] : '',
+      authorName: data.containsKey('authorName') ? data['authorName'] : '',
+      authorId: data.containsKey('authorId') ? data['authorId'] : '',
+      imgIds: data.containsKey('imgIds')
+          ? List<String>.from(data['imgIds'])
+          : [],
+      tags: data.containsKey('tags') ? List<String>.from(data['tags']) : [],
+      isSolved: data.containsKey('isSolved') ? data['isSolved'] : false,
+      baseToken: data.containsKey('baseToken') ? data['baseToken'] : 0,
+      solveCommendIds: data.containsKey('solveCommendIds')
+          ? List<String>.from(data['solveCommendIds'])
+          : [],
+      chooseSolveCommendId: data.containsKey('chooseSolveCommendId')
+          ? data['chooseSolveCommendId']
+          : '',
+      createdAt: data.containsKey('createdAt')
+          ? DateTime.parse(data['createdAt'])
+          : DateTime.now(),
+      rewardToken: data.containsKey('rewardToken') ? data['rewardToken'] : 0,
+      answer: data.containsKey('answer') ? data['answer'] : '',
+      chatRoomId: data.containsKey('chatRoomId') ? data['chatRoomId'] : '',
     );
   }
 
@@ -140,6 +153,8 @@ class ProblemsModel {
       'chooseSolveCommendId': chooseSolveCommendId,
       'createdAt': createdAt.toIso8601String(),
       'rewardToken': rewardToken,
+      'answer': answer,
+      'chatRoomId': chatRoomId,
     };
   }
 

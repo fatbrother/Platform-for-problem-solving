@@ -6,7 +6,7 @@ class ChatRoomDatabase {
   // use id to query database and return a listener
   static Stream<QuerySnapshot> getChatRoomListener(String id) {
     return FirebaseFirestore.instance
-        .collection('chatRoom')
+        .collection('chatRooms')
         .doc(id)
         .collection('messages')
         .orderBy('time', descending: true)
@@ -15,13 +15,13 @@ class ChatRoomDatabase {
 
   static Future<ChatRoomModel> getChatRoom(String id) async {
     ChatRoomModel model = ChatRoomModel.fromMap(
-        (await DB.getRow('chatRoom', id)));
+        (await DB.getRow('chatRooms', id)));
     return model;
   }
 
-  static void updateChatRoom(ChatRoomModel hatRoomModel) async {
+  static void updateChatRoom(ChatRoomModel chatRoomModel) async {
     try {
-      await DB.updateRow('chatRooms', hatRoomModel.id, hatRoomModel.toMap());
+      await DB.updateRow('chatRooms', chatRoomModel.id, chatRoomModel.toMap());
     } catch (e) {
       rethrow;
     }
@@ -35,22 +35,22 @@ class ChatRoomDatabase {
     }
   }
 
-  static void addChatRoom(ChatRoomModel chatRoomModel) async {
+  static Future<String> addChatRoom(ChatRoomModel chatRoomModel) async {
     try {
-      await DB.addRow('chatRooms', chatRoomModel.toMap());
+      return await DB.addRow('chatRooms', chatRoomModel.toMap());
     } catch (e) {
       rethrow;
     }
   }
 }
 
-class Messeage {
+class Message {
   String id;
   String message;
   // 0 for text, 1 for image
   int type;
 
-  Messeage({
+  Message({
     required this.id,
     required this.message,
     this.type = 0,
@@ -64,8 +64,8 @@ class Messeage {
     };
   }
 
-  factory Messeage.fromMap(Map<String, dynamic> map) {
-    return Messeage(
+  factory Message.fromMap(Map<String, dynamic> map) {
+    return Message(
       id: map['id'],
       message: map['message'],
       type: map['type'],
@@ -76,7 +76,7 @@ class Messeage {
 class ChatRoomModel {
   String id;
   List<String> memberIds;
-  List<Messeage> messages;
+  List<Message> messages;
 
   ChatRoomModel({
     required this.id,
@@ -85,26 +85,26 @@ class ChatRoomModel {
   });
 
   Map<String, dynamic> toMap() {
-    List<Map<String, dynamic>> messagesMap = [];
-    for (var message in messages) {
-      messagesMap.add(message.toMap());
-    }
     return {
       'id': id,
       'memberIds': memberIds,
-      'messages': messages,
+      'messages': messages.map((e) => e.toMap()).toList(),
     };
   }
 
   factory ChatRoomModel.fromMap(Map<String, dynamic> map) {
-    List<Messeage> result = [];
-    for (var value in map['messages']) {
-      result.add(Messeage.fromMap(value));
+    List<Message> messages = [];
+    if (map.containsKey('messages')) {
+      for (final Map<String, dynamic> message in map['messages']) {
+        messages.add(Message.fromMap(message));
+      }
     }
     return ChatRoomModel(
-      id: map['id'],
-      memberIds: List<String>.from(map['memberIds']),
-      messages: result,
+      id: map.containsKey('id') ? map['id'] : '',
+      memberIds: map.containsKey('memberIds')
+          ? List<String>.from(map['memberIds'])
+          : [],
+      messages: messages,
     );
   }
 }

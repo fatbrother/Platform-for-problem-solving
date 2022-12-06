@@ -104,8 +104,13 @@ class ProblemHomePage extends StatelessWidget {
       children.add(ProbelmBoxIcon(
           problem: problem,
           onTap: () {
-            Routes.push(context, Routes.selfSingleProblemPage,
-                arguments: problem, onPop: onPop);
+            if (problem.isSolved == false) {
+              Routes.push(context, Routes.selfSingleProblemPage,
+                  arguments: problem, onPop: onPop);
+            } else {
+              Routes.push(context, Routes.answerPage,
+                  arguments: problem, onPop: onPop);
+            }
           }));
       children.add(const SizedBox(height: 10));
     }

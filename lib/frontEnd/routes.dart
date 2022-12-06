@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
+import 'package:pops/frontEnd/pages/problem/answer_page.dart';
 import 'package:pops/frontEnd/pages/problem/application_profile.dart';
 import 'package:pops/frontEnd/pages/audit_failed_lables_page.dart';
 import 'package:pops/frontEnd/pages/bottom/home_page.dart';
@@ -12,7 +13,7 @@ import 'package:pops/frontEnd/pages/bottom/self_information_page.dart';
 import 'package:pops/frontEnd/pages/bottom/self_problem_page.dart';
 import 'package:pops/frontEnd/pages/bottom/sort_problem_page.dart';
 import 'package:pops/frontEnd/pages/bottom/unsolved_problem_page.dart';
-import 'package:pops/frontEnd/pages/chatroom_page.dart';
+import 'package:pops/frontEnd/pages/user/chatroom_page.dart';
 import 'package:pops/frontEnd/pages/init/login_page.dart';
 import 'package:pops/frontEnd/pages/init/register_page.dart';
 import 'package:pops/frontEnd/pages/problem/add_probelm_page.dart';
@@ -76,6 +77,7 @@ class Routes {
   static const String chatRoomPage = '/chatRoomPage';
   static const String unsolvedPage = '/unsolnedPage';
   static const String uploadAnsPage = '/uploadAnsPage';
+  static const String answerPage = '/answerPage';
   static List<String> bottomNavigationRoutes = [
     homePage,
     unsolvedPage,
@@ -120,6 +122,11 @@ class Routes {
     unsolvedPage: (context) => const UnsolvedPage(),
     sortProblemPage: (context) => const SortProblemPage(),
     selfInformationPage: (context) => const SelfInformationPage(),
+    answerPage: (context) {
+      final ProblemsModel problem =
+          ModalRoute.of(context)!.settings.arguments as ProblemsModel;
+      return AnswerPage(problem: problem);
+    },
     uploadAnsPage: (context) {
       final ProblemsModel problem =
           ModalRoute.of(context)!.settings.arguments as ProblemsModel;

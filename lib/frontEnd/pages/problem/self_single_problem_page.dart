@@ -82,7 +82,7 @@ class _SingleProblemPageBodyState extends State<SingleProblemPageBody> {
 
     return Container(
       height: double.infinity,
-      padding: Design.spacing,
+      margin: Design.spacing,
       decoration: const BoxDecoration(
           color: Design.secondaryColor,
           borderRadius: Design.outsideBorderRadius),

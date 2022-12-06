@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/other/chat_room.dart';
 import 'package:pops/backEnd/problem/contract.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
@@ -201,10 +203,22 @@ class UploadAnsPageBody extends StatelessWidget {
             width: double.infinity,
             height: 50,
             child: ConfirmButtom(
-              onPressed: () {
+              onPressed: () async {
                 if (controller.text.isEmpty) {
                   DialogManager.showInfoDialog(context, '請輸入解答');
+                  return;
                 }
+                Routes.back(context);
+                problem.isSolved = true;
+                problem.answer = controller.text;
+                ChatRoomModel chatRoom = ChatRoomModel(
+                  id: '',
+                  memberIds: [problem.authorId, contract.solverId],
+                  messages: [],
+                );
+                String chatRoomId = await ChatRoomDatabase.addChatRoom(chatRoom);
+                problem.chatRoomId = chatRoomId;
+                ProblemsDatabase.updateProblem(problem);
               },
               name: '上傳',
             ),

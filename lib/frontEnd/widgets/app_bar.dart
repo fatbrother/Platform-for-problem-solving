@@ -3,7 +3,9 @@ import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 
 class SimpleAppBar extends StatelessWidget with PreferredSizeWidget {
-  const SimpleAppBar({super.key});
+  final void Function()? onPop;
+
+  const SimpleAppBar({super.key, this.onPop});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +16,14 @@ class SimpleAppBar extends StatelessWidget with PreferredSizeWidget {
       leading: SizedBox(
         height: kToolbarHeight * 0.7,
         child: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.black,
-          onPressed: () => Routes.back(context),
-        ),
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.black,
+            onPressed: () {
+              if (onPop != null) {
+                onPop!();
+              }
+              Navigator.pop(context);
+            }),
       ),
     );
   }

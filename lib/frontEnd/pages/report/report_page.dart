@@ -23,7 +23,6 @@ class _ReportPageState extends State<ReportPage> {
         appBar: const SimpleAppBar(),
         backgroundColor: Design.backgroundColor,
         body: Container(
-          margin: Design.spacing,
           padding: Design.spacing,
           child: SingleChildScrollView(
             child: Column(
