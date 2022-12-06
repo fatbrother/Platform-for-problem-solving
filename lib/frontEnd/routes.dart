@@ -27,7 +27,6 @@ import 'package:pops/frontEnd/pages/report/report_page.dart';
 import 'package:pops/frontEnd/pages/report/report_success_page.dart';
 import 'package:pops/frontEnd/pages/setting/account_setting_page.dart';
 import 'package:pops/frontEnd/pages/setting/change_password_page.dart';
-import 'package:pops/frontEnd/pages/setting/change_phone_number_page.dart';
 import 'package:pops/frontEnd/pages/setting/general_labels_page.dart';
 import 'package:pops/frontEnd/pages/setting/identification_page.dart';
 import 'package:pops/frontEnd/pages/setting/system_labels_page.dart';
@@ -61,7 +60,6 @@ class Routes {
   static const String systemLabelsPage = '/systemLabelsPage';
 
   static const String changePasswordPage = '/changePasswordPage';
-  static const String changePhoneNumberPage = '/changePhoneNumberPage';
   static const String auditFailedTagsPage = '/auditFailedTagsPage';
 
   static const String ratingPage = '/ratingPage';
@@ -103,7 +101,6 @@ class Routes {
     auditFailedTagsPage: (context) => const AuditFailedTagsPage(),
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
-    changePhoneNumberPage: (context) => const ChangePhoneNumberPage(),
     identificationPage: (context) => const IdentificationPage(),
     notificationPage: (context) => const NotificationPage(),
     topUpPage: (context) => const TopUpPage(),

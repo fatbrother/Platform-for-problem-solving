@@ -86,9 +86,16 @@ class AccountManager {
   static Future<String> sendSms(String phone) async {
     String returnVerificationId = '';
 
+    // transform the phone number to the E.164
+
+    String phoneE164 = phone;
+    if (phoneE164[0] == '0') {
+      phoneE164 = '+886${phoneE164.substring(1)}';
+    }
+
     try {
       await _auth.verifyPhoneNumber(
-        phoneNumber: phone,
+        phoneNumber: phoneE164,
         verificationCompleted: (PhoneAuthCredential credential) {},
         verificationFailed: (FirebaseAuthException e) {
           throw e;

@@ -5,6 +5,7 @@ import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/scaffold.dart';
+import 'package:pops/frontEnd/widgets/setting_bar.dart';
 
 class IdentificationPage extends StatelessWidget {
   const IdentificationPage({
@@ -16,7 +17,8 @@ class IdentificationPage extends StatelessWidget {
     return MyScaffold(
       backgroundColor: Design.secondaryColor,
       body: const IdentificationView(),
-      currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.selfInformationPage),
+      currentIndex:
+          Routes.bottomNavigationRoutes.indexOf(Routes.selfInformationPage),
     );
   }
 }
@@ -29,8 +31,7 @@ class IdentificationView extends StatefulWidget {
 }
 
 class _IdentificationViewState extends State<IdentificationView> {
-  String _phoneNumber = "未設定";
-  String _personalState = "未啟用";
+  UsersModel user = UsersModel(id: '', name: '', email: '');
 
   @override
   void initState() {
@@ -44,15 +45,94 @@ class _IdentificationViewState extends State<IdentificationView> {
       padding: Design.spacing,
       child: Column(
         children: <Widget>[
-          PhoneNumberWidget(phoneNumber: _phoneNumber == "" ? "未設定" : _phoneNumber),
+          PhoneNumberWidget(phoneNumber: user.phone == "" ? "未設定" : user.phone),
           const SizedBox(height: 10),
-          PersonalStateWidget(personalState: _personalState),
+          PersonalStateWidget(
+              personalState: user.isPhoneVerified ? "已驗證" : "未驗證"),
           const SizedBox(height: 10),
-          const ChangePhoneNumberWiget(),
+          SettingBar(
+            name: '修改手機號碼',
+            onPressed: () {
+              TextEditingController controller = TextEditingController();
+              DialogManager.showContentDialog(
+                context,
+                TextField(
+                  keyboardType: TextInputType.phone,
+                  decoration: const InputDecoration(
+                    hintText: "請輸入手機號碼",
+                    border: InputBorder.none,
+                  ),
+                  controller: controller,
+                ),
+                () {
+                  if (controller.text == "") {
+                    DialogManager.showInfoDialog(context, "請輸入手機號碼");
+                    return;
+                  }
+                  if (controller.text.length != 10) {
+                    DialogManager.showInfoDialog(context, "手機號碼格式錯誤");
+                    return;
+                  }
+                  if (controller.text[0] != "0" || controller.text[1] != "9") {
+                    DialogManager.showInfoDialog(context, "手機號碼格式錯誤");
+                    return;
+                  }
+                  // check if phone number is number
+                  for (int i = 0; i < controller.text.length; i++) {
+                    if (controller.text[i].codeUnitAt(0) < 48 ||
+                        controller.text[i].codeUnitAt(0) > 57) {
+                      DialogManager.showInfoDialog(context, "手機號碼格式錯誤");
+                      return;
+                    }
+                  }
+                  if (controller.text == user.phone) {
+                    DialogManager.showInfoDialog(context, "手機號碼未變更");
+                    return;
+                  }
+                  user.phone = controller.text;
+                  user.isPhoneVerified = false;
+                  AccountManager.updateCurrentUser(user);
+                  loadUserInfo();
+                },
+              );
+            },
+          ),
           const SizedBox(height: 10),
           Vertification(
-            onPressed: () {
-              DialogManager.showInfoDialog(context, "簡訊已發送");
+            onPressed: () async {
+              try {
+                TextEditingController controller = TextEditingController();
+                String smsCode = await AccountManager.sendSms(user.phone);
+                if (mounted) {
+                  DialogManager.showContentDialog(
+                    context,
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: "請輸入驗證碼",
+                        border: InputBorder.none,
+                      ),
+                      controller: controller,
+                    ),
+                    () {
+                      if (controller.text == "") {
+                        DialogManager.showInfoDialog(context, "請輸入驗證碼");
+                        return;
+                      }
+                      if (controller.text != smsCode) {
+                        DialogManager.showInfoDialog(context, "驗證碼錯誤");
+                        return;
+                      }
+                      user.isPhoneVerified = true;
+                      DialogManager.showInfoDialog(context, "驗證成功");
+                      loadUserInfo();
+                    },
+                  );
+                }
+              } catch (e) {
+                DialogManager.showInfoDialog(context, "請先設定手機號碼");
+                return;
+              }
             },
           ),
         ],
@@ -61,11 +141,8 @@ class _IdentificationViewState extends State<IdentificationView> {
   }
 
   Future<void> loadUserInfo() async {
-    UsersModel currentUser = await AccountManager.currentUser;
-    setState(() {
-      _phoneNumber = currentUser.phone;
-      _personalState = currentUser.isVerified() ? "已啟用" : "未啟用";
-    });
+    user = await AccountManager.currentUser;
+    setState(() {});
   }
 }
 
@@ -86,9 +163,7 @@ class PhoneNumberWidget extends StatelessWidget {
         child: Text(
           "手機號碼\n$phoneNumber",
           textAlign: TextAlign.center,
-          style: const TextStyle(
-              fontSize: 20,
-              color: Design.primaryTextColor),
+          style: const TextStyle(fontSize: 20, color: Design.primaryTextColor),
         ),
       ),
     );
@@ -113,49 +188,8 @@ class PersonalStateWidget extends StatelessWidget {
           personalState,
           textAlign: TextAlign.center,
           style: const TextStyle(
-              fontSize: 20,
-              color: Color.fromARGB(255, 0, 0, 0)),
+              fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
         ),
-      ),
-    );
-  }
-}
-
-//修改手機號碼按鈕
-class ChangePhoneNumberWiget extends StatelessWidget {
-  const ChangePhoneNumberWiget({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: Design.getScreenHeight(context) * 0.05,
-      child: InkWell(
-        onTap: () {
-          //-->修改手機號碼changePhoneNumber
-          Routes.push(context, Routes.changePhoneNumberPage);
-        },
-        child: Stack(children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Design.insideColor,
-            ),
-            alignment: Alignment.center,
-            child: const Text(
-              '修改手機號碼',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Color.fromARGB(255, 0, 0, 0)),
-            ),
-          ),
-          Container(
-            alignment: const Alignment(1, 0),
-            child: const Icon(
-              Icons.double_arrow,
-              color: Color.fromARGB(177, 59, 59, 59),
-            ),
-          )
-        ]),
       ),
     );
   }

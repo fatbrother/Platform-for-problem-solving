@@ -3,6 +3,7 @@ import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/scaffold.dart';
 import 'package:pops/frontEnd/widgets/setting_bar.dart';
 
@@ -79,6 +80,13 @@ class _AccountSettingPageState extends State<AccountSettingPage> {
   }
 
   void deleteAccount() async {
-    
+    DialogManager.showContentDialog(
+      context,
+      const Text('帳號刪除後無法回復'),
+      () {
+        AccountManager.deleteAccount();
+        Routes.pushReplacement(context, Routes.login);
+      },
+    );
   }
 }

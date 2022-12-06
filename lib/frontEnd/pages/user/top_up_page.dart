@@ -163,15 +163,21 @@ class _TopUpView extends State<TopUpView> {
             height: Design.getScreenHeight(context) * 0.07,
             child: InkWell(
               onTap: () async {
-                int money = int.parse(_controller.text);
-                _controller.clear();
+                try {
+                  int money = int.parse(_controller.text);
+                  _controller.clear();
 
-                if (money < 0) {
+                  if (money <= 0) {
+                    DialogManager.showInfoDialog(context, '請輸入正確金額');
+                  } else {
+                    DialogManager.showInfoDialog(context, '儲值成功');
+                    user.tokens += money;
+                    await AccountManager.updateCurrentUser(user);
+                    loadUserInfo();
+                  }
+                } catch (e) {
                   DialogManager.showInfoDialog(context, '請輸入正確金額');
-                } else {
-                  DialogManager.showInfoDialog(context, '儲值成功');
-                  user.tokens += money;
-                  await AccountManager.updateCurrentUser(user);
+                  return;
                 }
               },
               child: Container(

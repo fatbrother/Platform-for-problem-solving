@@ -70,6 +70,7 @@ class UsersModel {
   int tokens;
   double score;
   int numberOfScores;
+  bool isPhoneVerified;
 
   UsersModel({
     required this.id,
@@ -93,6 +94,7 @@ class UsersModel {
     this.tokens = 0,
     this.score = 0,
     this.numberOfScores = 0,
+    this.isPhoneVerified = false,
   });
 
   static fromMap(Map<String, dynamic> data) {
@@ -151,6 +153,7 @@ class UsersModel {
       notices: data['notices'] == null 
           ? []
           : data['notices'].cast<String>(),
+      isPhoneVerified: data['isPhoneVerified'] ?? false,
     );
   }
 
@@ -177,11 +180,8 @@ class UsersModel {
       'feedbacks': feedbacks.map((e) => e.toMap()).toList(),
       'folders': folders.map((e) => e.toMap()).toList(),
       'notices': notices,
+      'isPhoneVerified': isPhoneVerified,
     };
-  }
-
-  bool isVerified() {
-    return phone != "";
   }
 }
 
