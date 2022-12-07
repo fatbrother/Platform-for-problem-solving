@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<ProblemsModel> problems = [];
-  
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +68,9 @@ class HomePageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> children = [];
     for (var problem in problems) {
+      if (problem.isSolved) {
+        continue;
+      }
       children.add(ProblemCard(problem: problem));
       children.add(const SizedBox(height: 10));
     }

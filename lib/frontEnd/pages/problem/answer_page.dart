@@ -106,7 +106,7 @@ class AnswerPage extends StatelessWidget {
                     FloatingActionButton(
                       onPressed: () {
                         Routes.push(context, Routes.chatRoomPage,
-                            arguments: problem.chatRoomId);
+                            arguments: {'chatRoomId': problem.chatRoomId, 'canEdit': !problem.isSolved});
                       },
                       backgroundColor: Design.secondaryColor,
                       child: const Icon(Icons.chat),
@@ -114,60 +114,68 @@ class AnswerPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: Design.getScreenWidth(context) * 0.45,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          DialogManager.showContentDialog(
-                            context,
-                            const Text('進入檢舉流程後便無法取消'),
-                            () {
-                              Routes.push(context, Routes.reportPage);
-                            },
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: Design.secondaryColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20))),
-                        child: const Text(
-                          '檢舉',
-                          style: TextStyle(color: Colors.black, fontSize: 20),
-                        ),
+                problem.isSolved
+                    ? const SizedBox()
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: Design.getScreenWidth(context) * 0.45,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                DialogManager.showContentDialog(
+                                  context,
+                                  const Text('進入檢舉流程後便無法取消'),
+                                  () {
+                                    Routes.push(context, Routes.reportPage);
+                                  },
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  backgroundColor: Design.secondaryColor,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
+                              child: const Text(
+                                '檢舉',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: Design.getScreenWidth(context) * 0.45,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                DialogManager.showContentDialog(
+                                  context,
+                                  const Text('完成交易後便無法再提出檢舉，\n聊天室也將關閉。'),
+                                  () {
+                                    Routes.push(
+                                      context,
+                                      Routes.ratingPage,
+                                      arguments: problem,
+                                    );
+                                  },
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  backgroundColor: Design.secondaryColor,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
+                              child: const Text(
+                                '完成交易',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      width: Design.getScreenWidth(context) * 0.45,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          DialogManager.showContentDialog(
-                            context,
-                            const Text('完成交易後便無法再提出檢舉，\n聊天室也將關閉。'),
-                            () {
-                              Routes.push(context, Routes.ratingPage, arguments: problem.chooseSolveCommendId);
-                            },
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: Design.secondaryColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20))),
-                        child: const Text(
-                          '完成交易',
-                          style: TextStyle(color: Colors.black, fontSize: 20),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ],

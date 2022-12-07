@@ -209,7 +209,6 @@ class UploadAnsPageBody extends StatelessWidget {
                   return;
                 }
                 Routes.back(context);
-                problem.isSolved = true;
                 problem.answer = controller.text;
                 ChatRoomModel chatRoom = ChatRoomModel(
                   id: '',

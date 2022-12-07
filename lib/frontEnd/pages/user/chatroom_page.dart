@@ -9,10 +9,12 @@ import 'package:pops/frontEnd/widgets/app_bar.dart';
 
 class ChatRoomPage extends StatefulWidget {
   final String chatRoomId;
+  final bool canEdit;
 
   const ChatRoomPage({
     Key? key,
     required this.chatRoomId,
+    this.canEdit = true,
   }) : super(key: key);
 
   @override
@@ -81,62 +83,61 @@ class ChatRoomPageState extends State<ChatRoomPage> {
                     ],
                   ),
                 ),
-                Center(
-                  child: Container(
-                    width: Design.getScreenWidth(context) * 0.95,
-                    height: Design.getScreenHeight(context) * 0.06,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      borderRadius: Design.outsideBorderRadius,
-                    ),
-                    margin: EdgeInsets.only(
-                        bottom: Design.getScreenHeight(context) * 0.01),
-                    child: Row(
-                      children: <Widget>[
-                        IconButton(
-                          onPressed: () async {
-                            String url = await ImgManager.uploadImage();
-                            Message message = Message(
-                              id: user.id,
-                              message: url,
-                              type: 1,
-                            );
-                            submitText(message);
-                          },
-                          icon: const Icon(Icons.image),
-                        ),
-                        Flexible(
-                          child: TextField(
-                            decoration: const InputDecoration(
-                              fillColor: Color.fromARGB(255, 255, 255, 255),
-                              filled: true,
-                              border: InputBorder.none,
-                              hintText: 'Aa...',
-                            ),
-                            controller: chatController,
-                            onSubmitted: (value) => submitText(
-                              Message(
-                                id: user.id,
-                                message: value,
-                                type: 0,
+                !widget.canEdit
+                    ? const SizedBox()
+                    : Center(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Design.insideColor,
+                            borderRadius: Design.outsideBorderRadius,
+                          ),
+                          margin: Design.spacing,
+                          child: Row(
+                            children: <Widget>[
+                              IconButton(
+                                onPressed: () async {
+                                  String url = await ImgManager.uploadImage();
+                                  Message message = Message(
+                                    id: user.id,
+                                    message: url,
+                                    type: 1,
+                                  );
+                                  submitText(message);
+                                },
+                                icon: const Icon(Icons.image),
                               ),
-                            ),
+                              Flexible(
+                                child: TextField(
+                                  decoration: const InputDecoration(
+                                    fillColor: Design.insideColor,
+                                    filled: true,
+                                    border: InputBorder.none,
+                                    hintText: 'Aa...',
+                                  ),
+                                  controller: chatController,
+                                  onSubmitted: (value) => submitText(
+                                    Message(
+                                      id: user.id,
+                                      message: value,
+                                      type: 0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () => submitText(
+                                  Message(
+                                    id: user.id,
+                                    message: chatController.text,
+                                    type: 0,
+                                  ),
+                                ),
+                                icon: const Icon(Icons.send),
+                              ),
+                            ],
                           ),
                         ),
-                        IconButton(
-                          onPressed: () => submitText(
-                            Message(
-                              id: user.id,
-                              message: chatController.text,
-                              type: 0,
-                            ),
-                          ),
-                          icon: const Icon(Icons.send),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                      ),
               ],
             ),
           );

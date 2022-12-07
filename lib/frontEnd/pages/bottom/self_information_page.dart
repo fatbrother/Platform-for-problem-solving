@@ -138,12 +138,12 @@ class SelfTagBar extends StatelessWidget {
           for (var tag in user.expertiseTags)
             ShowTagsWidget(
               title: tag,
-              isGeneral: false,
+              isGeneral: true,
             ),
           for (var tag in user.displaySystemTags)
             ShowTagsWidget(
               title: tag,
-              isGeneral: true,
+              isGeneral: false,
             ),
         ],
       ),

@@ -1,7 +1,6 @@
 // When we are adding a new page, we need to add it to the routes map.
 
 import 'package:flutter/cupertino.dart';
-import 'package:pops/backEnd/problem/contract.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
@@ -120,9 +119,9 @@ class Routes {
     sortProblemPage: (context) => const SortProblemPage(),
     selfInformationPage: (context) => const SelfInformationPage(),
     ratingPage: (context) {
-      final String contractId =
-          ModalRoute.of(context)!.settings.arguments as String;
-      return RatingPage(contractId: contractId);
+      final ProblemsModel problem =
+          ModalRoute.of(context)!.settings.arguments as ProblemsModel;
+      return RatingPage(problem: problem);
     },
     answerPage: (context) {
       final ProblemsModel problem =
@@ -148,9 +147,11 @@ class Routes {
       return FilesPage(folder: folder);
     },
     chatRoomPage: (context) {
-      final String chatRoomId =
-          ModalRoute.of(context)!.settings.arguments as String;
-      return ChatRoomPage(chatRoomId: chatRoomId);
+      Map args = ModalRoute.of(context)!.settings.arguments as Map;
+      return ChatRoomPage(
+        chatRoomId: args['chatRoomId'],
+        canEdit: args.containsKey('canEdit') ? args['canEdit'] : false,
+      );
     },
     selfSingleProblemPage: (context) {
       final ProblemsModel problem =

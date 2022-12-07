@@ -22,7 +22,7 @@ class SimpleAppBar extends StatelessWidget with PreferredSizeWidget {
               if (onPop != null) {
                 onPop!();
               }
-              Navigator.pop(context);
+              Routes.back(context);
             }),
       ),
     );

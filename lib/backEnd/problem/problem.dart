@@ -1,4 +1,3 @@
-import 'package:pops/backEnd/other/chat_room.dart';
 import 'package:pops/backEnd/other/img.dart';
 import 'package:pops/backEnd/problem/contract.dart';
 
@@ -93,11 +92,11 @@ class ProblemsModel {
   String chatRoomId;
 
   ProblemsModel({
-    required this.id,
-    required this.title,
-    required this.authorName,
-    required this.authorId,
-    required this.createdAt,
+    this.id = '',
+    this.title = '',
+    this.authorName = '',
+    this.authorId = '',
+    DateTime? createdAt,
     this.description = '',
     this.imgIds = const [],
     this.tags = const [],
@@ -108,7 +107,7 @@ class ProblemsModel {
     this.rewardToken = 0,
     this.answer = '',
     this.chatRoomId = '',
-  });
+  }): createdAt = createdAt ?? DateTime.now();
 
   static fromMap(Map<String, dynamic> data) {
     return ProblemsModel(

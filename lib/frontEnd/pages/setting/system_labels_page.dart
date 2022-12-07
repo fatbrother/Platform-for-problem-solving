@@ -31,35 +31,62 @@ class SystemLabelsView extends StatefulWidget {
 }
 
 class _SystemLabelsViewState extends State<SystemLabelsView> {
+  Map<String, List<String>> allTags = <String, List<String>>{
+    'audittingTags': <String>[],
+    'auditFailedTags': <String>[],
+    'notShowingTags': <String>[],
+    'showingTags': <String>[],
+  };
+
+  Future<void> loadAllTags() async {
+    var currentUser = await AccountManager.currentUser;
+    allTags = <String, List<String>>{};
+    allTags['audittingTags'] = currentUser.audittingTags;
+    allTags['auditFailedTags'] = currentUser.auditFailedTags;
+    allTags['showingTags'] = currentUser.displaySystemTags;
+    allTags['notShowingTags'] = currentUser.hideSystemTags;
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadAllTags();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: Design.spacing,
       child: Column(
         children: <Widget>[
-          const ShowSystemTagsWidget(),
-          SizedBox(height: Design.getScreenHeight(context) * 0.03),
-          const ShowSystemTableWidget(),
+          ShowLablesWidget(
+            tags: allTags['showingTags'] ?? <String>[],
+            isGeneral: false,
+            title: '目前顯示的系統標籤'
+          ),
+          const SizedBox(height: 10),
+          ShowLablesInfoWidget(allTags: allTags),
+          const SizedBox(height: 10),
+          AddLableWidget(),
         ],
       ),
     );
   }
 }
 
-class ShowSystemTagsWidget extends StatefulWidget {
-  const ShowSystemTagsWidget({super.key});
+class ShowLablesWidget extends StatelessWidget {
+  final String title;
+  final List<String> tags;
+  final bool isGeneral;
 
-  @override
-  State<ShowSystemTagsWidget> createState() => _ShowSystemTagsWidgetState();
-}
-
-class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
-  List<String> tags = <String>[];
-  @override
-  void initState() {
-    super.initState();
-    loadTags();
-  }
+  const ShowLablesWidget({
+    super.key,
+    required this.title,
+    required this.tags,
+    required this.isGeneral,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +100,10 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
       ),
       child: Column(
         children: [
-          const Text(
-            '目前顯示的系統標籤',
+          Text(
+            title,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
           ),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
           Wrap(
@@ -87,7 +114,7 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
                 for (final tag in tags)
                   ShowTagsWidget(
                     title: tag,
-                    isGeneral: false,
+                    isGeneral: isGeneral,
                   ),
               ]),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
@@ -95,50 +122,12 @@ class _ShowSystemTagsWidgetState extends State<ShowSystemTagsWidget> {
       ),
     );
   }
-  /*
-  Future<void> BeginTags() async {
-    final currentUser = await AccountManager.currentUser;
-    
-//     final newUser = UsersModel(
-//       id: currentUser.id,
-//       name: currentUser.name,
-//       email: currentUser.email,
-//       displaySystemTags: tags,
-//     );
-
-//     AccountManager.updateCurrentUser(newUser);
-//     setState(() {});
-//   }
-//   */
-
-  Future<void> loadTags() async {
-    var currentUser = await AccountManager.currentUser;
-    tags = currentUser.displaySystemTags;
-    debugPrint('tags: $tags');
-    setState(() {});
-  }
 }
 
-class ShowSystemTableWidget extends StatefulWidget {
-  const ShowSystemTableWidget({super.key});
+class ShowLablesInfoWidget extends StatelessWidget {
+  final Map<String, List<String>> allTags;
 
-  @override
-  State<ShowSystemTableWidget> createState() => _ShowSystemTableWidgetState();
-}
-
-class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
-  Map<String, List<String>> allTags = <String, List<String>>{
-    'audittingTags': <String>[],
-    'auditFailedTags': <String>[],
-    'notShowingTags': <String>[],
-    'showingTags': <String>[],
-  };
-
-  @override
-  void initState() {
-    super.initState();
-    loadAllTags();
-  }
+  const ShowLablesInfoWidget({super.key, required this.allTags});
 
   @override
   Widget build(BuildContext context) {
@@ -220,17 +209,6 @@ class _ShowSystemTableWidgetState extends State<ShowSystemTableWidget> {
       ),
     );
   }
-
-  Future<void> loadAllTags() async {
-    var currentUser = await AccountManager.currentUser;
-    allTags = <String, List<String>>{};
-    allTags['audittingTags'] = currentUser.audittingTags;
-    allTags['auditFailedTags'] = currentUser.auditFailedTags;
-    allTags['showingTags'] = currentUser.displaySystemTags;
-    allTags['notShowingTags'] = currentUser.hideSystemTags;
-
-    setState(() {});
-  }
 }
 
 class ShowLableColumn extends StatelessWidget {
@@ -256,10 +234,9 @@ class ShowLableColumn extends StatelessWidget {
     }
 
     return Container(
-      //審核失敗的標籤
       width: double.infinity,
       constraints: BoxConstraints(
-        minHeight: Design.getScreenHeight(context) * 0.15,
+        minHeight: Design.getScreenHeight(context) * 0.1,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: const BoxDecoration(
@@ -356,6 +333,36 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class AddLableWidget extends StatefulWidget {
+  const AddLableWidget({super.key});
+
+  @override
+  State<AddLableWidget> createState() => _AddLableWidgetState();
+}
+
+class _AddLableWidgetState extends State<AddLableWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        borderRadius: Design.outsideBorderRadius,
+        color: Design.insideColor,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('新增系統認證標籤',
+              style: TextStyle(
+                fontSize: 20,
+                color: Design.primaryTextColor,
+              )),
+        ],
+      ),
     );
   }
 }

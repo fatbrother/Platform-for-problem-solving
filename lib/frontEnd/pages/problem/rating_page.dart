@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/problem/contract.dart';
+import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
@@ -11,9 +12,9 @@ import 'package:pops/frontEnd/widgets/suggest_field.dart';
 import 'package:pops/frontEnd/widgets/star_plate.dart';
 
 class RatingPage extends StatefulWidget {
-  final String contractId;
+  final ProblemsModel problem;
 
-  const RatingPage({super.key, required this.contractId});
+  const RatingPage({super.key, required this.problem});
   @override
   State<RatingPage> createState() => _RatingPageState();
 }
@@ -23,9 +24,10 @@ class _RatingPageState extends State<RatingPage> {
   TextEditingController ratingController = TextEditingController();
   UsersModel ratingUser = UsersModel(id: '', name: '', email: '');
   UsersModel currentUser = UsersModel(id: '', name: '', email: '');
+  ContractsModel contract = ContractsModel();
 
   Future<void> loadUser() async {
-    final contract = await ContractsDatabase.queryContract(widget.contractId);
+    contract = await ContractsDatabase.queryContract(widget.problem.chooseSolveCommendId);
     ratingUser = await UsersDatabase.queryUser(contract.solverId);
     currentUser = await AccountManager.currentUser;
     setState(() {});
@@ -87,7 +89,12 @@ class _RatingPageState extends State<RatingPage> {
                       ratingUser.feedbacks.add(feedback);
                       ratingUser.score += numOfStars;
                       ratingUser.numberOfScores++;
+                      ratingUser.notices.add("您的${widget.problem.title}解題已被評分，${widget.problem.rewardToken}\$已經匯入您的錢包");
+                      ratingUser.commandProblemIds.remove(widget.problem.id);
+                      ratingUser.tokens += widget.problem.rewardToken;
                       UsersDatabase.updateUser(ratingUser);
+                      widget.problem.isSolved = true;
+                      ProblemsDatabase.updateProblem(widget.problem);
                       DialogManager.showInfoDialog(context, '感謝您的評分！');
                       Routes.pushReplacement(context, Routes.homePage);
                     },

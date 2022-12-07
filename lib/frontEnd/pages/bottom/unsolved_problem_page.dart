@@ -69,7 +69,7 @@ class _UnsolvedPageState extends State<UnsolvedPage> {
 
 class UnsolvedPageBody extends StatelessWidget {
   final List<ProblemsModel> problems;
-  
+
   const UnsolvedPageBody({super.key, required this.problems});
 
   @override
@@ -80,7 +80,12 @@ class UnsolvedPageBody extends StatelessWidget {
         ProbelmBoxIcon(
           problem: problem,
           onTap: () {
-            Routes.push(context, Routes.uploadAnsPage, arguments: problem);
+            if (problem.chatRoomId != '') {
+              Routes.push(context, Routes.chatRoomPage,
+                  arguments: problem.chatRoomId);
+            } else {
+              Routes.push(context, Routes.uploadAnsPage, arguments: problem);
+            }
           },
         ),
       );
@@ -88,11 +93,11 @@ class UnsolvedPageBody extends StatelessWidget {
     }
 
     return Container(
-      padding: Design.spacing,
       decoration: const BoxDecoration(
         color: Design.secondaryColor,
       ),
       child: ListView(
+        padding: Design.spacing,
         children: children,
       ),
     );
