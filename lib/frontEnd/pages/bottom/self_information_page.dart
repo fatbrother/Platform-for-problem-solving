@@ -183,7 +183,7 @@ class _SelfIntroductionBarState extends State<SelfIntroductionBar> {
             children: [
               Container(
                 padding: const EdgeInsets.only(left: 10),
-                child: const Text("自我解紹", style: TextStyle(fontSize: 20)),
+                child: const Text("自我介紹", style: TextStyle(fontSize: 20)),
               ),
               IconButton(
                 onPressed: changeState,
