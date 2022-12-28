@@ -1,21 +1,15 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class ImgManager {
   static final storage = FirebaseStorage.instance;
 
-  // get the image from the database
-  static Future<Image> getImage(String imgId) async {
+  // get the image from the database with url
+  static Future<String> getImage(String imgId) async {
     try {
-      var image = await storage.ref(imgId).getData();
-
-      if (image == null) {
-        throw Exception('No image found');
-      }
-
-      return Image.memory(image);
+      return await storage.ref(imgId).getDownloadURL();
     } catch (e) {
       rethrow;
     }
@@ -33,9 +27,16 @@ class ImgManager {
     final File file = File(image.path);
     
     // create a image id
-    // using the current time
-    // to make sure the id is unique
-    final String imgId = DateTime.now().toString(); 
+    Uuid uuid = const Uuid();
+    String imgId;
+    while (true) {
+      imgId = uuid.v4();
+      try {
+        await storage.ref(imgId).getDownloadURL();
+      } catch (e) {
+        break;
+      }
+    }
 
     try {
       await storage.ref(imgId).putFile(file);

@@ -15,7 +15,7 @@ To get started, you need to install the following:
 To run the app
 
 - Check you have installed the above
-- run `flutter doctor` and solve problems
+- Run `flutter doctor` and solve problems
 - Clone the repository
 - Open the project in IDE
 - Open the terminal and `cd route/to/project/folder`

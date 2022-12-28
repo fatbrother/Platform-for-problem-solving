@@ -108,6 +108,12 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await AccountManager.signIn(email, password);
     } catch (e) {
+      if (e.toString().contains('Email is not verified')) {
+        DialogManager.showInfoDialog(
+            context, '尚未驗證信箱，請至信箱收取驗證信');
+        return;
+      }
+
       DialogManager.showInfoDialog(context, e.toString());
       passwordController.clear();
       return;

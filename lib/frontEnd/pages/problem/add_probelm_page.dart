@@ -228,8 +228,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
                 problemsWithTag: [id],
               );
               TagsDatabase.addTag(tagModel);
-            }
-            else {
+            } else {
               TagsModel? tagModel = TagsDatabase.queryTag(tag);
               tagModel!.problemsWithTag.add(id);
               TagsDatabase.updateTag(tagModel);
@@ -242,12 +241,17 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
   }
 
   Future<void> addImage() async {
-    String imgId = await ImgManager.uploadImage();
-    Image img = await ImgManager.getImage(imgId);
-    setState(() {
-      imageIdList.add(imgId);
-      imageList.add(img);
-    });
+    try {
+      String imgId = await ImgManager.uploadImage();
+      Image img = Image.network(await ImgManager.getImage(imgId));
+      setState(() {
+        imageIdList.add(imgId);
+        imageList.add(img);
+      });
+    } catch (e) {
+      DialogManager.showInfoDialog(context, '上傳失敗');
+      return;
+    }
   }
 
   void addTag() {

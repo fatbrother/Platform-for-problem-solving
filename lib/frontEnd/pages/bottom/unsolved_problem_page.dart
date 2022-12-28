@@ -82,7 +82,7 @@ class UnsolvedPageBody extends StatelessWidget {
           onTap: () {
             if (problem.chatRoomId != '') {
               Routes.push(context, Routes.chatRoomPage,
-                  arguments: problem.chatRoomId);
+                  arguments: {'chatRoomId': problem.chatRoomId, 'canEdit': true});
             } else {
               Routes.push(context, Routes.uploadAnsPage, arguments: problem);
             }

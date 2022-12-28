@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/backEnd/problem/problem.dart';
+import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
@@ -23,7 +24,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void loadProblems(String tag) async {
-    var tmp = await ProblemsDatabase.queryAllProblems();
+    var user = await AccountManager.currentUser;
+    var tmp = (await ProblemsDatabase.queryAllProblems())
+        .where((ProblemsModel problem) => problem.authorId != user.id)
+        .toList();
+
     if (tag == '') {
       problems = tmp;
     } else {

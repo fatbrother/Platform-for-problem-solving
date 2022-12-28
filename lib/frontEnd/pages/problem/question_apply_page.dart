@@ -55,8 +55,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   void loadImages() async {
     for (final id in widget.problem.imgIds) {
-      final image = await ImgManager.getImage(id);
-      images.add(image);
+      images.add(Image.network(await ImgManager.getImage(id)));
     }
     setState(() {});
   }

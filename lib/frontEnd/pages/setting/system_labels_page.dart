@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/other/lableAudit.dart';
 import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
@@ -35,16 +37,15 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
     'audittingTags': <String>[],
     'auditFailedTags': <String>[],
     'notShowingTags': <String>[],
-    'showingTags': <String>[],
   };
+  UsersModel user = UsersModel(id: '', name: '', email: '');
 
   Future<void> loadAllTags() async {
-    var currentUser = await AccountManager.currentUser;
+    user = await AccountManager.currentUser;
     allTags = <String, List<String>>{};
-    allTags['audittingTags'] = currentUser.audittingTags;
-    allTags['auditFailedTags'] = currentUser.auditFailedTags;
-    allTags['showingTags'] = currentUser.displaySystemTags;
-    allTags['notShowingTags'] = currentUser.hideSystemTags;
+    allTags['audittingTags'] = user.audittingTags;
+    allTags['auditFailedTags'] = user.auditFailedTags;
+    allTags['showingTags'] = user.displaySystemTags;
 
     setState(() {});
   }
@@ -62,14 +63,154 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
       child: Column(
         children: <Widget>[
           ShowLablesWidget(
-            tags: allTags['showingTags'] ?? <String>[],
-            isGeneral: false,
-            title: '目前顯示的系統標籤'
+              tags: allTags['showingTags'] ?? <String>[],
+              isGeneral: false,
+              title: '目前顯示的系統標籤'),
+          const SizedBox(height: 10),
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: Design.outsideBorderRadius,
+              color: Design.insideColor,
+            ),
+            padding: Design.spacing,
+            child: Column(
+              children: <Widget>[
+                ShowLableColumn(
+                  title: '審核通過的標籤',
+                  children: [
+                    for (var tag in allTags['showingTags']!)
+                      ShowSystemTableBoxWidget(
+                        tag: tag,
+                        leftButtonTitle: '查看',
+                        leftButtonOnPressed: () {
+                          DialogManager.showInfoDialog(
+                            context,
+                            "標籤名稱：$tag",
+                          );
+                        },
+                        rightButtonTitle: '刪除',
+                        rightButtonOnPressed: () {
+                          DialogManager.showContentDialog(
+                            context,
+                            const Text('確定刪除?'),
+                            () async {
+                              allTags['showingTags']!.remove(tag);
+                              setState(() {});
+                              var user = await AccountManager.currentUser;
+                              user.displaySystemTags = allTags['showingTags']!;
+                              AccountManager.updateCurrentUser(user);
+                            },
+                          );
+                        },
+                      ),
+                  ],
+                ),
+                SizedBox(height: Design.getScreenHeight(context) * 0.02),
+                ShowLableColumn(title: '審核失敗的標籤', children: [
+                  //審核失敗的標籤
+                  for (final tag in allTags['auditFailedTags']!)
+                    ShowSystemTableBoxWidget(
+                      tag: tag,
+                      leftButtonTitle: '查看',
+                      leftButtonOnPressed: () {
+                        DialogManager.showInfoDialog(
+                          context,
+                          "標籤名稱：$tag 審核失敗",
+                        );
+                      },
+                      rightButtonTitle: '刪除',
+                      rightButtonOnPressed: () async {
+                        allTags['auditFailedTags']!.remove(tag);
+                        setState(() {});
+                        var user = await AccountManager.currentUser;
+                        user.auditFailedTags = allTags['auditFailedTags']!;
+                        AccountManager.updateCurrentUser(user);
+                      },
+                    ), //顯示所有該分類tags
+                ]),
+                SizedBox(height: Design.getScreenHeight(context) * 0.02),
+                ShowLableColumn(title: '審核中的標籤', children: [
+                  //審核中的標籤
+                  for (final tag in allTags['audittingTags']!)
+                    ShowSystemTableBoxWidget(
+                      tag: tag,
+                      leftButtonTitle: '查看',
+                      leftButtonOnPressed: () {
+                        DialogManager.showInfoDialog(
+                            context, "標籤需經由人工審核，可能花費較長時間，請耐心等候。");
+                        //or 顯示該標籤內容
+                      },
+                      rightButtonTitle: '刪除',
+                      rightButtonOnPressed: () {
+                        DialogManager.showContentDialog(
+                            context, const Text('確定刪除?'), () async {
+                          allTags['audittingTags']!.remove(tag);
+                          setState(() {});
+                          var user = await AccountManager.currentUser;
+                          AccountManager.updateCurrentUser(user);
+                        });
+                      },
+                    ), //顯示所有該分類tags
+                ]),
+              ],
+            ),
           ),
           const SizedBox(height: 10),
-          ShowLablesInfoWidget(allTags: allTags),
-          const SizedBox(height: 10),
-          AddLableWidget(),
+          GestureDetector(
+            onTap: () {
+              TextEditingController titleController = TextEditingController();
+              DialogManager.showContentDialog(
+                context,
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(
+                    hintText: '請輸入標籤名稱',
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+                () {
+                  if (titleController.text != '') {
+                    setState(() {
+                      if (allTags['audittingTags']!
+                          .contains(titleController.text)) {
+                        DialogManager.showInfoDialog(
+                          context,
+                          '標籤名稱重複',
+                        );
+                        return;
+                      }
+                      allTags['audittingTags']!.add(titleController.text);
+                      AuditCommandsModel auditCommandsModel =
+                          AuditCommandsModel(
+                        id: '',
+                        name: titleController.text,
+                        commanderId: user.id,
+                      );
+
+                      AuditCommandsDatabase.addAuditCommand(auditCommandsModel);
+                      user.audittingTags = allTags['audittingTags']!;
+                      AccountManager.updateCurrentUser(user);
+                    });
+                  }
+                },
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Design.insideColor,
+                borderRadius: Design.outsideBorderRadius,
+              ),
+              child: const Center(
+                child: Text(
+                  '新增標籤',
+                  style: TextStyle(color: Design.primaryTextColor),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -118,93 +259,6 @@ class ShowLablesWidget extends StatelessWidget {
                   ),
               ]),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
-        ],
-      ),
-    );
-  }
-}
-
-class ShowLablesInfoWidget extends StatelessWidget {
-  final Map<String, List<String>> allTags;
-
-  const ShowLablesInfoWidget({super.key, required this.allTags});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: Design.outsideBorderRadius,
-        color: Design.insideColor,
-      ),
-      padding: Design.spacing,
-      child: Column(
-        children: <Widget>[
-          ShowLableColumn(
-            title: '審核通過的標籤',
-            children: [
-              for (int i = 0; i < allTags['showingTags']!.length; i++)
-                ShowSystemTableBoxWidget(
-                  tag: allTags['showingTags']![i],
-                  leftButtonTitle: '隱藏',
-                  leftButtonOnPressed: () {
-                    // removeDisplayTagsToHideTags(i);
-                  },
-                  rightButtonTitle: '刪除',
-                  rightButtonOnPressed: () {
-                    // showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'showingTags', i);
-                  },
-                ),
-              for (int i = 0; i < allTags['notShowingTags']!.length; i++)
-                ShowSystemTableBoxWidget(
-                  tag: allTags['notShowingTags']![i],
-                  leftButtonTitle: '顯示',
-                  leftButtonOnPressed: () {
-                    // removeHideTagsToDisplayTags(i);
-                  },
-                  rightButtonTitle: '刪除',
-                  rightButtonOnPressed: () {
-                    // removeHideTags(i);
-                    // showDeleteAlertDialog(context, "確認刪除將無法再回復！", 'notShowingTags', i);
-                  },
-                ),
-            ],
-          ),
-          SizedBox(height: Design.getScreenHeight(context) * 0.02),
-          ShowLableColumn(title: '審核失敗的標籤', children: [
-            //審核失敗的標籤
-            for (final tag in allTags['auditFailedTags']!)
-              ShowSystemTableBoxWidget(
-                tag: tag,
-                leftButtonTitle: '查看',
-                leftButtonOnPressed: () {
-                  //audit_failed_tags_page
-                },
-                rightButtonTitle: '刪除',
-                rightButtonOnPressed: () {
-                  //
-                  //showDeleteAlertDialog(context, "確認刪除將無法再回復！");
-                },
-              ), //顯示所有該分類tags
-          ]),
-          SizedBox(height: Design.getScreenHeight(context) * 0.02),
-          ShowLableColumn(title: '審核中的標籤', children: [
-            //審核中的標籤
-            for (final tag in allTags['audittingTags']!)
-              ShowSystemTableBoxWidget(
-                tag: tag,
-                leftButtonTitle: '查看',
-                leftButtonOnPressed: () {
-                  DialogManager.showInfoDialog(
-                      context, "標籤需經由人工審核，可能花費較長時間，請耐心等候。");
-                  //or 顯示該標籤內容
-                },
-                rightButtonTitle: '刪除',
-                rightButtonOnPressed: () {
-                  //
-                  //showDeleteAlertDialog(context, "確認刪除將無法再回復！");
-                },
-              ), //顯示所有該分類tags
-          ]),
         ],
       ),
     );
@@ -333,36 +387,6 @@ class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class AddLableWidget extends StatefulWidget {
-  const AddLableWidget({super.key});
-
-  @override
-  State<AddLableWidget> createState() => _AddLableWidgetState();
-}
-
-class _AddLableWidgetState extends State<AddLableWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        borderRadius: Design.outsideBorderRadius,
-        color: Design.insideColor,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('新增系統認證標籤',
-              style: TextStyle(
-                fontSize: 20,
-                color: Design.primaryTextColor,
-              )),
-        ],
-      ),
     );
   }
 }

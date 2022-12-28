@@ -6,6 +6,7 @@ import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/backEnd/other/chat_room.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 
 class ChatRoomPage extends StatefulWidget {
   final String chatRoomId;
@@ -28,22 +29,14 @@ class ChatRoomPageState extends State<ChatRoomPage> {
 
   Future<void> submitText(Message message) async {
     chatController.clear();
-    if (message.type == 0 && message.message == '') {
+    if (message.message == '') {
       return;
     }
     messages.add(message);
 
-    try {
-      var chatRoom = await ChatRoomDatabase.getChatRoom(widget.chatRoomId);
-      try {
-        chatRoom.messages = messages;
-        ChatRoomDatabase.updateChatRoom(chatRoom);
-      } catch (e) {
-        rethrow;
-      }
-    } catch (e) {
-      rethrow;
-    }
+    var chatRoom = await ChatRoomDatabase.getChatRoom(widget.chatRoomId);
+    chatRoom.messages = messages;
+    ChatRoomDatabase.updateChatRoom(chatRoom);
   }
 
   Future<void> loadInfo() async {
@@ -96,7 +89,20 @@ class ChatRoomPageState extends State<ChatRoomPage> {
                             children: <Widget>[
                               IconButton(
                                 onPressed: () async {
-                                  String url = await ImgManager.uploadImage();
+                                  String url = "";
+                                  try {
+                                    url = await ImgManager.uploadImage();
+                                  } catch (e) {
+                                    if (e
+                                        .toString()
+                                        .contains('No image selected')) {
+                                      DialogManager.showInfoDialog(
+                                        context,
+                                        '未選擇圖片',
+                                      );
+                                      return;
+                                    }
+                                  }
                                   Message message = Message(
                                     id: user.id,
                                     message: url,

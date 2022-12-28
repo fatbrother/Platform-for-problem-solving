@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/other/chat_room.dart';
+import 'package:pops/backEnd/other/img.dart';
 import 'package:pops/backEnd/problem/contract.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/frontEnd/design.dart';
@@ -71,6 +72,8 @@ class UploadAnsPageBody extends StatelessWidget {
                 ? '$minutes minutes'
                 : '$seconds seconds';
 
+    List<String> imgList = <String>[];
+
     return Container(
       height: double.infinity,
       padding: Design.spacing,
@@ -105,7 +108,7 @@ class UploadAnsPageBody extends StatelessWidget {
                           Icons.access_time_rounded,
                         ),
                         Text(
-                          '$closetTime days left',
+                          closetTime,
                           style: const TextStyle(
                             color: Design.primaryTextColor,
                             fontSize: 15,
@@ -190,7 +193,11 @@ class UploadAnsPageBody extends StatelessWidget {
                           padding: const EdgeInsets.all(0),
                           icon: const Icon(Icons.add_box_outlined,
                               color: Colors.grey, size: 40),
-                          onPressed: () {},
+                          onPressed: () {
+                            ImgManager.uploadImage().then((value) {
+                              imgList.add(value);
+                            });
+                          },
                         ),
                       ],
                     ),
@@ -210,12 +217,14 @@ class UploadAnsPageBody extends StatelessWidget {
                 }
                 Routes.back(context);
                 problem.answer = controller.text;
+                problem.imgIds = imgList;
                 ChatRoomModel chatRoom = ChatRoomModel(
                   id: '',
                   memberIds: [problem.authorId, contract.solverId],
                   messages: [],
                 );
-                String chatRoomId = await ChatRoomDatabase.addChatRoom(chatRoom);
+                String chatRoomId =
+                    await ChatRoomDatabase.addChatRoom(chatRoom);
                 problem.chatRoomId = chatRoomId;
                 ProblemsDatabase.updateProblem(problem);
               },

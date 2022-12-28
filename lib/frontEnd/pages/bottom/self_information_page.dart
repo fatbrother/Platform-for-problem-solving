@@ -168,7 +168,9 @@ class _SelfIntroductionBarState extends State<SelfIntroductionBar> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = widget.user.selfIntroduction;
+    if (_controller.text == "") {
+      _controller.text = widget.user.selfIntroduction;
+    }
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -207,7 +209,7 @@ class _SelfIntroductionBarState extends State<SelfIntroductionBar> {
     );
   }
 
-  Future<void> changeState() async {
+  void changeState() {
     DialogManager.showContentDialog(
         context,
         TextField(
@@ -305,7 +307,7 @@ class _NameBarState extends State<NameBar> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = widget.user.name;
+    if (_controller.text == "") _controller.text = widget.user.name;
     return Container(
       width: double.infinity,
       height: Design.getScreenHeight(context) * 0.048,
@@ -330,7 +332,7 @@ class _NameBarState extends State<NameBar> {
           Align(
             alignment: Alignment.centerRight,
             child: IconButton(
-              onPressed: changeState,
+              onPressed: changeName,
               icon: const Icon(
                 Icons.edit,
                 color: Design.primaryColor,
@@ -342,7 +344,7 @@ class _NameBarState extends State<NameBar> {
     );
   }
 
-  Future<void> changeState() async {
+  void changeName() {
     DialogManager.showContentDialog(
         context,
         TextField(
@@ -352,6 +354,14 @@ class _NameBarState extends State<NameBar> {
             border: InputBorder.none,
           ),
         ), () {
+      if (_controller.text == "") {
+        DialogManager.showInfoDialog(context, "名字不可為空");
+        return;
+      }
+      if (_controller.text.length > 10) {
+        DialogManager.showInfoDialog(context, "名字不可超過10個字");
+        return;
+      }
       widget.user.name = _controller.text;
       AccountManager.updateCurrentUser(widget.user);
       setState(() {});

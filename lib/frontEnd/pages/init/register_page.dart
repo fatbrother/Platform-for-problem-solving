@@ -40,6 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Center(
             child: Container(
               padding: Design.spacing,
+              height: double.infinity,
               decoration: const BoxDecoration(
                 color: Design.secondaryColor,
                 borderRadius: Design.outsideBorderRadius,
@@ -94,6 +95,8 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
+    DialogManager.showInfoDialog(context, "驗證信已寄出，請至信箱收信",
+        onOk: () => Routes.back(context));
     try {
       await AccountManager.signUp(
         userNameController.text,
@@ -102,12 +105,12 @@ class _RegisterPageState extends State<RegisterPage> {
         confirmPasswordController.text,
       );
     } catch (e) {
-      DialogManager.showInfoDialog(context, e.toString());
+      DialogManager.showInfoDialog(
+        context,
+        e.toString(),
+        onOk: () => Routes.back(context),
+      );
       return;
-    }
-
-    if (mounted) {
-      Routes.pushReplacement(context, Routes.verifyPhone);
     }
   }
 }

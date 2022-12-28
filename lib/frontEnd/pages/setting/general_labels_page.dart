@@ -4,7 +4,9 @@ import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/pages/setting/system_labels_page.dart';
 import 'package:pops/frontEnd/routes.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/scaffold.dart';
+import 'package:pops/frontEnd/widgets/tag.dart';
 
 class GeneralLabelsPage extends StatefulWidget {
   const GeneralLabelsPage({super.key});
@@ -35,6 +37,7 @@ class GeneralLabelsPageBody extends StatefulWidget {
 class _GeneralLabelsPageBodyState extends State<GeneralLabelsPageBody> {
   List<String> labels = [];
   List<String> pastLabels = [];
+  UsersModel user = UsersModel(id: '', name: '', email: '');
 
   Future<void> loadInfo() async {
     UsersModel user = await AccountManager.currentUser;
@@ -56,16 +59,98 @@ class _GeneralLabelsPageBodyState extends State<GeneralLabelsPageBody> {
       padding: Design.spacing,
       child: Column(
         children: <Widget>[
-          ShowLablesWidget(
-            tags: labels,
-            isGeneral: true,
-            title: '目前顯示的專業標籤',
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                color: Design.insideColor),
+            width: double.infinity,
+            constraints: BoxConstraints(
+              minHeight: Design.getScreenHeight(context) * 0.15,
+            ),
+            child: Column(
+              children: [
+                const Text(
+                  '目前顯示的標籤',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(height: Design.getScreenHeight(context) * 0.01),
+                Wrap(
+                    spacing: 5,
+                    runSpacing: 5,
+                    direction: Axis.horizontal,
+                    children: [
+                      for (final tag in labels)
+                        GestureDetector(
+                          onLongPress: () {
+                            DialogManager.showContentDialog(
+                              context,
+                              const Text('確定要刪除此標籤嗎？'),
+                              () {
+                                setState(() {
+                                  labels.remove(tag);
+                                  user.expertiseTags = labels;
+                                  AccountManager.updateCurrentUser(user);
+                                });
+                              },
+                            );
+                          },
+                          child: ShowTagsWidget(
+                            title: tag,
+                            isGeneral: true,
+                          ),
+                        ),
+                    ]),
+                SizedBox(height: Design.getScreenHeight(context) * 0.01),
+              ],
+            ),
           ),
           const SizedBox(height: 10),
-          ShowLablesWidget(
-            tags: pastLabels,
-            isGeneral: true,
-            title: '曾使用過的專業標籤',
+          GestureDetector(
+            onTap: () {
+              TextEditingController controller = TextEditingController();
+              DialogManager.showContentDialog(
+                context,
+                TextField(
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    hintText: '請輸入標籤名稱',
+                    border: InputBorder.none,
+                  ),
+                ),
+                () {
+                  if (controller.text.isNotEmpty) {
+                    setState(() {
+                      if (labels.contains(controller.text)) {
+                        DialogManager.showInfoDialog(
+                          context,
+                          '標籤名稱重複',
+                        );
+                        return;
+                      }
+                      labels.add(controller.text);
+                      user.expertiseTags = labels;
+                      AccountManager.updateCurrentUser(user);
+                    });
+                  }
+                },
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Design.insideColor,
+                borderRadius: Design.outsideBorderRadius,
+              ),
+              child: const Center(
+                child: Text(
+                  '新增標籤',
+                  style: TextStyle(color: Design.primaryTextColor),
+                ),
+              ),
+            ),
           ),
         ],
       ),

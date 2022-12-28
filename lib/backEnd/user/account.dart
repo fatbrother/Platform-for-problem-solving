@@ -28,6 +28,8 @@ class AccountManager {
       }
 
       if (!user.emailVerified) {
+        // resend the verification email
+        user.sendEmailVerification();
         signOut();
         throw Exception('Email is not verified');
       }
@@ -37,6 +39,16 @@ class AccountManager {
     }
 
     _auth.currentUser!.reload();
+
+    try {
+      await UsersDatabase.queryUser(_auth.currentUser!.uid);
+    } catch (e) {
+      await UsersDatabase.addUser(UsersModel(
+        id: _auth.currentUser!.uid,
+        name: _auth.currentUser!.displayName!,
+        email: _auth.currentUser!.email!,
+      ));
+    }
   }
 
   static Future<void> signUp(String name, String email, String password,
@@ -49,31 +61,8 @@ class AccountManager {
       );
 
       final User? user = userCredential.user;
-
+      user?.updateDisplayName(name);
       user!.sendEmailVerification();
-
-      // wait for the user to verify their email
-      // if they don't verify their email, delete the account
-      int timer = 0;
-      while (!user.emailVerified && timer < 120) {
-        await Future.delayed(const Duration(seconds: 1));
-        await user.reload();
-        timer++;
-      }
-
-      if (!user.emailVerified) {
-        await user.delete();
-        throw Exception('Email is not verified');
-      }
-
-      signIn(email, password);
-      UsersDatabase.addUser(
-        UsersModel(
-          id: user.uid,
-          name: name,
-          email: user.email!,
-        ),
-      );
     } catch (e) {
       rethrow;
     }
