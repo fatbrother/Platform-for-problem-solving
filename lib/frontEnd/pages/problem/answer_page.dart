@@ -17,9 +17,7 @@ class AnswerPage extends StatelessWidget {
       appBar: const SimpleAppBar(),
       backgroundColor: Design.backgroundColor,
       body: problem.answer != ""
-          ? AnswerBody(
-              problem: problem,
-            )
+          ? AnswerBody(problem: problem)
           : const HaveNotAnswerBody(),
     );
   }
@@ -110,7 +108,7 @@ class AnswerBody extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      problem.answer == "" ? "尚未回答" : problem.answer,
+                      problem.answer,
                       style: const TextStyle(fontSize: 18),
                     ),
                   ],
@@ -158,6 +156,7 @@ class AnswerBody extends StatelessWidget {
                                   // ignore: use_build_context_synchronously
                                   Routes.push(context, Routes.reportPage,
                                       arguments: {
+                                        'problem': problem,
                                         'reporterId': problem.authorId,
                                         'beReporterId': solveCommand.solverId,
                                       });

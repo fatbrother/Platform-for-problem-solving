@@ -27,13 +27,16 @@ class _HomePageState extends State<HomePage> {
     var user = await AccountManager.currentUser;
     var generalProblem = (await ProblemsDatabase.queryAllProblems())
         .where((ProblemsModel problem) =>
-            problem.authorId != user.id && problem.isSolved == false)
+            problem.authorId != user.id && 
+            problem.isSolved == false && 
+            problem.chooseSolveCommendId == '')
         .toList();
     var upVotedProblem = (await ProblemsDatabase.queryAllProblems())
         .where((ProblemsModel problem) =>
             problem.authorId != user.id &&
             problem.isSolved == false &&
-            problem.isUpvoted == true)
+            problem.isUpvoted == true && 
+            problem.chooseSolveCommendId == '')
         .toList();
     
 

@@ -1,63 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
-import 'package:pops/frontEnd/widgets/buttons.dart';
-import 'package:pops/frontEnd/widgets/suggest_field.dart';
-import 'package:pops/frontEnd/widgets/dialog.dart';
 
-class ReportFailPage extends StatefulWidget {
+class ReportFailPage extends StatelessWidget {
   const ReportFailPage({super.key});
   @override
-  State<ReportFailPage> createState() => _ReportFailPageState();
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      appBar: SimpleAppBar(backRoute: Routes.selfProblemPage),
+      backgroundColor: Design.backgroundColor,
+      body: ReportFailBody(),
+    );
+  }
 }
 
-class _ReportFailPageState extends State<ReportFailPage> {
-  TextEditingController reportSuccessController = TextEditingController();
+class ReportFailBody extends StatelessWidget {
+  const ReportFailBody({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        appBar: const SimpleAppBar(),
-        backgroundColor: Design.backgroundColor,
-        body: Container(
-          margin: Design.spacing,
-          padding: Design.spacing,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const Text(
-                  '檢舉失敗',
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    color: Design.primaryColor,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.03),
-                const Text(
-                  '系統無法退還代幣，\n但您還是能對解題者評分評論。\n感謝您的使用。',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.025),
-                ReportField(
-                  maxline: 15,
-                  hintTextFloating: '請提供您寶貴的意見...',
-                  controller: reportSuccessController,
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.05),
-                SendButton(
-                    onPressed: () =>
-                        {DialogManager.showInfoDialog(context, '感謝您的建議。')},
-                    text: '確認'),
-              ],
+    return Container(
+      margin: Design.spacing,
+      padding: Design.spacing,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              '檢舉失敗',
+              style: TextStyle(
+                fontSize: 30.0,
+                color: Design.primaryColor,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
+            const Text(
+              '系統無法退還代幣，\n感謝您的檢舉。',
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.black,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: Design.getScreenHeight(context) * 0.3),
+          ],
         ),
       ),
     );

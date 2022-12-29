@@ -37,9 +37,10 @@ class ReportsDataBase {
     }
   }
 
-  static void addReport(ReportsModel report) async {
+  static Future<String> addReport(ReportsModel report) async {
     try {
-      await DB.addRow('reports', report.toMap());
+      String id = await DB.addRow('reports', report.toMap());
+      return id;
     } catch (e) {
       rethrow;
     }
@@ -52,16 +53,20 @@ class ReportsModel {
   String reportType;
   String reportDescription;
   String reporterId;
-  String beReportedId;
+  String beReporterId;
+  String problemId;
   bool isVerified;
+  bool isSucceeded;
 
   ReportsModel({
-    required this.id,
+    this.id = '',
     this.reportType = 'other',
     this.reportDescription = '',
-    required this.reporterId,
-    required this.beReportedId,
+    this.reporterId = '',
+    this.beReporterId = '',
+    this.problemId = '',
     this.isVerified = false,
+    this.isSucceeded = false,
   });
 
   factory ReportsModel.fromMap(Map<String, dynamic> map) {
@@ -70,8 +75,10 @@ class ReportsModel {
       reportType: map['reportType'] ?? reportsTypes.last,
       reportDescription: map['reportDescription'] ?? '',
       reporterId: map['reporterId'] ?? '',
-      beReportedId: map['beReportedId'] ?? '',
+      beReporterId: map['beReporterId'] ?? '',
+      problemId: map['problemId'] ?? '',
       isVerified: map['isVerified'] ?? false,
+      isSucceeded: map['isSucceeded'] ?? false,
     );
   }
 
@@ -81,8 +88,10 @@ class ReportsModel {
       'reportType': reportType,
       'reportDescription': reportDescription,
       'reporterId': reporterId,
-      'beReportedId': beReportedId,
+      'beReporterId': beReporterId,
+      'problemId': problemId,
       'isVerified': isVerified,
+      'isSucceeded': isSucceeded,
     };
   }
 }

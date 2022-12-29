@@ -1,73 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/database.dart';
 import 'package:pops/frontEnd/design.dart';
-import 'package:pops/frontEnd/widgets/buttons.dart';
-import 'package:pops/frontEnd/widgets/suggest_field.dart';
-import 'package:pops/frontEnd/widgets/dialog.dart';
+import 'package:pops/frontEnd/routes.dart';
+import 'package:pops/frontEnd/widgets/app_bar.dart';
 
-class ReportSuccessPage extends StatefulWidget {
-  const ReportSuccessPage({super.key});
-  @override
-  State<ReportSuccessPage> createState() => _ReportSuccessPageState();
-}
+class ReportSuccessPage extends StatelessWidget {
+  final ReportsModel report;
 
-class _ReportSuccessPageState extends State<ReportSuccessPage> {
-  TextEditingController reportSuccessController = TextEditingController();
-  List<bool> checkList = [false, false, false, false];
+  const ReportSuccessPage({super.key, required this.report});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        backgroundColor: Design.backgroundColor,
-        body: Container(
-          margin: Design.spacing,
-          padding: Design.spacing,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: Design.getScreenHeight(context) * 0.05),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => {},
-                      icon: const Icon(Icons.arrow_back),
-                      iconSize: 35,
-                    ),
-                  ],
-                ),
-                const Text(
-                  '檢舉成功',
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    color: Design.primaryColor,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.05),
-                const Text(
-                  '點選確定系統將歸還代幣。\n解題者會受到警告。\n感謝您的使用。',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.03),
-                ReportField(
-                  maxline: 15,
-                  hintTextFloating: '請提供您寶貴的意見...',
-                  controller: reportSuccessController,
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.05),
-                SendButton(
-                    onPressed: () =>
-                        {DialogManager.showInfoDialog(context, '感謝您的建議。')},
-                    text: '確認'),
-              ],
+    return Scaffold(
+      appBar: const SimpleAppBar(backRoute: Routes.selfProblemPage),
+      body: ReportSuccessBody(
+        report: report,
+      ),
+    );
+  }
+}
+
+class ReportSuccessBody extends StatefulWidget {
+  final ReportsModel report;
+
+  const ReportSuccessBody({super.key, required this.report});
+
+  @override
+  State<ReportSuccessBody> createState() => _ReportSuccessBodyState();
+}
+
+class _ReportSuccessBodyState extends State<ReportSuccessBody> {
+  UsersModel reporter = UsersModel(id: '', name: '', email: '');
+  ProblemsModel problem = ProblemsModel();
+
+  void returnTocken() async {
+    reporter = await UsersDatabase.queryUser(widget.report.reporterId);
+    problem = await ProblemsDatabase.queryProblem(widget.report.problemId);
+    reporter.tokens += 10 + problem.rewardToken;
+    UsersDatabase.updateUser(reporter);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    returnTocken();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      padding: Design.spacing,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            '檢舉成功',
+            style: TextStyle(
+              fontSize: 30.0,
+              color: Design.primaryColor,
             ),
+            textAlign: TextAlign.center,
           ),
-        ),
+          const Text(
+            '系統已退還上架及懸賞代幣，\n感謝您的檢舉。',
+            style: TextStyle(
+              fontSize: 20.0,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: Design.getScreenHeight(context) * 0.3),
+        ],
       ),
     );
   }

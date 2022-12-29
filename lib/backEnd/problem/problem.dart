@@ -90,6 +90,7 @@ class ProblemsModel {
   int rewardToken;
   String answer;
   String chatRoomId;
+  String reportId;
   bool isUpvoted = false;
 
   ProblemsModel({
@@ -109,6 +110,7 @@ class ProblemsModel {
     this.answer = '',
     this.chatRoomId = '',
     this.isUpvoted = false,
+    this.reportId = '',
   }): createdAt = createdAt ?? DateTime.now();
 
   static fromMap(Map<String, dynamic> data) {
@@ -137,6 +139,7 @@ class ProblemsModel {
       answer: data.containsKey('answer') ? data['answer'] : '',
       chatRoomId: data.containsKey('chatRoomId') ? data['chatRoomId'] : '',
       isUpvoted: data.containsKey('isUpvoted') ? data['isUpvoted'] : false,
+      reportId: data.containsKey('reportId') ? data['reportId'] : '',
     );
   }
 
@@ -158,6 +161,7 @@ class ProblemsModel {
       'answer': answer,
       'chatRoomId': chatRoomId,
       'isUpvoted': isUpvoted,
+      'reportId': reportId,
     };
   }
 

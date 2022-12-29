@@ -4,8 +4,9 @@ import 'package:pops/frontEnd/routes.dart';
 
 class SimpleAppBar extends StatelessWidget with PreferredSizeWidget {
   final void Function()? onPop;
+  final String? backRoute;
 
-  const SimpleAppBar({super.key, this.onPop});
+  const SimpleAppBar({super.key, this.onPop, this.backRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,13 @@ class SimpleAppBar extends StatelessWidget with PreferredSizeWidget {
             onPressed: () {
               if (onPop != null) {
                 onPop!();
+              }
+              if (backRoute != null) {
+                try {
+                  Routes.pushReplacement(context, backRoute!);
+                  return;
+                  // ignore: empty_catches
+                } catch (e) {}
               }
               Routes.back(context);
             }),

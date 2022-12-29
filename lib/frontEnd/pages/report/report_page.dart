@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/database.dart';
 import 'package:pops/frontEnd/design.dart';
+import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
 import 'package:pops/frontEnd/widgets/suggest_field.dart';
@@ -9,11 +10,13 @@ import 'package:pops/frontEnd/widgets/dialog.dart';
 class ReportPage extends StatefulWidget {
   final String reporterId;
   final String beReporterId;
+  final ProblemsModel problem;
 
   const ReportPage({
     super.key,
     required this.reporterId,
     required this.beReporterId,
+    required this.problem,
   });
   @override
   State<ReportPage> createState() => _ReportPageState();
@@ -28,7 +31,9 @@ class _ReportPageState extends State<ReportPage> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: const SimpleAppBar(),
+        appBar: const SimpleAppBar(
+          backRoute: Routes.homePage,
+        ),
         backgroundColor: Design.backgroundColor,
         body: Container(
           padding: Design.spacing,
@@ -62,17 +67,24 @@ class _ReportPageState extends State<ReportPage> {
                 ),
                 SizedBox(height: Design.getScreenHeight(context) * 0.02),
                 SendButton(
-                    onPressed: () {
-                      DialogManager.showInfoDialog(
-                          context, '您的檢舉將進入審核，所需時間較長，請耐心等候。');
+                    onPressed: () async {
+                      DialogManager.showInfoDialog(context, '您的檢舉將進入審核，請耐心等候。');
 
                       ReportsModel newReport = ReportsModel(
                         id: '',
                         reportType: ReportsModel.reportsTypes[check],
                         reportDescription: ratingController.text,
-                        reporterId: '',
-                        beReportedId: '',
+                        reporterId: widget.reporterId,
+                        beReporterId: widget.beReporterId,
+                        problemId: widget.problem.id,
                       );
+                      String reportId =
+                          await ReportsDataBase.addReport(newReport);
+                      widget.problem.reportId = reportId;
+                      ProblemsDatabase.updateProblem(widget.problem);
+                      // ignore: use_build_context_synchronously
+                      Routes.pushReplacement(context, Routes.reportWaitPage,
+                          arguments: reportId);
                     },
                     text: '送出'),
               ],

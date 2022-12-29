@@ -1,11 +1,13 @@
 // When we are adding a new page, we need to add it to the routes map.
 
 import 'package:flutter/cupertino.dart';
+import 'package:pops/backEnd/database.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/pages/problem/answer_page.dart';
 import 'package:pops/frontEnd/pages/problem/application_profile.dart';
+import 'package:pops/frontEnd/pages/report/report_wait_page.dart';
 import 'package:pops/frontEnd/pages/user/audit_failed_lables_page.dart';
 import 'package:pops/frontEnd/pages/bottom/home_page.dart';
 import 'package:pops/frontEnd/pages/bottom/notification_page.dart';
@@ -62,6 +64,7 @@ class Routes {
 
   static const String ratingPage = '/ratingPage';
   static const String reportPage = '/reportPage';
+  static const String reportWaitPage = '/reportWaitPage';
   static const String reportFailPage = '/reportFailPage';
   static const String reportSuccessPage = '/reportSuccessPage';
 
@@ -95,7 +98,6 @@ class Routes {
   final Map<String, WidgetBuilder> _routes = {
     login: (context) => const LoginPage(),
     register: (context) => const RegisterPage(),
-    //userTagPage: (context) => const UserTagPage(),
     auditFailedTagsPage: (context) => const AuditFailedTagsPage(),
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
@@ -104,7 +106,6 @@ class Routes {
     topUpPage: (context) => const TopUpPage(),
     ratePage: (context) => const RatePage(),
     reportFailPage: (context) => const ReportFailPage(),
-    reportSuccessPage: (context) => const ReportSuccessPage(),
     homePage: (context) => const HomePage(),
     addProblemPage: (context) => const AddProblemPage(),
     settingPage: (context) => const SettingPage(),
@@ -115,10 +116,19 @@ class Routes {
     unsolvedPage: (context) => const UnsolvedPage(),
     sortProblemPage: (context) => const SortProblemPage(),
     selfInformationPage: (context) => const SelfInformationPage(),
+    reportSuccessPage: (context) {
+      final report = ModalRoute.of(context)!.settings.arguments as ReportsModel;
+      return ReportSuccessPage(report: report);
+    },
+    reportWaitPage: (context) {
+      final reportId = ModalRoute.of(context)!.settings.arguments as String;
+      return ReportWaitPage(reportId: reportId);
+    },
     reportPage: (context) {
       final args =
           ModalRoute.of(context)!.settings.arguments as Map;
       return ReportPage(
+        problem: args['problem'] as ProblemsModel,
         reporterId: args['reporterId'] as String,
         beReporterId: args['beReporterId'] as String,
       );
