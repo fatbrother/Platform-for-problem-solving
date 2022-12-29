@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/other/img.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
@@ -37,10 +38,13 @@ class SelfInfoPageBody extends StatefulWidget {
 
 class _SelfInfoPageBodyState extends State<SelfInfoPageBody> {
   UsersModel user = UsersModel(id: '', email: '', name: '');
+  Image headshot = Image.asset('assets/icon/defultUserIcon.png');
 
   Future<void> loadUserInfo() async {
     user = await AccountManager.currentUser;
-    debugPrint(user.name);
+    if (user.headshotId != '') {
+      headshot = Image.network(await ImgManager.getImage(user.headshotId));
+    }
     setState(() {});
   }
 
@@ -85,7 +89,7 @@ class _SelfInfoPageBodyState extends State<SelfInfoPageBody> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: ListView(
         children: [
-          const UserIcon(),
+          UserIcon(headshot: headshot, user: user),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
           NameBar(user: user),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
@@ -381,17 +385,55 @@ class _NameBarState extends State<NameBar> {
 }
 
 class UserIcon extends StatelessWidget {
+  final Image headshot;
+  final UsersModel user;
+
   const UserIcon({
     Key? key,
+    required this.headshot,
+    required this.user,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CircleAvatar(
-        backgroundColor: Design.insideColor,
-        radius: Design.getScreenWidth(context) / 5,
-        foregroundImage: Image.asset('assets/icon/defultUserIcon.png').image,
+    return SizedBox(
+      height: Design.getScreenWidth(context) / 1.9,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: Center(
+              child: CircleAvatar(
+                backgroundColor: Design.insideColor,
+                radius: Design.getScreenWidth(context) / 5,
+                foregroundImage: headshot.image,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: IconButton(
+              onPressed: () async {
+                try {
+                  String id = await ImgManager.uploadImage();
+                  if (user.headshotId != '') {
+                    ImgManager.deleteImage(user.headshotId);
+                  }
+                  user.headshotId = id;
+                  AccountManager.updateCurrentUser(user);
+                } catch (e) {
+                  DialogManager.showInfoDialog(context, "上傳失敗");
+                }
+              },
+              icon: const Icon(
+                Icons.photo_camera,
+                size: 30,
+                color: Color.fromARGB(255, 58, 58, 58),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

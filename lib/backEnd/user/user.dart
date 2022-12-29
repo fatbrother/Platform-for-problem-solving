@@ -58,6 +58,7 @@ class UsersModel {
   String email;
   String phone;
   String selfIntroduction;
+  String headshotId;
   int reportNum;
   List<String> commandProblemIds;
   List<String> askProblemIds;
@@ -80,6 +81,7 @@ class UsersModel {
     required this.id,
     required this.name,
     required this.email,
+    this.headshotId = '',
     this.reportNum = 0,
     this.phone = '',
     this.commandProblemIds = const [],
@@ -120,6 +122,7 @@ class UsersModel {
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
+      headshotId: data['headshotId'] ?? '',
       reportNum: data['reportNum'] ?? 0,
       selfIntroduction: data['selfIntroduction'] ?? '',
       commandProblemIds: data['commandProblemIds'] == null
@@ -160,35 +163,11 @@ class UsersModel {
   }
 
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> res;
-    res = {
-      'id': id,
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'reportNum': reportNum,
-      'selfIntroduction': selfIntroduction,
-      'commandProblemIds': commandProblemIds,
-      'askProblemIds': askProblemIds,
-      'expertiseTags': expertiseTags,
-      'pastExpertiseTags': pastExpertiseTags,
-      'displaySystemTags': displaySystemTags,
-      'hideSystemTags': hideSystemTags,
-      'auditFailedTags': auditFailedTags,
-      'audittingTags': audittingTags,
-      'chatRoomsIds': chatRoomsIds,
-      'tokens': tokens,
-      'score': score,
-      'numberOfScores': numberOfScores,
-      'feedbacks': feedbacks.map((e) => e.toMap()).toList(),
-      'folders': folders.map((e) => e.toMap()).toList(),
-      'notices': notices,
-      'isPhoneVerified': isPhoneVerified,
-    };
     return {
       'id': id,
       'name': name,
       'email': email,
+      'headshotId': headshotId,
       'phone': phone,
       'reportNum': reportNum,
       'selfIntroduction': selfIntroduction,

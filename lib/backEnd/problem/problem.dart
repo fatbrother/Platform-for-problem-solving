@@ -81,6 +81,7 @@ class ProblemsModel {
   String authorName;
   String authorId;
   List<String> imgIds;
+  List<String> answerImgIds;
   List<String> tags;
   int baseToken;
   bool isSolved;
@@ -101,6 +102,7 @@ class ProblemsModel {
     DateTime? createdAt,
     this.description = '',
     this.imgIds = const [],
+    this.answerImgIds = const [],
     this.tags = const [],
     this.isSolved = false,
     this.baseToken = 0,
@@ -111,7 +113,7 @@ class ProblemsModel {
     this.chatRoomId = '',
     this.isUpvoted = false,
     this.reportId = '',
-  }): createdAt = createdAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now();
 
   static fromMap(Map<String, dynamic> data) {
     return ProblemsModel(
@@ -120,8 +122,10 @@ class ProblemsModel {
       description: data.containsKey('description') ? data['description'] : '',
       authorName: data.containsKey('authorName') ? data['authorName'] : '',
       authorId: data.containsKey('authorId') ? data['authorId'] : '',
-      imgIds: data.containsKey('imgIds')
-          ? List<String>.from(data['imgIds'])
+      imgIds:
+          data.containsKey('imgIds') ? List<String>.from(data['imgIds']) : [],
+      answerImgIds: data.containsKey('answerImgIds')
+          ? List<String>.from(data['answerImgIds'])
           : [],
       tags: data.containsKey('tags') ? List<String>.from(data['tags']) : [],
       isSolved: data.containsKey('isSolved') ? data['isSolved'] : false,
@@ -151,6 +155,7 @@ class ProblemsModel {
       'authorName': authorName,
       'authorId': authorId,
       'imgIds': imgIds,
+      'answerImgIds': answerImgIds,
       'tags': tags,
       'isSolved': isSolved,
       'baseToken': baseToken,
