@@ -213,10 +213,13 @@ class UploadAnsPageBody extends StatelessWidget {
                             padding: const EdgeInsets.all(0),
                             icon: const Icon(Icons.add_box_outlined,
                                 color: Colors.grey, size: 40),
-                            onPressed: () {
-                              ImgManager.uploadImage().then((value) {
-                                imgList.add(value);
-                              });
+                            onPressed: () async {
+                              try {
+                                String id = await ImgManager.uploadImage();
+                                imgList.add(id);
+                              } catch (e) {
+                                DialogManager.showInfoDialog(context, '上傳失敗');
+                              }
                             },
                           ),
                         ],
@@ -239,7 +242,7 @@ class UploadAnsPageBody extends StatelessWidget {
                 }
                 Routes.back(context);
                 problem.answer = controller.text;
-                problem.imgIds = imgList;
+                problem.answerImgIds = imgList;
                 ChatRoomModel chatRoom = ChatRoomModel(
                   id: '',
                   memberIds: [problem.authorId, contract.solverId],

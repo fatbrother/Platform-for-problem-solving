@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/other/img.dart';
 import 'package:pops/backEnd/problem/contract.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/frontEnd/design.dart';
@@ -23,13 +24,36 @@ class AnswerPage extends StatelessWidget {
   }
 }
 
-class AnswerBody extends StatelessWidget {
+class AnswerBody extends StatefulWidget {
   const AnswerBody({
     Key? key,
     required this.problem,
   }) : super(key: key);
 
   final ProblemsModel problem;
+
+  @override
+  State<AnswerBody> createState() => _AnswerBodyState();
+}
+
+class _AnswerBodyState extends State<AnswerBody> {
+  List<Image> images = [];
+
+  void loadImages() async {
+    for (final id in widget.problem.imgIds) {
+      images.add(Image.network(
+        await ImgManager.getImage(id),
+        width: double.infinity,
+      ));
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadImages();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +76,7 @@ class AnswerBody extends StatelessWidget {
                   color: Colors.white,
                 ),
                 child: Text(
-                  problem.title,
+                  widget.problem.title,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -81,7 +105,7 @@ class AnswerBody extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      problem.description,
+                      widget.problem.description,
                       style: const TextStyle(fontSize: 18),
                     ),
                   ],
@@ -108,9 +132,10 @@ class AnswerBody extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      problem.answer,
+                      widget.problem.answer,
                       style: const TextStyle(fontSize: 18),
                     ),
+                    for (var img in images) img,
                   ],
                 ),
               ),
@@ -124,8 +149,8 @@ class AnswerBody extends StatelessWidget {
                   FloatingActionButton(
                     onPressed: () {
                       Routes.push(context, Routes.chatRoomPage, arguments: {
-                        'chatRoomId': problem.chatRoomId,
-                        'canEdit': !problem.isSolved
+                        'chatRoomId': widget.problem.chatRoomId,
+                        'canEdit': !widget.problem.isSolved
                       });
                     },
                     backgroundColor: Design.secondaryColor,
@@ -134,7 +159,7 @@ class AnswerBody extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              problem.isSolved
+              widget.problem.isSolved
                   ? const SizedBox()
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -151,13 +176,13 @@ class AnswerBody extends StatelessWidget {
                                 () async {
                                   var solveCommand =
                                       await ContractsDatabase.queryContract(
-                                          problem.chooseSolveCommendId);
+                                          widget.problem.chooseSolveCommendId);
 
                                   // ignore: use_build_context_synchronously
                                   Routes.push(context, Routes.reportPage,
                                       arguments: {
-                                        'problem': problem,
-                                        'reporterId': problem.authorId,
+                                        'problem': widget.problem,
+                                        'reporterId': widget.problem.authorId,
                                         'beReporterId': solveCommand.solverId,
                                       });
                                 },
@@ -187,7 +212,7 @@ class AnswerBody extends StatelessWidget {
                                   Routes.push(
                                     context,
                                     Routes.ratingPage,
-                                    arguments: problem,
+                                    arguments: widget.problem,
                                   );
                                 },
                               );
