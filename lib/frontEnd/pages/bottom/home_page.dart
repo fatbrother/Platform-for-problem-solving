@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
     problems.shuffle();
     upVotedProblem.shuffle();
     // add 3 upvoted problems
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 3 && i < upVotedProblem.length; i++) {
       if (i < upVotedProblem.length) {
         problems.insert(i, upVotedProblem[i]);
       }

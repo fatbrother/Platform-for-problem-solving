@@ -21,6 +21,7 @@ class UploadAnsPage extends StatefulWidget {
 
 class _UploadAnsPageState extends State<UploadAnsPage> {
   ContractsModel contract = ContractsModel();
+  List<Image> images = [];
 
   Future<void> loadContracts() async {
     contract = await ContractsDatabase.queryContract(
@@ -28,10 +29,21 @@ class _UploadAnsPageState extends State<UploadAnsPage> {
     setState(() {});
   }
 
+  void loadImages() async {
+    for (final id in widget.problem.imgIds) {
+      images.add(Image.network(
+        await ImgManager.getImage(id),
+        width: double.infinity,
+      ));
+    }
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
     loadContracts();
+    loadImages();
   }
 
   @override
@@ -40,7 +52,11 @@ class _UploadAnsPageState extends State<UploadAnsPage> {
       appBar: const SimpleAppBar(),
       resizeToAvoidBottomInset: false,
       backgroundColor: Design.backgroundColor,
-      body: UploadAnsPageBody(problem: widget.problem, contract: contract),
+      body: UploadAnsPageBody(
+        problem: widget.problem,
+        contract: contract,
+        images: images,
+      ),
     );
   }
 }
@@ -48,12 +64,14 @@ class _UploadAnsPageState extends State<UploadAnsPage> {
 class UploadAnsPageBody extends StatelessWidget {
   final ProblemsModel problem;
   final ContractsModel contract;
+  final List<Image> images;
   final TextEditingController controller = TextEditingController();
 
   UploadAnsPageBody({
     super.key,
     required this.problem,
     required this.contract,
+    required this.images,
   });
 
   @override
@@ -147,11 +165,7 @@ class UploadAnsPageBody extends StatelessWidget {
                         fontSize: 15,
                       ),
                     ),
-                    for (final img in problem.imgIds)
-                      Image.network(
-                        img,
-                        width: double.infinity,
-                      ),
+                    for (final img in images) img,
                   ],
                 ),
               ),
