@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
         problems.insert(i, upVotedProblem[i]);
       }
     }
+
     setState(() {});
   }
 
