@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pops/backEnd/other/lableAudit.dart';
+import 'package:pops/backEnd/other/img.dart';
+import 'package:pops/backEnd/other/lable_audit.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
@@ -39,6 +40,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
     'notShowingTags': <String>[],
   };
   UsersModel user = UsersModel(id: '', name: '', email: '');
+  List<String> imgIds = <String>[];
 
   Future<void> loadAllTags() async {
     user = await AccountManager.currentUser;
@@ -129,25 +131,46 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
               TextEditingController titleController = TextEditingController();
               DialogManager.showContentDialog(
                 context,
-                TextField(
-                  controller: titleController,
-                  decoration: const InputDecoration(
-                    hintText: '請輸入標籤名稱',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.zero,
+                SizedBox(
+                  width: Design.getScreenWidth(context) * 0.6,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: Design.getScreenWidth(context) * 0.3,
+                        child: TextField(
+                          controller: titleController,
+                          decoration: const InputDecoration(
+                            hintText: '請輸入標籤名稱',
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () async {
+                          try {
+                            String id = await ImgManager.uploadImage();
+                            imgIds.add(id);
+                          } catch (e) {
+                            DialogManager.showInfoDialog(context, '上傳失敗');
+                          }
+                        },
+                        icon: const Icon(Icons.image_outlined),
+                      ),
+                    ],
                   ),
                 ),
                 () {
-                  if (titleController.text == '') 
-                  {
+                  if (titleController.text == '') {
                     DialogManager.showInfoDialog(
                       context,
                       '標籤名稱不可為空',
                     );
                     return;
                   }
-                  if (titleController.text.length > 10) 
-                  {
+                  if (titleController.text.length > 10) {
                     DialogManager.showInfoDialog(
                       context,
                       '標籤名稱過長',
@@ -168,6 +191,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
                     id: '',
                     name: titleController.text,
                     commanderId: user.id,
+                    auditImages: imgIds,
                   );
 
                   AuditCommandsDatabase.addAuditCommand(auditCommandsModel);
