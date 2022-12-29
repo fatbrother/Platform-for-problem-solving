@@ -76,13 +76,18 @@ class UnsolvedPageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> children = [];
     for (final problem in problems) {
+      if (problem.isSolved) {
+        continue;
+      }
       children.add(
         ProbelmBoxIcon(
           problem: problem,
           onTap: () {
             if (problem.chatRoomId != '') {
-              Routes.push(context, Routes.chatRoomPage,
-                  arguments: {'chatRoomId': problem.chatRoomId, 'canEdit': true});
+              Routes.push(context, Routes.chatRoomPage, arguments: {
+                'chatRoomId': problem.chatRoomId,
+                'canEdit': true
+              });
             } else {
               Routes.push(context, Routes.uploadAnsPage, arguments: problem);
             }

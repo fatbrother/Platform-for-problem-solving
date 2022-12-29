@@ -53,12 +53,18 @@ class _FilesPage extends State<FilesPage> {
         ProbelmBoxIcon(
           problem: problem,
           onTap: () {
-            Routes.push(
-              context,
-              Routes.selfSingleProblemPage,
-              arguments: problem,
-              onPop: loadInfo,
-            );
+            if (problem.reportId != '') {
+              Routes.push(context, Routes.reportWaitPage,
+                  arguments: problem.reportId);
+              return;
+            }
+            if (problem.chooseSolveCommendId == '') {
+              Routes.push(context, Routes.selfSingleProblemPage,
+                  arguments: problem);
+            } else {
+              Routes.push(context, Routes.answerPage,
+                  arguments: problem);
+            }
           },
           onLongPress: () {
             DialogManager.showContentDialog(

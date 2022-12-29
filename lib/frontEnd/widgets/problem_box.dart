@@ -4,14 +4,14 @@ import 'package:pops/frontEnd/design.dart';
 
 class ProbelmBoxIcon extends StatelessWidget {
   final ProblemsModel problem;
-  final void Function() onTap;
   final void Function()? onLongPress;
   final bool isColorReversed;
+  final void Function()? onTap;
 
   const ProbelmBoxIcon({
     super.key,
     required this.problem,
-    required this.onTap,
+    this.onTap,
     this.onLongPress,
     this.isColorReversed = false,
   });
