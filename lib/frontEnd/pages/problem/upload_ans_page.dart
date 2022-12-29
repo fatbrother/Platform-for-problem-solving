@@ -97,130 +97,137 @@ class UploadAnsPageBody extends StatelessWidget {
       height: double.infinity,
       padding: Design.spacing,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ListView(
-            shrinkWrap: true,
-            children: [
-              Container(
-                padding: Design.spacing,
-                decoration: const BoxDecoration(
-                  color: Design.insideColor,
-                  borderRadius: Design.outsideBorderRadius,
-                ),
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Text(
-                      problem.title,
-                      style: const TextStyle(
-                        color: Design.primaryTextColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.access_time_rounded,
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                Container(
+                  padding: Design.spacing,
+                  decoration: const BoxDecoration(
+                    color: Design.insideColor,
+                    borderRadius: Design.outsideBorderRadius,
+                  ),
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Text(
+                        problem.title,
+                        style: const TextStyle(
+                          color: Design.primaryTextColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          closetTime,
-                          style: const TextStyle(
-                            color: Design.primaryTextColor,
-                            fontSize: 15,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.access_time_rounded,
+                          ),
+                          Text(
+                            closetTime,
+                            style: const TextStyle(
+                              color: Design.primaryTextColor,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  width: double.infinity,
+                  padding: Design.spacing,
+                  decoration: const BoxDecoration(
+                    color: Design.insideColor,
+                    borderRadius: Design.outsideBorderRadius,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '題目文字內容',
+                        style: TextStyle(
+                          color: Design.primaryTextColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        problem.description,
+                        style: const TextStyle(
+                          color: Design.primaryTextColor,
+                          fontSize: 15,
+                        ),
+                      ),
+                      for (final img in images) img,
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  width: double.infinity,
+                  padding: Design.spacing,
+                  decoration: const BoxDecoration(
+                    color: Design.insideColor,
+                    borderRadius: Design.outsideBorderRadius,
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        constraints: const BoxConstraints(
+                          minHeight: 300,
+                        ),
+                        width: double.infinity,
+                        child: TextField(
+                          controller: controller,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            isCollapsed: true,
+                            border: InputBorder.none,
+                            hintText: '輸入解答...',
+                            hintStyle: TextStyle(
+                              fontSize: 20,
+                            ),
                           ),
                         ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                padding: Design.spacing,
-                decoration: const BoxDecoration(
-                  color: Design.insideColor,
-                  borderRadius: Design.outsideBorderRadius,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '題目文字內容',
-                      style: TextStyle(
-                        color: Design.primaryTextColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      problem.description,
-                      style: const TextStyle(
-                        color: Design.primaryTextColor,
-                        fontSize: 15,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: const [
+                              Icon(Icons.image, color: Colors.grey, size: 50),
+                              Icon(Icons.image, color: Colors.grey, size: 50),
+                              Icon(Icons.image, color: Colors.grey, size: 50),
+                            ],
+                          ),
+                          IconButton(
+                            padding: const EdgeInsets.all(0),
+                            icon: const Icon(Icons.add_box_outlined,
+                                color: Colors.grey, size: 40),
+                            onPressed: () {
+                              ImgManager.uploadImage().then((value) {
+                                imgList.add(value);
+                              });
+                            },
+                          ),
+                        ],
                       ),
-                    ),
-                    for (final img in images) img,
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                padding: Design.spacing,
-                constraints: const BoxConstraints(
-                  minHeight: 300,
-                ),
-                decoration: const BoxDecoration(
-                  color: Design.insideColor,
-                  borderRadius: Design.outsideBorderRadius,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextField(
-                      controller: controller,
-                      decoration: const InputDecoration(
-                        isCollapsed: true,
-                        border: InputBorder.none,
-                        hintText: '輸入解答...',
-                        hintStyle: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: const [
-                            Icon(Icons.image, color: Colors.grey, size: 50),
-                            Icon(Icons.image, color: Colors.grey, size: 50),
-                            Icon(Icons.image, color: Colors.grey, size: 50),
-                          ],
-                        ),
-                        IconButton(
-                          padding: const EdgeInsets.all(0),
-                          icon: const Icon(Icons.add_box_outlined,
-                              color: Colors.grey, size: 40),
-                          onPressed: () {
-                            ImgManager.uploadImage().then((value) {
-                              imgList.add(value);
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
+          const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             height: 50,
