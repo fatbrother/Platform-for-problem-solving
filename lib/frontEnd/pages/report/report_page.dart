@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pops/backEnd/database.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttons.dart';
@@ -6,7 +7,14 @@ import 'package:pops/frontEnd/widgets/suggest_field.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 
 class ReportPage extends StatefulWidget {
-  const ReportPage({super.key});
+  final String reporterId;
+  final String beReporterId;
+
+  const ReportPage({
+    super.key,
+    required this.reporterId,
+    required this.beReporterId,
+  });
   @override
   State<ReportPage> createState() => _ReportPageState();
 }
@@ -36,49 +44,17 @@ class _ReportPageState extends State<ReportPage> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: Design.getScreenHeight(context) * 0.01),
-                CheckButton(
-                  text: '空白答案',
-                  backgroundColor: Design.backgroundColor,
-                  ischeck: check == 0,
-                  onPressed: () => setState(
-                    () {
-                      check = 0;
-                    },
+                for (int i = 0; i < ReportsModel.reportsTypes.length; i++)
+                  CheckButton(
+                    text: ReportsModel.reportsTypes[i],
+                    backgroundColor: Design.backgroundColor,
+                    ischeck: check == i,
+                    onPressed: () => setState(
+                      () {
+                        check = i;
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.01),
-                CheckButton(
-                  text: '不雅字眼',
-                  backgroundColor: Design.backgroundColor,
-                  ischeck: check == 1,
-                  onPressed: () => setState(
-                    () {
-                      check = 1;
-                    },
-                  ),
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.01),
-                CheckButton(
-                  text: '答案與問題無關',
-                  backgroundColor: Design.backgroundColor,
-                  ischeck: check == 2,
-                  onPressed: () => setState(
-                    () {
-                      check = 2;
-                    },
-                  ),
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.01),
-                CheckButton(
-                  text: '其他',
-                  backgroundColor: Design.backgroundColor,
-                  ischeck: check == 3,
-                  onPressed: () => setState(
-                    () {
-                      check = 3;
-                    },
-                  ),
-                ),
                 ReportField(
                   maxline: 15,
                   hintTextFloating: '請對檢舉原因加以解釋...',
@@ -89,6 +65,14 @@ class _ReportPageState extends State<ReportPage> {
                     onPressed: () {
                       DialogManager.showInfoDialog(
                           context, '您的檢舉將進入審核，所需時間較長，請耐心等候。');
+
+                      ReportsModel newReport = ReportsModel(
+                        id: '',
+                        reportType: ReportsModel.reportsTypes[check],
+                        reportDescription: ratingController.text,
+                        reporterId: '',
+                        beReportedId: '',
+                      );
                     },
                     text: '送出'),
               ],

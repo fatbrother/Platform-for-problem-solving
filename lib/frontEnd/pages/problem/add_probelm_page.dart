@@ -139,15 +139,27 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
                 spacing: 10,
                 children: [
                   for (final tag in tags)
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: Design.secondaryColor,
+                    GestureDetector(
+                      onLongPress: () {
+                        DialogManager.showContentDialog(
+                          context,
+                          const Text('確定刪除標籤?'),
+                          () {
+                            tags.remove(tag);
+                            setState(() {});
+                          },
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          color: Design.secondaryColor,
+                        ),
+                        child: Text(tag,
+                            style: const TextStyle(
+                                fontSize: 17, color: Colors.white)),
                       ),
-                      child: Text(tag,
-                          style: const TextStyle(
-                              fontSize: 17, color: Colors.white)),
                     ),
                 ],
               )
@@ -196,6 +208,10 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
         : int.parse(rewardTokenController.text);
     if (title == '' || description == '' || rewardToken == 0) {
       DialogManager.showInfoDialog(context, '請輸入完整資料');
+      return;
+    }
+    if (tags.isEmpty) {
+      DialogManager.showInfoDialog(context, '請至少輸入一個標籤');
       return;
     }
 
@@ -274,6 +290,27 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
           ),
         ), () {
       setState(() {
+        if (tagController.text.length > 10) {
+          DialogManager.showInfoDialog(context, '標籤長度過長');
+          return;
+        }
+        if (tags.contains(tagController.text)) {
+          DialogManager.showInfoDialog(context, '標籤重複');
+          return;
+        }
+        if (tagController.text == '') {
+          DialogManager.showInfoDialog(context, '標籤不得為空');
+          return;
+        }
+        if (tagController.text.contains(' ')) {
+          DialogManager.showInfoDialog(context, '標籤不得包含空格');
+          return;
+        }
+        if (tags.length >= 5) {
+          DialogManager.showInfoDialog(context, '標籤不得超過五個');
+          return;
+        }
+
         tags.add(tagController.text);
       });
     });

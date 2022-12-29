@@ -28,7 +28,6 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   List<Message> messages = [];
 
   Future<void> submitText(Message message) async {
-    chatController.clear();
     if (message.message == '') {
       return;
     }
@@ -43,7 +42,10 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     user = await AccountManager.currentUser;
     ChatRoomModel chatRoom =
         await ChatRoomDatabase.getChatRoom(widget.chatRoomId);
-    messages = chatRoom.messages;
+    // merge messages
+    if (chatRoom.messages.length > messages.length) {
+      messages = chatRoom.messages;
+    }
     if (mounted) {
       setState(() {});
     }
@@ -52,102 +54,104 @@ class ChatRoomPageState extends State<ChatRoomPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: ChatRoomDatabase.getChatRoomListener(widget.chatRoomId),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            loadInfo();
-          }
-          return Scaffold(
-            backgroundColor: Design.backgroundColor,
-            appBar: const SimpleAppBar(),
-            body: Column(
-              children: <Widget>[
-                Expanded(
-                  child: ListView(
-                    reverse: true,
-                    shrinkWrap: true,
-                    padding: Design.spacing,
-                    children: [
-                      for (final message in messages.reversed)
-                        ChatLine(
-                          message: message,
-                          isMe: message.id == user.id,
-                        ),
-                    ],
-                  ),
+      stream: ChatRoomDatabase.getChatRoomListener(widget.chatRoomId),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          loadInfo();
+        }
+        return Scaffold(
+          backgroundColor: Design.backgroundColor,
+          appBar: const SimpleAppBar(),
+          body: Column(
+            children: <Widget>[
+              Expanded(
+                child: ListView(
+                  reverse: true,
+                  shrinkWrap: true,
+                  padding: Design.spacing,
+                  children: [
+                    for (final message in messages.reversed)
+                      ChatLine(
+                        message: message,
+                        isMe: message.id == user.id,
+                      ),
+                  ],
                 ),
-                !widget.canEdit
-                    ? const SizedBox()
-                    : Center(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Design.insideColor,
-                            borderRadius: Design.outsideBorderRadius,
-                          ),
-                          margin: Design.spacing,
-                          child: Row(
-                            children: <Widget>[
-                              IconButton(
-                                onPressed: () async {
-                                  String url = "";
-                                  try {
-                                    url = await ImgManager.uploadImage();
-                                  } catch (e) {
-                                    if (e
-                                        .toString()
-                                        .contains('No image selected')) {
-                                      DialogManager.showInfoDialog(
-                                        context,
-                                        '未選擇圖片',
-                                      );
-                                      return;
-                                    }
+              ),
+              !widget.canEdit
+                  ? const SizedBox()
+                  : Center(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Design.insideColor,
+                          borderRadius: Design.outsideBorderRadius,
+                        ),
+                        margin: Design.spacing,
+                        child: Row(
+                          children: <Widget>[
+                            IconButton(
+                              onPressed: () async {
+                                String url = "";
+                                try {
+                                  url = await ImgManager.uploadImage();
+                                } catch (e) {
+                                  if (e
+                                      .toString()
+                                      .contains('No image selected')) {
+                                    DialogManager.showInfoDialog(
+                                      context,
+                                      '未選擇圖片',
+                                    );
+                                    return;
                                   }
-                                  Message message = Message(
-                                    id: user.id,
-                                    message: url,
-                                    type: 1,
-                                  );
-                                  submitText(message);
-                                },
-                                icon: const Icon(Icons.image),
-                              ),
-                              Flexible(
-                                child: TextField(
-                                  decoration: const InputDecoration(
-                                    fillColor: Design.insideColor,
-                                    filled: true,
-                                    border: InputBorder.none,
-                                    hintText: 'Aa...',
-                                  ),
-                                  controller: chatController,
-                                  onSubmitted: (value) => submitText(
-                                    Message(
-                                      id: user.id,
-                                      message: value,
-                                      type: 0,
-                                    ),
-                                  ),
+                                }
+                                Message message = Message(
+                                  id: user.id,
+                                  message: url,
+                                  type: 1,
+                                );
+                                submitText(message);
+                              },
+                              icon: const Icon(Icons.image),
+                            ),
+                            Flexible(
+                              child: TextField(
+                                decoration: const InputDecoration(
+                                  fillColor: Design.insideColor,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  hintText: 'Aa...',
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () => submitText(
+                                controller: chatController,
+                                onSubmitted: (value) => submitText(
                                   Message(
                                     id: user.id,
-                                    message: chatController.text,
+                                    message: value,
                                     type: 0,
                                   ),
                                 ),
-                                icon: const Icon(Icons.send),
                               ),
-                            ],
-                          ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                submitText(Message(
+                                  id: user.id,
+                                  message: chatController.text,
+                                  type: 0,
+                                ));
+                                chatController.clear();
+                              },
+                              icon: const Icon(Icons.send),
+                            ),
+                          ],
                         ),
                       ),
-              ],
-            ),
-          );
-        });
+                    ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -162,10 +166,17 @@ class ChatLine extends StatelessWidget {
     return Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
+        !isMe
+            ? const Icon(Icons.person_outline_outlined, size: 32)
+            : const SizedBox(),
+        const SizedBox(width: 10),
         message.type == 0
             ? Container(
                 padding: Design.spacing,
                 margin: const EdgeInsets.symmetric(vertical: 10.0),
+                constraints: BoxConstraints(
+                  maxWidth: Design.getScreenWidth(context) * 0.7,
+                ),
                 decoration: BoxDecoration(
                   color: (isMe) ? Design.secondaryColor : Colors.white,
                   borderRadius: Design.outsideBorderRadius,
@@ -190,7 +201,9 @@ class ChatLine extends StatelessWidget {
                 child: Image.network(message.message),
               ),
         const SizedBox(width: 10.0),
-        const Icon(Icons.person_outline_outlined, size: 32),
+        isMe
+            ? const Icon(Icons.person_outline_outlined, size: 32)
+            : const SizedBox(),
       ],
     );
   }

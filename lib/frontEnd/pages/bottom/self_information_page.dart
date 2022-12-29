@@ -101,8 +101,6 @@ class _SelfInfoPageBodyState extends State<SelfInfoPageBody> {
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
           SettingBar(name: '設定', onPressed: setting),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
-          SettingBar(name: '常見問題', onPressed: commonProblem),
-          SizedBox(height: Design.getScreenHeight(context) * 0.01),
           SettingBar(name: '登出', onPressed: logOut),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
         ],

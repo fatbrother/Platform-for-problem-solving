@@ -75,37 +75,6 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
             padding: Design.spacing,
             child: Column(
               children: <Widget>[
-                ShowLableColumn(
-                  title: '審核通過的標籤',
-                  children: [
-                    for (var tag in allTags['showingTags']!)
-                      ShowSystemTableBoxWidget(
-                        tag: tag,
-                        leftButtonTitle: '查看',
-                        leftButtonOnPressed: () {
-                          DialogManager.showInfoDialog(
-                            context,
-                            "標籤名稱：$tag",
-                          );
-                        },
-                        rightButtonTitle: '刪除',
-                        rightButtonOnPressed: () {
-                          DialogManager.showContentDialog(
-                            context,
-                            const Text('確定刪除?'),
-                            () async {
-                              allTags['showingTags']!.remove(tag);
-                              setState(() {});
-                              var user = await AccountManager.currentUser;
-                              user.displaySystemTags = allTags['showingTags']!;
-                              AccountManager.updateCurrentUser(user);
-                            },
-                          );
-                        },
-                      ),
-                  ],
-                ),
-                SizedBox(height: Design.getScreenHeight(context) * 0.02),
                 ShowLableColumn(title: '審核失敗的標籤', children: [
                   //審核失敗的標籤
                   for (final tag in allTags['auditFailedTags']!)
@@ -138,7 +107,6 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
                       leftButtonOnPressed: () {
                         DialogManager.showInfoDialog(
                             context, "標籤需經由人工審核，可能花費較長時間，請耐心等候。");
-                        //or 顯示該標籤內容
                       },
                       rightButtonTitle: '刪除',
                       rightButtonOnPressed: () {
@@ -150,7 +118,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
                           AccountManager.updateCurrentUser(user);
                         });
                       },
-                    ), //顯示所有該分類tags
+                    ),
                 ]),
               ],
             ),
@@ -170,29 +138,42 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
                   ),
                 ),
                 () {
-                  if (titleController.text != '') {
-                    setState(() {
-                      if (allTags['audittingTags']!
-                          .contains(titleController.text)) {
-                        DialogManager.showInfoDialog(
-                          context,
-                          '標籤名稱重複',
-                        );
-                        return;
-                      }
-                      allTags['audittingTags']!.add(titleController.text);
-                      AuditCommandsModel auditCommandsModel =
-                          AuditCommandsModel(
-                        id: '',
-                        name: titleController.text,
-                        commanderId: user.id,
-                      );
-
-                      AuditCommandsDatabase.addAuditCommand(auditCommandsModel);
-                      user.audittingTags = allTags['audittingTags']!;
-                      AccountManager.updateCurrentUser(user);
-                    });
+                  if (titleController.text == '') 
+                  {
+                    DialogManager.showInfoDialog(
+                      context,
+                      '標籤名稱不可為空',
+                    );
+                    return;
                   }
+                  if (titleController.text.length > 10) 
+                  {
+                    DialogManager.showInfoDialog(
+                      context,
+                      '標籤名稱不可超過10個字',
+                    );
+                    return;
+                  }
+                  if (allTags['audittingTags']!
+                      .contains(titleController.text)) {
+                    DialogManager.showInfoDialog(
+                      context,
+                      '標籤名稱重複',
+                    );
+                    return;
+                  }
+
+                  allTags['audittingTags']!.add(titleController.text);
+                  AuditCommandsModel auditCommandsModel = AuditCommandsModel(
+                    id: '',
+                    name: titleController.text,
+                    commanderId: user.id,
+                  );
+
+                  AuditCommandsDatabase.addAuditCommand(auditCommandsModel);
+                  user.audittingTags = allTags['audittingTags']!;
+                  AccountManager.updateCurrentUser(user);
+                  setState(() {});
                 },
               );
             },

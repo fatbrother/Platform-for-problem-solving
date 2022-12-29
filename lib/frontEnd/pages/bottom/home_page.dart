@@ -25,19 +25,34 @@ class _HomePageState extends State<HomePage> {
 
   void loadProblems(String tag) async {
     var user = await AccountManager.currentUser;
-    var tmp = (await ProblemsDatabase.queryAllProblems())
-        .where((ProblemsModel problem) => problem.authorId != user.id)
+    var generalProblem = (await ProblemsDatabase.queryAllProblems())
+        .where((ProblemsModel problem) =>
+            problem.authorId != user.id && problem.isSolved == false)
         .toList();
+    var upVotedProblem = (await ProblemsDatabase.queryAllProblems())
+        .where((ProblemsModel problem) =>
+            problem.authorId != user.id &&
+            problem.isSolved == false &&
+            problem.isUpvoted == true)
+        .toList();
+    
 
     if (tag == '') {
-      problems = tmp;
+      problems = generalProblem;
     } else {
-      problems = tmp
+      problems = generalProblem
           .where((ProblemsModel problem) => problem.tags.contains(tag))
           .toList();
     }
     // suffle the problems
     problems.shuffle();
+    upVotedProblem.shuffle();
+    // add 3 upvoted problems
+    for (var i = 0; i < 3; i++) {
+      if (i < upVotedProblem.length) {
+        problems.insert(i, upVotedProblem[i]);
+      }
+    }
     setState(() {});
   }
 

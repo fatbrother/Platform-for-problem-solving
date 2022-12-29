@@ -38,17 +38,17 @@ class ProblemsDatabase {
   static void deleteProblem(String problemId) async {
     try {
       ProblemsModel problem = await queryProblem(problemId);
+      await ContractsDatabase.deleteContract(problem.chooseSolveCommendId);
       for (final contractId in problem.solveCommendIds) {
-        ContractsDatabase.deleteContract(contractId);
+        await ContractsDatabase.deleteContract(contractId);
       }
-      ContractsDatabase.deleteContract(problem.chooseSolveCommendId);
       for (final tag in problem.tags) {
         TagsModel? tmp = TagsDatabase.queryTag(tag);
         tmp!.problemsWithTag.remove(problemId);
-        TagsDatabase.updateTag(tmp);
+        await TagsDatabase.updateTag(tmp);
       }
       for (final imgId in problem.imgIds) {
-        ImgManager.deleteImage(imgId);
+        await ImgManager.deleteImage(imgId);
       }
       var user = await UsersDatabase.queryUser(problem.authorId);
       for (final folder in user.folders) {
@@ -57,10 +57,10 @@ class ProblemsDatabase {
         }
       }
       user.askProblemIds.remove(problemId);
-      UsersDatabase.updateUser(user);
+      await UsersDatabase.updateUser(user);
       await DB.deleteRow('problems', problemId);
     } catch (e) {
-      rethrow;
+      return;
     }
   }
 
@@ -90,6 +90,7 @@ class ProblemsModel {
   int rewardToken;
   String answer;
   String chatRoomId;
+  bool isUpvoted = false;
 
   ProblemsModel({
     this.id = '',
@@ -107,6 +108,7 @@ class ProblemsModel {
     this.rewardToken = 0,
     this.answer = '',
     this.chatRoomId = '',
+    this.isUpvoted = false,
   }): createdAt = createdAt ?? DateTime.now();
 
   static fromMap(Map<String, dynamic> data) {
@@ -134,6 +136,7 @@ class ProblemsModel {
       rewardToken: data.containsKey('rewardToken') ? data['rewardToken'] : 0,
       answer: data.containsKey('answer') ? data['answer'] : '',
       chatRoomId: data.containsKey('chatRoomId') ? data['chatRoomId'] : '',
+      isUpvoted: data.containsKey('isUpvoted') ? data['isUpvoted'] : false,
     );
   }
 
@@ -154,6 +157,7 @@ class ProblemsModel {
       'rewardToken': rewardToken,
       'answer': answer,
       'chatRoomId': chatRoomId,
+      'isUpvoted': isUpvoted,
     };
   }
 

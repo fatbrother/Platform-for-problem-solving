@@ -3,6 +3,7 @@ import 'package:pops/backEnd/other/chat_room.dart';
 import 'package:pops/backEnd/other/img.dart';
 import 'package:pops/backEnd/problem/contract.dart';
 import 'package:pops/backEnd/problem/problem.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
@@ -227,6 +228,9 @@ class UploadAnsPageBody extends StatelessWidget {
                     await ChatRoomDatabase.addChatRoom(chatRoom);
                 problem.chatRoomId = chatRoomId;
                 ProblemsDatabase.updateProblem(problem);
+                var author = await UsersDatabase.queryUser(problem.authorId);
+                author.notices.add("${problem.title}已解答");
+                UsersDatabase.updateUser(author);
               },
               name: '上傳',
             ),

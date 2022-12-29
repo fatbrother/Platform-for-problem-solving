@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
             fontWeight: FontWeight.bold,
           ),
           backgroundColor: Design.primaryColor,
-          title: const Text('Login Page'),
+          title: const Text('登入'),
         ),
         body: Container(
           margin: Design.spacing,
@@ -53,11 +53,11 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     SizedBox(height: Design.getScreenHeight(context) * 0.03),
                     InputField(
-                      hintText: 'Email',
+                      hintText: '信箱',
                       controller: emailController,
                     ),
                     InputField(
-                      hintText: 'Password',
+                      hintText: '密碼',
                       controller: passwordController,
                       obscureText: true,
                     ),
@@ -69,17 +69,17 @@ class _LoginPageState extends State<LoginPage> {
                               onPressed: () {
                                 Routes.push(context, Routes.register);
                               },
-                              text: 'Register'),
+                              text: '註冊'),
                           const Text('/', textScaleFactor: 1.5),
                           SecondaryButton(
                             onPressed: () => forgotPassword(),
-                            text: 'Forgot Password',
+                            text: '忘記密碼',
                           ),
                         ],
                       ),
                       MainButton(
                         onPressed: () => signIn(),
-                        text: 'Login',
+                        text: '登入',
                       ),
                     ]),
                     SizedBox(height: 0.05 * Design.getScreenHeight(context)),
@@ -109,8 +109,19 @@ class _LoginPageState extends State<LoginPage> {
       await AccountManager.signIn(email, password);
     } catch (e) {
       if (e.toString().contains('Email is not verified')) {
-        DialogManager.showInfoDialog(
-            context, '尚未驗證信箱，請至信箱收取驗證信');
+        DialogManager.showInfoDialog(context, '尚未驗證信箱，請至信箱收取驗證信');
+        return;
+      }
+      if (e.toString().contains('no user record corresponding to this identifier'))
+  {
+          DialogManager.showInfoDialog(context, '無此帳號');
+          emailController.clear();
+          passwordController.clear();
+          return;
+        }
+      if (e.toString().contains('password is invalid')) {
+        DialogManager.showInfoDialog(context, '密碼錯誤');
+        passwordController.clear();
         return;
       }
 
@@ -130,11 +141,14 @@ class _LoginPageState extends State<LoginPage> {
         TextField(
           controller: emailController,
           decoration: const InputDecoration(
-            hintText: 'Enter your email',
+            hintText: '請輸入信箱',
           ),
         ), () async {
       try {
         await AccountManager.resetPasswordBySendEmail(emailController.text);
+        if (mounted) {
+          DialogManager.showInfoDialog(context, '已寄送重設密碼信至信箱');
+        }
       } catch (e) {
         DialogManager.showInfoDialog(context, e.toString());
       }

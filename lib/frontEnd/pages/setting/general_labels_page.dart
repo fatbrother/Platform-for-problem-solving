@@ -40,7 +40,7 @@ class _GeneralLabelsPageBodyState extends State<GeneralLabelsPageBody> {
   UsersModel user = UsersModel(id: '', name: '', email: '');
 
   Future<void> loadInfo() async {
-    UsersModel user = await AccountManager.currentUser;
+    user = await AccountManager.currentUser;
     setState(() {
       labels = user.expertiseTags;
       pastLabels = user.pastExpertiseTags;

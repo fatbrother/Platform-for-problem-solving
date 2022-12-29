@@ -47,7 +47,7 @@ class ReportsDataBase {
 }
 
 class ReportsModel {
-  static const List<String> _reportsTypes = ['foul', 'empty', 'meaningless', 'other'];
+  static const List<String> reportsTypes = ['空白答案', '不雅字眼', '答案與問題無關', '其他'];
   String id;
   String reportType;
   String reportDescription;
@@ -67,7 +67,7 @@ class ReportsModel {
   factory ReportsModel.fromMap(Map<String, dynamic> map) {
     return ReportsModel(
       id: map['id'] ?? '',
-      reportType: map['reportType'] ?? _reportsTypes.last,
+      reportType: map['reportType'] ?? reportsTypes.last,
       reportDescription: map['reportDescription'] ?? '',
       reporterId: map['reporterId'] ?? '',
       beReportedId: map['beReportedId'] ?? '',

@@ -56,14 +56,21 @@ class _SortProblemPage extends State<SortProblemPage> {
               FolderModel newFolder = FolderModel(
                   name: titleController.text, problemIds: <String>[]);
               // check if the folder name already exists
+              if (newFolder.name.length > 15) {
+                DialogManager.showInfoDialog(context, '資料夾名稱過長');
+                return;
+              }
               if (folderList
                   .any((FolderModel folder) => folder.name == newFolder.name)) {
                 DialogManager.showInfoDialog(context, '資料夾名稱已存在');
-              } else {
-                folderList.add(newFolder);
-                user.folders = folderList;
-                UsersDatabase.updateUser(user);
+                return;
               }
+              if (newFolder.name == "") {
+                newFolder.name = "未命名資料夾${folderList.length + 1}";
+              }
+              folderList.add(newFolder);
+              user.folders = folderList;
+              UsersDatabase.updateUser(user);
             }),
           );
         },
@@ -109,29 +116,13 @@ class _SortProblemPage extends State<SortProblemPage> {
                         onTap: () => Routes.push(context, Routes.folderPage,
                             arguments: folder),
                         onLongPress: () {
-                          TextEditingController titleController =
-                              TextEditingController();
                           DialogManager.showContentDialog(
-                            context,
-                            TextField(
-                                controller: titleController,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '請輸入資料夾新名稱',
-                                )),
-                            () => setState(() {
-                              // check if the folder name already exists
-                              if (folderList.any((FolderModel folder) =>
-                                  folder.name == titleController.text)) {
-                                DialogManager.showInfoDialog(
-                                    context, '資料夾名稱已存在');
-                              } else {
-                                folder.name = titleController.text;
-                                user.folders = folderList;
-                                UsersDatabase.updateUser(user);
-                              }
-                            }),
-                          );
+                              context, Text('確定要刪除 ${folder.name} 嗎？'), () {
+                            folderList.remove(folder);
+                            user.folders = folderList;
+                            UsersDatabase.updateUser(user);
+                            setState(() {});
+                          });
                         },
                       ),
                   ],
@@ -145,7 +136,7 @@ class _SortProblemPage extends State<SortProblemPage> {
   }
 }
 
-class FolderBox extends StatelessWidget {
+class FolderBox extends StatefulWidget {
   final FolderModel folder;
   final void Function() onTap;
   final void Function() onLongPress;
@@ -156,11 +147,17 @@ class FolderBox extends StatelessWidget {
     required this.onTap,
     required this.onLongPress,
   });
+
+  @override
+  State<FolderBox> createState() => _FolderBoxState();
+}
+
+class _FolderBoxState extends State<FolderBox> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
       child: SizedBox(
         width: Design.getScreenWidth(context) * 0.5,
         height: Design.getScreenWidth(context) * 0.5,
@@ -172,7 +169,7 @@ class FolderBox extends StatelessWidget {
               fit: BoxFit.contain,
             ),
             Text(
-              folder.name,
+              widget.folder.name,
               style: const TextStyle(fontSize: 20),
             ),
           ],

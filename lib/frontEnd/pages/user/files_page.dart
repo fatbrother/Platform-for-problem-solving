@@ -136,7 +136,8 @@ class _FilesPage extends State<FilesPage> {
               .map((e) => e.name == widget.folder.name ? widget.folder : e)
               .toList();
           await AccountManager.updateCurrentUser(user);
-          setState(() {});
+          loadInfo();
+          closeSnackBar();
         },
         isColorReversed: true,
       ));

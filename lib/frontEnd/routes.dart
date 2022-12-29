@@ -30,7 +30,6 @@ import 'package:pops/frontEnd/pages/setting/general_labels_page.dart';
 import 'package:pops/frontEnd/pages/setting/identification_page.dart';
 import 'package:pops/frontEnd/pages/setting/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/user/add_label_page.dart';
-import 'package:pops/frontEnd/pages/user/common_problems_page.dart';
 import 'package:pops/frontEnd/pages/user/files_page.dart';
 import 'package:pops/frontEnd/pages/user/rate_page.dart';
 import 'package:pops/frontEnd/pages/user/setting_page.dart';
@@ -103,13 +102,11 @@ class Routes {
     identificationPage: (context) => const IdentificationPage(),
     notificationPage: (context) => const NotificationPage(),
     topUpPage: (context) => const TopUpPage(),
-    reportPage: (context) => const ReportPage(),
     ratePage: (context) => const RatePage(),
     reportFailPage: (context) => const ReportFailPage(),
     reportSuccessPage: (context) => const ReportSuccessPage(),
     homePage: (context) => const HomePage(),
     addProblemPage: (context) => const AddProblemPage(),
-    commonProblemPage: (context) => const CommonProblemPage(),
     settingPage: (context) => const SettingPage(),
     accountSettingPage: (context) => const AccountSettingPage(),
     addLabelPage: (context) => const AddLabelPage(),
@@ -118,6 +115,14 @@ class Routes {
     unsolvedPage: (context) => const UnsolvedPage(),
     sortProblemPage: (context) => const SortProblemPage(),
     selfInformationPage: (context) => const SelfInformationPage(),
+    reportPage: (context) {
+      final args =
+          ModalRoute.of(context)!.settings.arguments as Map;
+      return ReportPage(
+        reporterId: args['reporterId'] as String,
+        beReporterId: args['beReporterId'] as String,
+      );
+    },
     ratingPage: (context) {
       final ProblemsModel problem =
           ModalRoute.of(context)!.settings.arguments as ProblemsModel;

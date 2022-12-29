@@ -120,10 +120,19 @@ class _SingleProblemPageBodyState extends State<SingleProblemPageBody> {
                     icon: const Icon(Icons.delete)),
                 IconButton(
                     onPressed: () {
+                      if (widget.problem.isUpvoted) {
+                        DialogManager.showInfoDialog(context, '已經加價過了');
+                        return;
+                      }
                       DialogManager.showContentDialog(
                         context,
                         const Text('加價15代幣以增加平台推廣'),
-                        () {},
+                        () {
+                          user.tokens -= 15;
+                          AccountManager.updateCurrentUser(user);
+                          widget.problem.isUpvoted = true;
+                          ProblemsDatabase.updateProblem(widget.problem);
+                        },
                       );
                     },
                     icon: const Icon(Icons.monetization_on_outlined)),

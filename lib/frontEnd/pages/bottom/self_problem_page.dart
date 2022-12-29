@@ -100,7 +100,7 @@ class ProblemHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
-    for (var problem in problems) {
+    for (var problem in problems.reversed) {
       children.add(ProbelmBoxIcon(
           problem: problem,
           onTap: () {

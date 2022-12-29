@@ -33,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
             fontWeight: FontWeight.bold,
           ),
           backgroundColor: Design.primaryColor,
-          title: const Text('Register Page'),
+          title: const Text('註冊'),
         ),
         body: Container(
           padding: Design.spacing,
@@ -50,30 +50,30 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     SizedBox(height: Design.getScreenHeight(context) * 0.01),
                     InputField(
-                      hintText: 'Username',
+                      hintText: '使用者名稱',
                       controller: userNameController,
                     ),
                     SizedBox(height: Design.getScreenHeight(context) * 0.03),
                     InputField(
-                      hintText: 'Email',
+                      hintText: '電子郵件',
                       controller: emailController,
                     ),
                     SizedBox(height: Design.getScreenHeight(context) * 0.03),
                     InputField(
-                      hintText: 'Password',
+                      hintText: '密碼',
                       controller: passwordController,
                       obscureText: true,
                     ),
                     SizedBox(height: Design.getScreenHeight(context) * 0.03),
                     InputField(
-                      hintText: 'Confirm Password',
+                      hintText: '確認密碼',
                       controller: confirmPasswordController,
                       obscureText: true,
                     ),
                     SizedBox(height: Design.getScreenHeight(context) * 0.03),
                     MainButton(
                       onPressed: () => signUp(),
-                      text: 'Register',
+                      text: '註冊',
                     ),
                     SizedBox(height: Design.getScreenHeight(context) * 0.01),
                   ],

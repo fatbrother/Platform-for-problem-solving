@@ -21,7 +21,11 @@ class UsersDatabase {
 
   static Future<void> updateUser(UsersModel usersModel) async {
     try {
-      await DB.updateRow('users', usersModel.id, usersModel.toMap());
+      await DB.updateRow(
+        'users',
+        usersModel.id,
+        usersModel.toMap(),
+      );
     } catch (e) {
       rethrow;
     }
@@ -88,7 +92,7 @@ class UsersModel {
     this.audittingTags = const [],
     this.askProblemIds = const [],
     this.chatRoomsIds = const [],
-    this.feedbacks = const [],  
+    this.feedbacks = const [],
     this.notices = const [],
     this.folders = const [],
     this.tokens = 0,
@@ -150,14 +154,37 @@ class UsersModel {
       numberOfScores: data['numberOfScores'] ?? 0,
       feedbacks: feedbacks,
       folders: folders,
-      notices: data['notices'] == null 
-          ? []
-          : data['notices'].cast<String>(),
+      notices: data['notices'] == null ? [] : data['notices'].cast<String>(),
       isPhoneVerified: data['isPhoneVerified'] ?? false,
     );
   }
 
   Map<String, dynamic> toMap() {
+    Map<String, dynamic> res;
+    res = {
+      'id': id,
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'reportNum': reportNum,
+      'selfIntroduction': selfIntroduction,
+      'commandProblemIds': commandProblemIds,
+      'askProblemIds': askProblemIds,
+      'expertiseTags': expertiseTags,
+      'pastExpertiseTags': pastExpertiseTags,
+      'displaySystemTags': displaySystemTags,
+      'hideSystemTags': hideSystemTags,
+      'auditFailedTags': auditFailedTags,
+      'audittingTags': audittingTags,
+      'chatRoomsIds': chatRoomsIds,
+      'tokens': tokens,
+      'score': score,
+      'numberOfScores': numberOfScores,
+      'feedbacks': feedbacks.map((e) => e.toMap()).toList(),
+      'folders': folders.map((e) => e.toMap()).toList(),
+      'notices': notices,
+      'isPhoneVerified': isPhoneVerified,
+    };
     return {
       'id': id,
       'name': name,
@@ -225,9 +252,8 @@ class FolderModel {
   static FolderModel fromMap(Map<String, dynamic> data) {
     return FolderModel(
       name: data['name'] ?? '',
-      problemIds: data['problemIds'] == null
-          ? []
-          : data['problemIds'].cast<String>(),
+      problemIds:
+          data['problemIds'] == null ? [] : data['problemIds'].cast<String>(),
     );
   }
 

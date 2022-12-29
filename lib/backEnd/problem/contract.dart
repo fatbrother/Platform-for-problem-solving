@@ -29,7 +29,7 @@ class ContractsDatabase {
     }
   }
 
-  static void deleteContract(String contractId) async {
+  static Future<void> deleteContract(String contractId) async {
     try {
       await DB.deleteRow('contracts', contractId);
     } catch (e) {
