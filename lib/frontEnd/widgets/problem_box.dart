@@ -76,7 +76,7 @@ class ProbelmBoxIcon extends StatelessWidget {
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              problem.authorName,
+                              isColorReversed ? problem.authorName : problem.solverName,
                               style: const TextStyle(
                                   fontSize: 15, color: Colors.black),
                             ),

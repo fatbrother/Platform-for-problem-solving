@@ -79,7 +79,9 @@ class ProblemsModel {
   String title;
   String description;
   String authorName;
+  String solverName;
   String authorId;
+  String solverId;
   List<String> imgIds;
   List<String> answerImgIds;
   List<String> tags;
@@ -98,7 +100,9 @@ class ProblemsModel {
     this.id = '',
     this.title = '',
     this.authorName = '',
+    this.solverName = '',
     this.authorId = '',
+    this.solverId = '',
     DateTime? createdAt,
     this.description = '',
     this.imgIds = const [],
@@ -121,9 +125,11 @@ class ProblemsModel {
       title: data.containsKey('title') ? data['title'] : '',
       description: data.containsKey('description') ? data['description'] : '',
       authorName: data.containsKey('authorName') ? data['authorName'] : '',
+      solverName: data.containsKey('solverName') ? data['solverName'] : '',
       authorId: data.containsKey('authorId') ? data['authorId'] : '',
       imgIds:
           data.containsKey('imgIds') ? List<String>.from(data['imgIds']) : [],
+      solverId: data.containsKey('solverId') ? data['solverId'] : '',
       answerImgIds: data.containsKey('answerImgIds')
           ? List<String>.from(data['answerImgIds'])
           : [],
@@ -153,7 +159,9 @@ class ProblemsModel {
       'title': title,
       'description': description,
       'authorName': authorName,
+      'solverName': solverName,
       'authorId': authorId,
+      'solverId': solverId,
       'imgIds': imgIds,
       'answerImgIds': answerImgIds,
       'tags': tags,
