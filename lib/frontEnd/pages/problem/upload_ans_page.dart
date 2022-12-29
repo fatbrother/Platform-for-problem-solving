@@ -61,13 +61,12 @@ class _UploadAnsPageState extends State<UploadAnsPage> {
   }
 }
 
-class UploadAnsPageBody extends StatelessWidget {
+class UploadAnsPageBody extends StatefulWidget {
   final ProblemsModel problem;
   final ContractsModel contract;
   final List<Image> images;
-  final TextEditingController controller = TextEditingController();
 
-  UploadAnsPageBody({
+  const UploadAnsPageBody({
     super.key,
     required this.problem,
     required this.contract,
@@ -75,9 +74,34 @@ class UploadAnsPageBody extends StatelessWidget {
   });
 
   @override
+  State<UploadAnsPageBody> createState() => _UploadAnsPageBodyState();
+}
+
+class _UploadAnsPageBodyState extends State<UploadAnsPageBody> {
+  List<String> imgList = <String>[];
+  List<Image> answerImages = <Image>[];
+  final TextEditingController controller = TextEditingController();
+
+  void loadImages() async {
+    for (final id in imgList) {
+      answerImages.add(Image.network(
+        await ImgManager.getImage(id),
+        width: double.infinity,
+      ));
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadImages();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // cal the time from now to the deadline
-    final time = contract.deadline.difference(DateTime.now());
+    final time = widget.contract.deadline.difference(DateTime.now());
     final days = time.inDays;
     final hours = time.inHours;
     final minutes = time.inMinutes;
@@ -90,8 +114,6 @@ class UploadAnsPageBody extends StatelessWidget {
             : minutes > 0
                 ? '$minutes minutes'
                 : '$seconds seconds';
-
-    List<String> imgList = <String>[];
 
     return Container(
       height: double.infinity,
@@ -114,7 +136,7 @@ class UploadAnsPageBody extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        problem.title,
+                        widget.problem.title,
                         style: const TextStyle(
                           color: Design.primaryTextColor,
                           fontSize: 20,
@@ -161,13 +183,13 @@ class UploadAnsPageBody extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        problem.description,
+                        widget.problem.description,
                         style: const TextStyle(
                           color: Design.primaryTextColor,
                           fontSize: 15,
                         ),
                       ),
-                      for (final img in images) img,
+                      for (final img in widget.images) img,
                     ],
                   ),
                 ),
@@ -199,6 +221,7 @@ class UploadAnsPageBody extends StatelessWidget {
                           ),
                         ),
                       ),
+                      for (final img in answerImages) img,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -217,6 +240,11 @@ class UploadAnsPageBody extends StatelessWidget {
                               try {
                                 String id = await ImgManager.uploadImage();
                                 imgList.add(id);
+                                answerImages.add(Image.network(
+                                  await ImgManager.getImage(id),
+                                  width: double.infinity,
+                                ));
+                                setState(() {});
                               } catch (e) {
                                 DialogManager.showInfoDialog(context, '上傳失敗');
                               }
@@ -241,19 +269,23 @@ class UploadAnsPageBody extends StatelessWidget {
                   return;
                 }
                 Routes.back(context);
-                problem.answer = controller.text;
-                problem.answerImgIds = imgList;
+                widget.problem.answer = controller.text;
+                widget.problem.answerImgIds = imgList;
                 ChatRoomModel chatRoom = ChatRoomModel(
                   id: '',
-                  memberIds: [problem.authorId, contract.solverId],
+                  memberIds: [
+                    widget.problem.authorId,
+                    widget.contract.solverId
+                  ],
                   messages: [],
                 );
                 String chatRoomId =
                     await ChatRoomDatabase.addChatRoom(chatRoom);
-                problem.chatRoomId = chatRoomId;
-                ProblemsDatabase.updateProblem(problem);
-                var author = await UsersDatabase.queryUser(problem.authorId);
-                author.notices.add("${problem.title}已解答");
+                widget.problem.chatRoomId = chatRoomId;
+                ProblemsDatabase.updateProblem(widget.problem);
+                var author =
+                    await UsersDatabase.queryUser(widget.problem.authorId);
+                author.notices.add("${widget.problem.title}已解答");
                 UsersDatabase.updateUser(author);
               },
               name: '上傳',
