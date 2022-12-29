@@ -188,6 +188,7 @@ class _ApplicationProfilePageState extends State<ApplicationProfilePage> {
     widget.problem.rewardToken = widget.contract.price;
     widget.problem.solverId = widget.solver.id;
     widget.problem.solverName = widget.solver.name;
+    widget.problem.deadline = widget.contract.deadline;
     ProblemsDatabase.updateProblem(widget.problem);
     widget.solver.commandProblemIds.add(widget.problem.id); 
     widget.solver.notices.add(

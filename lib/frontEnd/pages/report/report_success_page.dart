@@ -31,12 +31,17 @@ class ReportSuccessBody extends StatefulWidget {
 
 class _ReportSuccessBodyState extends State<ReportSuccessBody> {
   UsersModel reporter = UsersModel(id: '', name: '', email: '');
+  UsersModel beReporter = UsersModel(id: '', name: '', email: '');
   ProblemsModel problem = ProblemsModel();
 
   void returnTocken() async {
     reporter = await UsersDatabase.queryUser(widget.report.reporterId);
     problem = await ProblemsDatabase.queryProblem(widget.report.problemId);
+    beReporter = await UsersDatabase.queryUser(widget.report.beReporterId);
     reporter.tokens += 10 + problem.rewardToken;
+    beReporter.reportNum += 1;
+    beReporter.notices.add('${reporter.name}對您的檢舉已通過，請注意您的行為');
+    UsersDatabase.updateUser(beReporter);
     UsersDatabase.updateUser(reporter);
   }
 

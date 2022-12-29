@@ -112,13 +112,14 @@ class _LoginPageState extends State<LoginPage> {
         DialogManager.showInfoDialog(context, '尚未驗證信箱，請至信箱收取驗證信');
         return;
       }
-      if (e.toString().contains('no user record corresponding to this identifier'))
-  {
-          DialogManager.showInfoDialog(context, '無此帳號');
-          emailController.clear();
-          passwordController.clear();
-          return;
-        }
+      if (e
+          .toString()
+          .contains('no user record corresponding to this identifier')) {
+        DialogManager.showInfoDialog(context, '無此帳號');
+        emailController.clear();
+        passwordController.clear();
+        return;
+      }
       if (e.toString().contains('password is invalid')) {
         DialogManager.showInfoDialog(context, '密碼錯誤');
         passwordController.clear();
@@ -127,6 +128,14 @@ class _LoginPageState extends State<LoginPage> {
 
       DialogManager.showInfoDialog(context, e.toString());
       passwordController.clear();
+      return;
+    }
+
+    var currentUser = await AccountManager.currentUser;
+    if (currentUser.reportNum > 3) {
+      if (mounted) {
+        DialogManager.showInfoDialog(context, '您已被檢舉超過三次，已被停權');
+      }
       return;
     }
 

@@ -1,3 +1,4 @@
+import 'package:pops/backEnd/other/chat_room.dart';
 import 'package:pops/backEnd/other/img.dart';
 import 'package:pops/backEnd/problem/contract.dart';
 
@@ -42,6 +43,7 @@ class ProblemsDatabase {
       for (final contractId in problem.solveCommendIds) {
         await ContractsDatabase.deleteContract(contractId);
       }
+      ChatRoomDatabase.deleteChatRoom(problem.chatRoomId);
       for (final tag in problem.tags) {
         TagsModel? tmp = TagsDatabase.queryTag(tag);
         tmp!.problemsWithTag.remove(problemId);
@@ -51,6 +53,9 @@ class ProblemsDatabase {
         await ImgManager.deleteImage(imgId);
       }
       var user = await UsersDatabase.queryUser(problem.authorId);
+      var solver = await UsersDatabase.queryUser(problem.solverId);
+      user.chatRoomsIds.remove(problem.chatRoomId);
+      solver.chatRoomsIds.remove(problem.chatRoomId);
       for (final folder in user.folders) {
         if (folder.problemIds.contains(problemId)) {
           folder.problemIds.remove(problemId);
@@ -90,6 +95,7 @@ class ProblemsModel {
   List<String> solveCommendIds;
   String chooseSolveCommendId;
   DateTime createdAt;
+  DateTime deadline;
   int rewardToken;
   String answer;
   String chatRoomId;
@@ -104,6 +110,7 @@ class ProblemsModel {
     this.authorId = '',
     this.solverId = '',
     DateTime? createdAt,
+    DateTime? deadline,
     this.description = '',
     this.imgIds = const [],
     this.answerImgIds = const [],
@@ -117,7 +124,8 @@ class ProblemsModel {
     this.chatRoomId = '',
     this.isUpvoted = false,
     this.reportId = '',
-  }) : createdAt = createdAt ?? DateTime.now();
+  })  : createdAt = createdAt ?? DateTime.now(),
+        deadline = deadline ?? DateTime(0);
 
   static fromMap(Map<String, dynamic> data) {
     return ProblemsModel(
@@ -145,6 +153,9 @@ class ProblemsModel {
       createdAt: data.containsKey('createdAt')
           ? DateTime.parse(data['createdAt'])
           : DateTime.now(),
+      deadline: data.containsKey('deadline')
+          ? DateTime.parse(data['deadline'])
+          : DateTime(0),
       rewardToken: data.containsKey('rewardToken') ? data['rewardToken'] : 0,
       answer: data.containsKey('answer') ? data['answer'] : '',
       chatRoomId: data.containsKey('chatRoomId') ? data['chatRoomId'] : '',
@@ -170,12 +181,18 @@ class ProblemsModel {
       'solveCommendIds': solveCommendIds,
       'chooseSolveCommendId': chooseSolveCommendId,
       'createdAt': createdAt.toIso8601String(),
+      'deadline': deadline.toIso8601String(),
       'rewardToken': rewardToken,
       'answer': answer,
       'chatRoomId': chatRoomId,
       'isUpvoted': isUpvoted,
       'reportId': reportId,
     };
+  }
+
+  bool get isOverDeadline {
+    final DateTime now = DateTime.now();
+    return now.isAfter(deadline);
   }
 
   String get existTimeString {

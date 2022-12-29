@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttom_navigation_bar.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/problem_box.dart';
 
 class SelfProblemPage extends StatefulWidget {
@@ -17,6 +19,7 @@ class SelfProblemPage extends StatefulWidget {
 
 class _SelfProblemPageState extends State<SelfProblemPage> {
   List<ProblemsModel> problems = [];
+  UsersModel user = UsersModel(id: '', name: '', email: '');
   String tag = '';
 
   @override
@@ -26,7 +29,7 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
   }
 
   Future<void> loadProblems() async {
-    final user = await AccountManager.currentUser;
+    user = await AccountManager.currentUser;
     problems = [];
     if (tag == '') {
       for (var problemId in user.askProblemIds) {
@@ -64,6 +67,7 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
       ),
       body: ProblemHomePage(
         problems: problems,
+        user: user,
         onPop: () {
           Future.delayed(const Duration(seconds: 1), () {
             loadProblems();
@@ -89,12 +93,14 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
 
 class ProblemHomePage extends StatelessWidget {
   final List<ProblemsModel> problems;
+  final UsersModel user; 
   final void Function() onPop;
 
   const ProblemHomePage({
     super.key,
     required this.problems,
     required this.onPop,
+    required this.user,
   });
 
   @override
@@ -107,6 +113,27 @@ class ProblemHomePage extends StatelessWidget {
             if (problem.reportId != '') {
               Routes.push(context, Routes.reportWaitPage,
                   arguments: problem.reportId, onPop: onPop);
+              return;
+            }
+            if (problem.deadline != DateTime(0) &&
+                problem.isOverDeadline &&
+                problem.answer == '') {
+              DialogManager.showContentDialog(
+                context,
+                const Text('回答者超過時間未上傳答案\n代幣已全數退回'),
+                () async {
+                  user.tokens += problem.rewardToken;
+                  user.tokens += 10;
+                  var solver = await UsersDatabase.queryUser(problem.solverId);
+                  solver.reportNum += 1;
+                  solver.notices.add('${problem.title}超過時間未上傳答案，以被檢舉');
+                  await UsersDatabase.updateUser(solver);
+                  await AccountManager.updateCurrentUser(user);
+                  ProblemsDatabase.deleteProblem(problem.id);
+                  // ignore: use_build_context_synchronously
+                  Routes.pushReplacement(context, Routes.selfProblemPage);
+                },
+              );
               return;
             }
             if (problem.chooseSolveCommendId == '') {

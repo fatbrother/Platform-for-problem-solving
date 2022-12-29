@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:pops/backEnd/other/tag.dart';
 import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
+import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 import 'package:pops/frontEnd/widgets/buttom_navigation_bar.dart';
+import 'package:pops/frontEnd/widgets/dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<ProblemsModel> problems = [];
+  UsersModel user = UsersModel(id: '', name: '', email: '');
 
   @override
   void initState() {
@@ -24,21 +27,33 @@ class _HomePageState extends State<HomePage> {
   }
 
   void loadProblems(String tag) async {
-    var user = await AccountManager.currentUser;
+    user = await AccountManager.currentUser;
+
+    if (user.reportNum > 3) {
+      AccountManager.signOut();
+      if (mounted) {
+        DialogManager.showInfoDialog(
+          context,
+          '您已被檢舉超過三次，已被停權',
+          onOk: () => Routes.pushReplacement(context, Routes.login),
+        );
+      }
+      return;
+    }
+
     var generalProblem = (await ProblemsDatabase.queryAllProblems())
         .where((ProblemsModel problem) =>
-            problem.authorId != user.id && 
-            problem.isSolved == false && 
+            problem.authorId != user.id &&
+            problem.isSolved == false &&
             problem.chooseSolveCommendId == '')
         .toList();
     var upVotedProblem = (await ProblemsDatabase.queryAllProblems())
         .where((ProblemsModel problem) =>
             problem.authorId != user.id &&
             problem.isSolved == false &&
-            problem.isUpvoted == true && 
+            problem.isUpvoted == true &&
             problem.chooseSolveCommendId == '')
         .toList();
-    
 
     if (tag == '') {
       problems = generalProblem;

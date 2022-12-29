@@ -58,12 +58,27 @@ class _FilesPage extends State<FilesPage> {
                   arguments: problem.reportId);
               return;
             }
+            if (problem.deadline != DateTime(0) &&
+                problem.isOverDeadline &&
+                problem.answer == '') {
+              DialogManager.showContentDialog(
+                context,
+                const Text('回答者超過時間未上傳答案\n代幣以全數退回\n回答者的保證金以加入錢包'),
+                () {
+                  user.tokens += problem.rewardToken;
+                  user.tokens += 10;
+                  AccountManager.updateCurrentUser(user);
+                  ProblemsDatabase.deleteProblem(problem.id);
+                  Routes.pushReplacement(context, Routes.selfProblemPage);
+                },
+              );
+              return;
+            }
             if (problem.chooseSolveCommendId == '') {
               Routes.push(context, Routes.selfSingleProblemPage,
                   arguments: problem);
             } else {
-              Routes.push(context, Routes.answerPage,
-                  arguments: problem);
+              Routes.push(context, Routes.answerPage, arguments: problem);
             }
           },
           onLongPress: () {
