@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/design.dart';
-import 'package:pops/frontEnd/pages/setting/system_labels_page.dart';
 import 'package:pops/frontEnd/routes.dart';
 import 'package:pops/frontEnd/widgets/dialog.dart';
 import 'package:pops/frontEnd/widgets/scaffold.dart';
@@ -120,20 +119,32 @@ class _GeneralLabelsPageBodyState extends State<GeneralLabelsPageBody> {
                   ),
                 ),
                 () {
-                  if (controller.text.isNotEmpty) {
-                    setState(() {
-                      if (labels.contains(controller.text)) {
-                        DialogManager.showInfoDialog(
-                          context,
-                          '標籤名稱重複',
-                        );
-                        return;
-                      }
-                      labels.add(controller.text);
-                      user.expertiseTags = labels;
-                      AccountManager.updateCurrentUser(user);
-                    });
+                  if (controller.text == '') {
+                    DialogManager.showInfoDialog(
+                      context,
+                      '標籤名稱不可為空',
+                    );
+                    return;
                   }
+                  if (controller.text.length > 10) {
+                    DialogManager.showInfoDialog(
+                      context,
+                      '標籤名稱過長',
+                    );
+                    return;
+                  }
+                  if (labels.contains(controller.text)) {
+                    DialogManager.showInfoDialog(
+                      context,
+                      '標籤名稱重複',
+                    );
+                    return;
+                  }
+                  setState(() {
+                    labels.add(controller.text);
+                    user.expertiseTags = labels;
+                    AccountManager.updateCurrentUser(user);
+                  });
                 },
               );
             },

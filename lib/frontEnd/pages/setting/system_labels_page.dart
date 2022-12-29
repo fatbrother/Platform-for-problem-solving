@@ -150,7 +150,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
                   {
                     DialogManager.showInfoDialog(
                       context,
-                      '標籤名稱不可超過10個字',
+                      '標籤名稱過長',
                     );
                     return;
                   }
