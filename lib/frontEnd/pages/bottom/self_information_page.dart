@@ -119,12 +119,36 @@ class SelfTagBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> children = [];
+    for (var tag in user.expertiseTags) {
+      children.add(
+        ShowTagsWidget(
+          title: tag,
+          isGeneral: true,
+        ),
+      );
+    }
+    for (var tag in user.displaySystemTags) {
+      children.add(ShowTagsWidget(
+        title: tag,
+        isGeneral: false,
+      ));
+    }
+    if (children.isEmpty) {
+      children.add(
+        const Text(
+          '尚未設定標籤',
+          style: TextStyle(
+            color: Design.primaryTextColor,
+            fontSize: 18,
+          ),
+        ),
+      );
+    }
+
     return Container(
       width: double.infinity,
       padding: Design.spacing,
-      constraints: BoxConstraints(
-        minHeight: Design.getScreenHeight(context) * 0.1,
-      ),
       decoration: const BoxDecoration(
         color: Design.insideColor,
         borderRadius: Design.outsideBorderRadius,
@@ -132,18 +156,7 @@ class SelfTagBar extends StatelessWidget {
       child: Wrap(
         runSpacing: 10,
         spacing: 10,
-        children: [
-          for (var tag in user.expertiseTags)
-            ShowTagsWidget(
-              title: tag,
-              isGeneral: true,
-            ),
-          for (var tag in user.displaySystemTags)
-            ShowTagsWidget(
-              title: tag,
-              isGeneral: false,
-            ),
-        ],
+        children: children,
       ),
     );
   }

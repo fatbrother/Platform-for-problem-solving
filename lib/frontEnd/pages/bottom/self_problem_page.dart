@@ -104,6 +104,11 @@ class ProblemHomePage extends StatelessWidget {
       children.add(ProbelmBoxIcon(
           problem: problem,
           onTap: () {
+            if (problem.reportId != '') {
+              Routes.push(context, Routes.reportWaitPage,
+                  arguments: problem.reportId, onPop: onPop);
+              return;
+            }
             if (problem.chooseSolveCommendId == '') {
               Routes.push(context, Routes.selfSingleProblemPage,
                   arguments: problem, onPop: onPop);

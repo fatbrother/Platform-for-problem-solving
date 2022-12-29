@@ -82,6 +82,8 @@ class _ApplicationProfilePageState extends State<ApplicationProfilePage> {
                     const SizedBox(height: 10),
                     ScoreBar(user: widget.solver),
                     const SizedBox(height: 10),
+                    SelfTagBar(user: widget.solver),
+                    const SizedBox(height: 10),
                     Container(
                       padding: Design.spacing,
                       decoration: const BoxDecoration(
