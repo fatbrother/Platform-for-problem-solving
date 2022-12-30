@@ -117,6 +117,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
                           allTags['audittingTags']!.remove(tag);
                           setState(() {});
                           var user = await AccountManager.currentUser;
+                          user.audittingTags = allTags['audittingTags']!;
                           AccountManager.updateCurrentUser(user);
                         });
                       },

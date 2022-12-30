@@ -104,7 +104,7 @@ class AccountManager {
   static Future<void> verifyPhoneNumber(
       String verificationId, String smsCode) async {
     try {
-      _auth.currentUser!.updatePhoneNumber(PhoneAuthProvider.credential(
+      await _auth.currentUser!.updatePhoneNumber(PhoneAuthProvider.credential(
         verificationId: verificationId,
         smsCode: smsCode,
       ));

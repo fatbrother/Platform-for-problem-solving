@@ -102,7 +102,7 @@ class _IdentificationViewState extends State<IdentificationView> {
             onPressed: () async {
               try {
                 TextEditingController controller = TextEditingController();
-                String smsCode = await AccountManager.sendSms(user.phone);
+                String verificationId = await AccountManager.sendSms(user.phone);
                 if (mounted) {
                   DialogManager.showContentDialog(
                     context,
@@ -114,18 +114,23 @@ class _IdentificationViewState extends State<IdentificationView> {
                       ),
                       controller: controller,
                     ),
-                    () {
+                    () async {
                       if (controller.text == "") {
                         DialogManager.showInfoDialog(context, "請輸入驗證碼");
                         return;
                       }
-                      if (controller.text != smsCode) {
+
+                      try {
+                        await AccountManager.verifyPhoneNumber(
+                            verificationId, controller.text);
+                      }
+                      catch (e) {
                         DialogManager.showInfoDialog(context, "驗證碼錯誤");
                         return;
                       }
+
                       user.isPhoneVerified = true;
-                      DialogManager.showInfoDialog(context, "驗證成功");
-                      loadUserInfo();
+                      AccountManager.updateCurrentUser(user);
                     },
                   );
                 }
