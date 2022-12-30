@@ -5,7 +5,9 @@ import 'package:pops/frontEnd/design.dart';
 import 'package:pops/frontEnd/widgets/app_bar.dart';
 
 class RatePage extends StatefulWidget {
-  const RatePage({super.key});
+  final UsersModel user;
+
+  const RatePage({super.key, required this.user});
   @override
   State<RatePage> createState() => _RatePageState();
 }
@@ -15,8 +17,7 @@ class _RatePageState extends State<RatePage> {
   int starNum = 6;
 
   Future<void> loadFeedbacks() async {
-    UsersModel user = await AccountManager.currentUser;
-    feedbacks = user.feedbacks;
+    feedbacks = widget.user.feedbacks;
     setState(() {});
   }
 

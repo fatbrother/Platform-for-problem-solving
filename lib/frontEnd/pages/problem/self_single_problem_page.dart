@@ -78,6 +78,7 @@ class _SingleProblemPageBodyState extends State<SingleProblemPageBody> {
     List<Widget> children = [];
     for (final contract in widget.contracts) {
       children.add(ApplicationBox(contract: contract, problem: widget.problem));
+      const SizedBox(height: 10);
     }
 
     return Container(
@@ -110,7 +111,6 @@ class _SingleProblemPageBodyState extends State<SingleProblemPageBody> {
                         const Text('刪除後不會歸還上架金額！'),
                         () {
                           user.tokens += widget.problem.baseToken;
-                          debugPrint('problem id: ${widget.problem.id}');
                           ProblemsDatabase.deleteProblem(widget.problem.id);
                           Routes.back(context);
                         },

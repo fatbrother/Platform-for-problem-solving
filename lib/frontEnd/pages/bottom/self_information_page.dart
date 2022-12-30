@@ -252,7 +252,7 @@ class ScoreBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Routes.push(context, Routes.ratePage),
+      onTap: () => Routes.push(context, Routes.ratePage, arguments: user),
       child: Container(
         width: double.infinity,
         height: Design.getScreenHeight(context) * 0.048,

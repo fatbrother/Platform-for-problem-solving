@@ -99,7 +99,6 @@ class Routes {
     changePasswordPage: (context) => const ChangePasswordPage(),
     notificationPage: (context) => const NotificationPage(),
     topUpPage: (context) => const TopUpPage(),
-    ratePage: (context) => const RatePage(),
     reportFailPage: (context) => const ReportFailPage(),
     homePage: (context) => const HomePage(),
     addProblemPage: (context) => const AddProblemPage(),
@@ -111,6 +110,12 @@ class Routes {
     unsolvedPage: (context) => const UnsolvedPage(),
     sortProblemPage: (context) => const SortProblemPage(),
     selfInformationPage: (context) => const SelfInformationPage(),
+    ratePage: (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as UsersModel;
+      return RatePage(
+        user: args,
+      );
+    },
     reportSuccessPage: (context) {
       final report = ModalRoute.of(context)!.settings.arguments as ReportsModel;
       return ReportSuccessPage(report: report);
