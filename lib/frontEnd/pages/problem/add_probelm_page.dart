@@ -214,6 +214,10 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
       DialogManager.showInfoDialog(context, '請至少輸入一個標籤');
       return;
     }
+    if (rewardToken < 0) {
+      DialogManager.showInfoDialog(context, '價格不得為負數');
+      return;
+    }
 
     DialogManager.showContentDialog(context, const Text('系統將收取10代幣上架手續費'), () {
       final problem = ProblemsModel(
