@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:pops/backEnd/other/chat_room.dart';
 import 'package:pops/backEnd/other/img.dart';
 import 'package:pops/backEnd/problem/contract.dart';
@@ -39,33 +40,57 @@ class ProblemsDatabase {
   static void deleteProblem(String problemId) async {
     try {
       ProblemsModel problem = await queryProblem(problemId);
-      await ContractsDatabase.deleteContract(problem.chooseSolveCommendId);
-      for (final contractId in problem.solveCommendIds) {
-        await ContractsDatabase.deleteContract(contractId);
+      try {
+        await ContractsDatabase.deleteContract(problem.chooseSolveCommendId);
+      } catch (e) {
+        // pass
       }
-      ChatRoomDatabase.deleteChatRoom(problem.chatRoomId);
-      for (final tag in problem.tags) {
-        TagsModel? tmp = TagsDatabase.queryTag(tag);
-        tmp!.problemsWithTag.remove(problemId);
-        await TagsDatabase.updateTag(tmp);
+      try {
+        for (final contractId in problem.solveCommendIds) {
+          await ContractsDatabase.deleteContract(contractId);
+        }
+      } catch (e) {
+        // pass
       }
-      for (final imgId in problem.imgIds) {
-        await ImgManager.deleteImage(imgId);
+
+      if (problem.chatRoomId != '') {
+        ChatRoomDatabase.deleteChatRoom(problem.chatRoomId);
+      }
+
+      try {
+        for (final tag in problem.tags) {
+          TagsModel? tmp = TagsDatabase.queryTag(tag);
+          tmp!.problemsWithTag.remove(problemId);
+          await TagsDatabase.updateTag(tmp);
+        }
+      } catch (e) {
+        // pass
+      }
+      try {
+        for (final imgId in problem.imgIds) {
+          await ImgManager.deleteImage(imgId);
+        }
+      } catch (e) {
+        // pass
       }
       var user = await UsersDatabase.queryUser(problem.authorId);
-      var solver = await UsersDatabase.queryUser(problem.solverId);
       user.chatRoomsIds.remove(problem.chatRoomId);
-      solver.chatRoomsIds.remove(problem.chatRoomId);
+      user.askProblemIds.remove(problem.id);
       for (final folder in user.folders) {
         if (folder.problemIds.contains(problemId)) {
           folder.problemIds.remove(problemId);
         }
       }
-      user.askProblemIds.remove(problemId);
       await UsersDatabase.updateUser(user);
+      if (problem.solverId != '') {
+        var solver = await UsersDatabase.queryUser(problem.solverId);
+        solver.commandProblemIds.remove(problem.id);
+        solver.chatRoomsIds.remove(problem.chatRoomId);
+        await UsersDatabase.updateUser(solver);
+      }
       await DB.deleteRow('problems', problemId);
     } catch (e) {
-      return;
+      rethrow;
     }
   }
 
