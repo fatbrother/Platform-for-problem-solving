@@ -37,10 +37,6 @@ class _SettingPageState extends State<SettingPage> {
               onPressed: () => Routes.push(context, Routes.accountSettingPage),
               name: '帳號管理'),
           const SizedBox(height: 10),
-          SettingBar(
-              onPressed: () => Routes.push(context, Routes.identificationPage),
-              name: '個人身分驗證'),
-          const SizedBox(height: 10),
           Container(
               padding: Design.spacing,
               width: double.infinity,

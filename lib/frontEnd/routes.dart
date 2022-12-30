@@ -2,9 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:pops/backEnd/database.dart';
-import 'package:pops/backEnd/problem/problem.dart';
 import 'package:pops/backEnd/user/account.dart';
-import 'package:pops/backEnd/user/user.dart';
 import 'package:pops/frontEnd/pages/problem/answer_page.dart';
 import 'package:pops/frontEnd/pages/problem/application_profile.dart';
 import 'package:pops/frontEnd/pages/report/report_wait_page.dart';
@@ -29,7 +27,6 @@ import 'package:pops/frontEnd/pages/report/report_success_page.dart';
 import 'package:pops/frontEnd/pages/setting/account_setting_page.dart';
 import 'package:pops/frontEnd/pages/setting/change_password_page.dart';
 import 'package:pops/frontEnd/pages/setting/general_labels_page.dart';
-import 'package:pops/frontEnd/pages/setting/identification_page.dart';
 import 'package:pops/frontEnd/pages/setting/system_labels_page.dart';
 import 'package:pops/frontEnd/pages/user/add_label_page.dart';
 import 'package:pops/frontEnd/pages/user/files_page.dart';
@@ -44,7 +41,6 @@ class Routes {
 
   static const String selfProblemPage = '/selfProblemPage';
   static const String selfSingleProblemPage = '/selfSingleProblemPage';
-  static const String identificationPage = '/identificationPage';
 
   static const String selfInformationPage = '/selfInformationPage';
   static const String topUpPage = '/topUpPage';
@@ -101,7 +97,6 @@ class Routes {
     auditFailedTagsPage: (context) => const AuditFailedTagsPage(),
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
-    identificationPage: (context) => const IdentificationPage(),
     notificationPage: (context) => const NotificationPage(),
     topUpPage: (context) => const TopUpPage(),
     ratePage: (context) => const RatePage(),

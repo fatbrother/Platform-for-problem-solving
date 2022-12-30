@@ -65,6 +65,19 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
       child: Column(
         children: <Widget>[
           ShowLablesWidget(
+              onLongPress: (String tag) {
+                DialogManager.showContentDialog(
+                  context,
+                  const Text('確定刪除標籤?'),
+                  () async {
+                    allTags['showingTags']!.remove(tag);
+                    setState(() {});
+                    var user = await AccountManager.currentUser;
+                    user.displaySystemTags = allTags['showingTags']!;
+                    AccountManager.updateCurrentUser(user);
+                  },
+                );
+              },
               tags: allTags['showingTags'] ?? <String>[],
               isGeneral: false,
               title: '目前顯示的系統標籤'),
@@ -227,12 +240,14 @@ class ShowLablesWidget extends StatelessWidget {
   final String title;
   final List<String> tags;
   final bool isGeneral;
+  final Function(String) onLongPress;
 
   const ShowLablesWidget({
     super.key,
     required this.title,
     required this.tags,
     required this.isGeneral,
+    required this.onLongPress,
   });
 
   @override
@@ -259,9 +274,12 @@ class ShowLablesWidget extends StatelessWidget {
               direction: Axis.horizontal,
               children: [
                 for (final tag in tags)
-                  ShowTagsWidget(
-                    title: tag,
-                    isGeneral: isGeneral,
+                  GestureDetector(
+                    onLongPress: () => onLongPress(tag),
+                    child: ShowTagsWidget(
+                      title: tag,
+                      isGeneral: isGeneral,
+                    ),
                   ),
               ]),
           SizedBox(height: Design.getScreenHeight(context) * 0.01),
