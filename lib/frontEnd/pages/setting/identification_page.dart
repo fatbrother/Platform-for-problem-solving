@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pops/backEnd/user/account.dart';
 import 'package:pops/backEnd/user/user.dart';
@@ -100,44 +101,58 @@ class _IdentificationViewState extends State<IdentificationView> {
           const SizedBox(height: 10),
           Vertification(
             onPressed: () async {
-              try {
-                TextEditingController controller = TextEditingController();
-                String verificationId = await AccountManager.sendSms(user.phone);
-                if (mounted) {
-                  DialogManager.showContentDialog(
-                    context,
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: "請輸入驗證碼",
-                        border: InputBorder.none,
-                      ),
-                      controller: controller,
-                    ),
-                    () async {
-                      if (controller.text == "") {
-                        DialogManager.showInfoDialog(context, "請輸入驗證碼");
-                        return;
-                      }
-
-                      try {
-                        await AccountManager.verifyPhoneNumber(
-                            verificationId, controller.text);
-                      }
-                      catch (e) {
-                        DialogManager.showInfoDialog(context, "驗證碼錯誤");
-                        return;
-                      }
-
-                      user.isPhoneVerified = true;
-                      AccountManager.updateCurrentUser(user);
-                    },
-                  );
-                }
-              } catch (e) {
-                DialogManager.showInfoDialog(context, "請先設定手機號碼");
-                return;
+              String smsCode = "";
+              String phoneE164 = user.phone;
+              if (phoneE164[0] == '0') {
+                phoneE164 = '+886${phoneE164.substring(1)}';
               }
+              FirebaseAuth auth = FirebaseAuth.instance;
+
+              await auth.verifyPhoneNumber(
+                phoneNumber: phoneE164,
+                codeSent: (String verificationId, int? resendToken) async {
+                  // Update the UI - wait for the user to enter the SMS code
+                  try {
+                    TextEditingController controller = TextEditingController();
+                    DialogManager.showContentDialog(
+                      context,
+                      TextField(
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          hintText: "請輸入驗證碼",
+                          border: InputBorder.none,
+                        ),
+                        controller: controller,
+                      ),
+                      () async {
+                        if (controller.text == "") {
+                          DialogManager.showInfoDialog(context, "請輸入驗證碼");
+                          return;
+                        }
+                        smsCode = controller.text;
+                      },
+                    );
+                  } catch (e) {
+                    DialogManager.showInfoDialog(context, "請先設定手機號碼");
+                    return;
+                  }
+                  // Create a PhoneAuthCredential with the code
+                  PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                      verificationId: verificationId, smsCode: smsCode);
+
+                  // Sign the user in (or link) with the credential
+                  await auth.signInWithCredential(credential);
+                },
+                codeAutoRetrievalTimeout: (String verificationId) {},
+                verificationCompleted:
+                    (PhoneAuthCredential phoneAuthCredential) {
+                  user.isPhoneVerified = true;
+                  AccountManager.updateCurrentUser(user);
+                },
+                verificationFailed: (FirebaseAuthException error) {
+                  DialogManager.showInfoDialog(context, error.message ?? "");
+                },
+              );
             },
           ),
         ],

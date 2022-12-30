@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import '../database.dart';
 
 // use this class to control the account
@@ -73,32 +74,35 @@ class AccountManager {
   }
 
   static Future<String> sendSms(String phone) async {
-    String returnVerificationId = '';
+    String verificationId = '';
+    // get the verification id
 
     // transform the phone number to the E.164
-
     String phoneE164 = phone;
     if (phoneE164[0] == '0') {
       phoneE164 = '+886${phoneE164.substring(1)}';
     }
 
-    try {
-      await _auth.verifyPhoneNumber(
-        phoneNumber: phoneE164,
-        verificationCompleted: (PhoneAuthCredential credential) {},
-        verificationFailed: (FirebaseAuthException e) {
-          throw e;
-        },
-        codeSent: (String verificationId, int? resendToken) async {
-          returnVerificationId = verificationId;
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {},
-      );
-    } catch (e) {
-      rethrow;
-    }
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneE164,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          throw Exception('The provided phone number is not valid.');
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        verificationId = verificationId;
+        debugPrint(verificationId);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        verificationId = verificationId;
+      },
+    );
 
-    return returnVerificationId;
+    return verificationId;
   }
 
   static Future<void> verifyPhoneNumber(
@@ -108,12 +112,11 @@ class AccountManager {
         verificationId: verificationId,
         smsCode: smsCode,
       ));
-      try {
-        UsersModel? usersModel = await currentUser;
-        usersModel.phone = _auth.currentUser!.phoneNumber!;
-        UsersDatabase.updateUser(usersModel);
-      } catch (e) {
-        rethrow;
+      await _auth.currentUser!.reload();
+      var user = await AccountManager.currentUser;
+      if (_auth.currentUser!.phoneNumber != null) {
+        user.phone = _auth.currentUser!.phoneNumber!;
+        user.isPhoneVerified = true;
       }
     } catch (e) {
       rethrow;
