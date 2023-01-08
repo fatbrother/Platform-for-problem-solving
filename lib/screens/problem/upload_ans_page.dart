@@ -283,7 +283,7 @@ class _UploadAnsPageBodyState extends State<UploadAnsPageBody> {
                   messages: [],
                 );
                 String chatRoomId =
-                    await ChatRoomDatabase.addChatRoom(chatRoom);
+                    await ChatRoomDatabase.instance.add(chatRoom);
                 widget.problem.chatRoomId = chatRoomId;
                 ProblemsDatabase.instance.update(widget.problem);
                 var author =

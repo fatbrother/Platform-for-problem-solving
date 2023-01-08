@@ -1,45 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pops/models/chatroom_model.dart';
-import 'package:pops/services/database.dart';
+import 'package:pops/services/services_base.dart';
 
-class ChatRoomDatabase {
+class ChatRoomDatabase extends ServiceBase<ChatRoomModel>
+    with Query, Update, Delete, Add, GetStream {
   // use id to query database and return a listener
-  static Stream<QuerySnapshot> getChatRoomListener(String id) {
-    return FirebaseFirestore.instance
-        .collection('chatRooms')
-        .doc(id)
-        .collection('messages')
-        .orderBy('time', descending: true)
-        .snapshots();
+  @override
+  String get tableName => 'chatroom';
+
+  @override
+  ChatRoomModel fromMap(Map<String, dynamic> map) {
+    return ChatRoomModel.fromMap(map);
   }
 
-  static Future<ChatRoomModel> getChatRoom(String id) async {
-    ChatRoomModel model = ChatRoomModel.fromMap(
-        (await DB.getRow('chatRooms', id)));
-    return model;
-  }
-
-  static void updateChatRoom(ChatRoomModel chatRoomModel) async {
-    try {
-      await DB.updateRow('chatRooms', chatRoomModel.id, chatRoomModel.toMap());
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  static void deleteChatRoom(String id) async {
-    try {
-      await DB.deleteRow('chatRooms', id);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  static Future<String> addChatRoom(ChatRoomModel chatRoomModel) async {
-    try {
-      return await DB.addRow('chatRooms', chatRoomModel.toMap());
-    } catch (e) {
-      rethrow;
-    }
-  }
+  static final ChatRoomDatabase instance = ChatRoomDatabase();
 }

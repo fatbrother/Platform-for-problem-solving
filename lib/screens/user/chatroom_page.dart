@@ -34,15 +34,15 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     }
     messages.add(message);
 
-    var chatRoom = await ChatRoomDatabase.getChatRoom(widget.chatRoomId);
+    var chatRoom = await ChatRoomDatabase.instance.query(widget.chatRoomId);
     chatRoom.messages = messages;
-    ChatRoomDatabase.updateChatRoom(chatRoom);
+    ChatRoomDatabase.instance.update(chatRoom);
   }
 
   Future<void> loadInfo() async {
     user = await AccountManager.currentUser;
     ChatRoomModel chatRoom =
-        await ChatRoomDatabase.getChatRoom(widget.chatRoomId);
+        await ChatRoomDatabase.instance.query(widget.chatRoomId);
     // merge messages
     if (chatRoom.messages.length > messages.length) {
       messages = chatRoom.messages;
@@ -54,8 +54,8 @@ class ChatRoomPageState extends State<ChatRoomPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: ChatRoomDatabase.getChatRoomListener(widget.chatRoomId),
+    return StreamBuilder<DocumentSnapshot>(
+      stream: ChatRoomDatabase.instance.getStream(widget.chatRoomId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           loadInfo();

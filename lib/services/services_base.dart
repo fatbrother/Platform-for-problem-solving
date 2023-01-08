@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pops/services/database.dart';
 import 'package:pops/models/model_base.dart';
 
@@ -9,8 +10,7 @@ abstract class ServiceBase<T extends ModelBase> {
 mixin QueryAll<T extends ModelBase> on ServiceBase<T> {
   Future<List<T>> queryAll() async {
     try {
-      final List<Map<String, dynamic>> table =
-          await DB.getTable(tableName);
+      final List<Map<String, dynamic>> table = await DB.getTable(tableName);
       return table.map((e) => fromMap(e)).toList();
     } catch (e) {
       rethrow;
@@ -21,8 +21,7 @@ mixin QueryAll<T extends ModelBase> on ServiceBase<T> {
 mixin Query<T extends ModelBase> on ServiceBase<T> {
   Future<T> query(String id) async {
     try {
-      final Map<String, dynamic> row =
-          await DB.getRow(tableName, id);
+      final Map<String, dynamic> row = await DB.getRow(tableName, id);
       if (row.isEmpty) throw Exception('No data found');
       return fromMap(row);
     } catch (e) {
@@ -60,6 +59,16 @@ mixin Add<T extends ModelBase> on ServiceBase<T> {
     try {
       String id = await DB.addRow(tableName, model.toMap());
       return id;
+    } catch (e) {
+      rethrow;
+    }
+  }
+}
+
+mixin GetStream<T extends ModelBase> on ServiceBase<T> {
+  Stream<DocumentSnapshot> getStream(String id) {
+    try {
+      return DB.getStream(tableName, id);
     } catch (e) {
       rethrow;
     }

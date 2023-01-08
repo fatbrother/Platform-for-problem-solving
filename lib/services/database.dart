@@ -10,9 +10,9 @@ export 'other/tag.dart';
 // just import this file
 class DB {
   static final db = FirebaseFirestore.instance;
-  
+
   // get the table of the database
-  static Future<List<Map<String, dynamic>>> getTable(String tableName) async { 
+  static Future<List<Map<String, dynamic>>> getTable(String tableName) async {
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await db.collection(tableName).get();
@@ -63,7 +63,8 @@ class DB {
   }
 
   // add the row of the databases
-  static Future<String> addRow(String tableName, Map<String, dynamic> row) async {
+  static Future<String> addRow(
+      String tableName, Map<String, dynamic> row) async {
     try {
       // if the row has an id, use it
       if (row.containsKey('id') && row['id'] != null && row['id'] != '') {
@@ -79,5 +80,10 @@ class DB {
     } catch (e) {
       rethrow;
     }
+  }
+
+  static Stream<DocumentSnapshot> getStream(
+      String tableName, String rowId) {
+    return db.collection(tableName).doc(rowId).snapshots();
   }
 }

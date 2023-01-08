@@ -32,7 +32,7 @@ class ProblemsDatabase extends ServiceBase<ProblemsModel>
       }
 
       if (problem.chatRoomId != '') {
-        ChatRoomDatabase.deleteChatRoom(problem.chatRoomId);
+        ChatRoomDatabase.instance.delete(problem.chatRoomId);
       }
 
       try {
