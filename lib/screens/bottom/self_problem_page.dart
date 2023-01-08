@@ -126,10 +126,10 @@ class ProblemHomePage extends StatelessWidget {
                 () async {
                   user.tokens += problem.rewardToken;
                   user.tokens += 10;
-                  var solver = await UsersDatabase.queryUser(problem.solverId);
+                  var solver = await UsersDatabase.instance.query(problem.solverId);
                   solver.reportNum += 1;
                   solver.notices.add('${problem.title}超過時間未上傳答案，以被檢舉');
-                  await UsersDatabase.updateUser(solver);
+                  await UsersDatabase.instance.update(solver);
                   await AccountManager.updateCurrentUser(user);
                   ProblemsDatabase.deleteProblem(problem.id);
                   // ignore: use_build_context_synchronously

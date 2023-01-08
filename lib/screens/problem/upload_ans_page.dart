@@ -286,9 +286,9 @@ class _UploadAnsPageBodyState extends State<UploadAnsPageBody> {
                 widget.problem.chatRoomId = chatRoomId;
                 ProblemsDatabase.updateProblem(widget.problem);
                 var author =
-                    await UsersDatabase.queryUser(widget.problem.authorId);
+                    await UsersDatabase.instance.query(widget.problem.authorId);
                 author.notices.add("${widget.problem.title}已解答");
-                UsersDatabase.updateUser(author);
+                UsersDatabase.instance.update(author);
               },
               name: '上傳',
             ),

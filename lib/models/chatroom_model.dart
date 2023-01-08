@@ -1,4 +1,7 @@
-class Message {
+import 'package:pops/models/model_base.dart';
+
+class Message extends ModelBase {
+  @override
   String id;
   String message;
   // 0 for text, 1 for image
@@ -10,6 +13,7 @@ class Message {
     this.type = 0,
   });
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -27,7 +31,8 @@ class Message {
   }
 }
 
-class ChatRoomModel {
+class ChatRoomModel extends ModelBase {
+  @override
   String id;
   List<String> memberIds;
   List<Message> messages;
@@ -38,6 +43,7 @@ class ChatRoomModel {
     required this.messages,
   });
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,

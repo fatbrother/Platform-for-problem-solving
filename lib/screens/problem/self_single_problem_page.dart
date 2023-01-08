@@ -164,7 +164,7 @@ class _ApplicationBoxState extends State<ApplicationBox> {
   UsersModel user = UsersModel(id: '', name: '', email: '');
 
   Future<void> loadUser() async {
-    user = await UsersDatabase.queryUser(widget.contract.solverId);
+    user = await UsersDatabase.instance.query(widget.contract.solverId);
     setState(() {});
   }
 

@@ -232,9 +232,9 @@ class MyCustomFormState extends State<MyCustomForm> {
     widget.problem.solveCommendIds.add(contractId);
     ProblemsDatabase.updateProblem(widget.problem);
 
-    final author = await UsersDatabase.queryUser(widget.problem.authorId);
+    final author = await UsersDatabase.instance.query(widget.problem.authorId);
     author.notices.add("您的問題${widget.problem.title}有人應徵了!!");
-    UsersDatabase.updateUser(author);
+    UsersDatabase.instance.update(author);
   }
 
   Future<DateTime?> pickDate() => showDatePicker(

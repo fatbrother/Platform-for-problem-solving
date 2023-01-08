@@ -7,11 +7,11 @@ import 'package:pops/models/user_model.dart';
 class AccountManager {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static Future<UsersModel> get currentUser async =>
-      await UsersDatabase.queryUser(_auth.currentUser!.uid);
+      await UsersDatabase.instance.query(_auth.currentUser!.uid);
 
   static Future<void> updateCurrentUser(UsersModel user) async {
     user.id = _auth.currentUser!.uid;
-    UsersDatabase.updateUser(user);
+    UsersDatabase.instance.update(user);
   }
 
   static Future<void> signIn(String email, String password) async {
@@ -42,9 +42,9 @@ class AccountManager {
     _auth.currentUser!.reload();
 
     try {
-      await UsersDatabase.queryUser(_auth.currentUser!.uid);
+      await UsersDatabase.instance.query(_auth.currentUser!.uid);
     } catch (e) {
-      await UsersDatabase.addUser(UsersModel(
+      await UsersDatabase.instance.add(UsersModel(
         id: _auth.currentUser!.uid,
         name: _auth.currentUser!.displayName!,
         email: _auth.currentUser!.email!,
@@ -160,7 +160,7 @@ class AccountManager {
 
   static deleteAccount() async {
     try {
-      UsersDatabase.deleteUser(_auth.currentUser!.uid);
+      UsersDatabase.instance.delete(_auth.currentUser!.uid);
       await _auth.currentUser!.delete();
       await _auth.currentUser!.reload();
     } catch (e) {

@@ -71,7 +71,7 @@ class _SortProblemPage extends State<SortProblemPage> {
               }
               folderList.add(newFolder);
               user.folders = folderList;
-              UsersDatabase.updateUser(user);
+              UsersDatabase.instance.update(user);
             }),
           );
         },
@@ -121,7 +121,7 @@ class _SortProblemPage extends State<SortProblemPage> {
                               context, Text('確定要刪除 ${folder.name} 嗎？'), () {
                             folderList.remove(folder);
                             user.folders = folderList;
-                            UsersDatabase.updateUser(user);
+                            UsersDatabase.instance.update(user);
                             setState(() {});
                           });
                         },

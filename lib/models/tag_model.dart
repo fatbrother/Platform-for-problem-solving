@@ -1,4 +1,7 @@
-class TagsModel {
+import 'package:pops/models/model_base.dart';
+
+class TagsModel extends ModelBase {
+  @override
   String id;
   String name;
   List<String> problemsWithTag;
@@ -9,7 +12,7 @@ class TagsModel {
     this.problemsWithTag = const [],
   });
 
-  static fromMap(Map<String, dynamic> data) {
+  factory TagsModel.fromMap(Map<String, dynamic> data) {
     return TagsModel(
       // if data have 'id' then use it, else set it to 0
       id: data['id'] ?? '',
@@ -20,6 +23,7 @@ class TagsModel {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,

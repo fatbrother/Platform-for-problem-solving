@@ -1,4 +1,7 @@
-class AuditCommandsModel {
+import 'package:pops/models/model_base.dart';
+
+class AuditCommandsModel extends ModelBase{
+  @override
   String id;
   String name;
   String commanderId;
@@ -11,12 +14,18 @@ class AuditCommandsModel {
     this.auditImages = const [],
   });
 
-  AuditCommandsModel.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        name = map['name'],
-        commanderId = map['commanderId'],
-        auditImages = map['auditImages'];
+  factory AuditCommandsModel.fromMap(Map<String, dynamic> map) {
+    return AuditCommandsModel(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      commanderId: map['commanderId'] ?? '',
+      auditImages: map['auditImages'] == null
+          ? []
+          : map['auditImages'].cast<String>(),
+    );
+  }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,

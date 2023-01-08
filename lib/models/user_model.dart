@@ -1,4 +1,7 @@
-class UsersModel {
+import 'package:pops/models/model_base.dart';
+
+class UsersModel extends ModelBase {
+  @override
   String id;
   String name;
   String email;
@@ -24,9 +27,9 @@ class UsersModel {
   bool isPhoneVerified;
 
   UsersModel({
-    required this.id,
-    required this.name,
-    required this.email,
+    this.id = '',
+    this.name = '',
+    this.email = '',
     this.headshotId = '',
     this.reportNum = 0,
     this.phone = '',
@@ -49,7 +52,7 @@ class UsersModel {
     this.isPhoneVerified = false,
   });
 
-  static fromMap(Map<String, dynamic> data) {
+  factory UsersModel.fromMap(Map<String, dynamic> data) {
     List<FeedbacksModel> feedbacks = [];
     if (data.containsKey('feedbacks')) {
       for (final Map<String, dynamic> feedback in data['feedbacks']) {
@@ -108,6 +111,7 @@ class UsersModel {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,

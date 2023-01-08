@@ -1,4 +1,7 @@
-class ProblemsModel {
+import 'package:pops/models/model_base.dart';
+
+class ProblemsModel extends ModelBase {
+  @override
   String id;
   String title;
   String description;
@@ -46,7 +49,7 @@ class ProblemsModel {
   })  : createdAt = createdAt ?? DateTime.now(),
         deadline = deadline ?? DateTime(0);
 
-  static fromMap(Map<String, dynamic> data) {
+  factory ProblemsModel.fromMap(Map<String, dynamic> data) {
     return ProblemsModel(
       id: data.containsKey('id') ? data['id'] : '',
       title: data.containsKey('title') ? data['title'] : '',
@@ -83,6 +86,7 @@ class ProblemsModel {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,

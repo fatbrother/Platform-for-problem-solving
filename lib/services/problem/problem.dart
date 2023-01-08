@@ -73,7 +73,7 @@ class ProblemsDatabase {
       } catch (e) {
         // pass
       }
-      var user = await UsersDatabase.queryUser(problem.authorId);
+      var user = await UsersDatabase.instance.query(problem.authorId);
       user.chatRoomsIds.remove(problem.chatRoomId);
       user.askProblemIds.remove(problem.id);
       for (final folder in user.folders) {
@@ -81,12 +81,12 @@ class ProblemsDatabase {
           folder.problemIds.remove(problemId);
         }
       }
-      await UsersDatabase.updateUser(user);
+      await UsersDatabase.instance.update(user);
       if (problem.solverId != '') {
-        var solver = await UsersDatabase.queryUser(problem.solverId);
+        var solver = await UsersDatabase.instance.query(problem.solverId);
         solver.commandProblemIds.remove(problem.id);
         solver.chatRoomsIds.remove(problem.chatRoomId);
-        await UsersDatabase.updateUser(solver);
+        await UsersDatabase.instance.update(solver);
       }
       await DB.deleteRow('problems', problemId);
     } catch (e) {

@@ -1,5 +1,8 @@
-class ReportsModel {
+import 'package:pops/models/model_base.dart';
+
+class ReportsModel extends ModelBase {
   static const List<String> reportsTypes = ['空白答案', '不雅字眼', '答案與問題無關', '其他'];
+  @override
   String id;
   String reportType;
   String reportDescription;
@@ -33,6 +36,7 @@ class ReportsModel {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,

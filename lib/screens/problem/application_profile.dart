@@ -195,7 +195,7 @@ class _ApplicationProfilePageState extends State<ApplicationProfilePage> {
     widget.solver.commandProblemIds.add(widget.problem.id); 
     widget.solver.notices.add(
         '應徵成功！請於${widget.contract.deadline.toLocal().toString()}前上傳「${widget.problem.title}」的答案。');
-    await UsersDatabase.updateUser(widget.solver);
+    await UsersDatabase.instance.update(widget.solver);
     currentUser = await AccountManager.currentUser;
     currentUser.tokens -= widget.contract.price - widget.problem.baseToken;
     AccountManager.updateCurrentUser(currentUser);

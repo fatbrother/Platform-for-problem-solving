@@ -30,7 +30,7 @@ class _RatingPageState extends State<RatingPage> {
 
   Future<void> loadUser() async {
     contract = await ContractsDatabase.queryContract(widget.problem.chooseSolveCommendId);
-    ratingUser = await UsersDatabase.queryUser(contract.solverId);
+    ratingUser = await UsersDatabase.instance.query(contract.solverId);
     currentUser = await AccountManager.currentUser;
     setState(() {});
   }
@@ -94,7 +94,7 @@ class _RatingPageState extends State<RatingPage> {
                       ratingUser.notices.add("您的${widget.problem.title}解題已被評分，${widget.problem.rewardToken}\$已經匯入您的錢包");
                       ratingUser.commandProblemIds.remove(widget.problem.id);
                       ratingUser.tokens += widget.problem.rewardToken;
-                      UsersDatabase.updateUser(ratingUser);
+                      UsersDatabase.instance.update(ratingUser);
                       widget.problem.isSolved = true;
                       ProblemsDatabase.updateProblem(widget.problem);
                       DialogManager.showInfoDialog(context, '感謝您的評分！');
