@@ -35,11 +35,11 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
     problems = [];
     if (tag == '') {
       for (var problemId in user.askProblemIds) {
-        problems.add(await ProblemsDatabase.queryProblem(problemId));
+        problems.add(await ProblemsDatabase.instance.query(problemId));
       }
     } else {
       for (var problemId in user.askProblemIds) {
-        final problem = await ProblemsDatabase.queryProblem(problemId);
+        final problem = await ProblemsDatabase.instance.query(problemId);
         if (problem.tags.contains(tag)) {
           problems.add(problem);
         }
@@ -131,7 +131,7 @@ class ProblemHomePage extends StatelessWidget {
                   solver.notices.add('${problem.title}超過時間未上傳答案，以被檢舉');
                   await UsersDatabase.instance.update(solver);
                   await AccountManager.updateCurrentUser(user);
-                  ProblemsDatabase.deleteProblem(problem.id);
+                  ProblemsDatabase.instance.delete(problem.id);
                   // ignore: use_build_context_synchronously
                   Routes.pushReplacement(context, Routes.selfProblemPage);
                 },

@@ -23,12 +23,12 @@ class _UnsolvedPageState extends State<UnsolvedPage> {
     var user = await AccountManager.currentUser;
     if (tag == '') {
       for (final id in user.commandProblemIds) {
-        final problem = await ProblemsDatabase.queryProblem(id);
+        final problem = await ProblemsDatabase.instance.query(id);
         problems.add(problem);
       }
     } else {
       for (final id in user.commandProblemIds) {
-        final problem = await ProblemsDatabase.queryProblem(id);
+        final problem = await ProblemsDatabase.instance.query(id);
         if (problem.tags.contains(tag)) {
           problems.add(problem);
         }

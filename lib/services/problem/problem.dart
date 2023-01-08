@@ -1,45 +1,23 @@
 import 'package:pops/models/problem_model.dart';
 import 'package:pops/models/tag_model.dart';
+import 'package:pops/services/database.dart';
 import 'package:pops/services/other/chat_room.dart';
 import 'package:pops/services/other/img.dart';
 import 'package:pops/services/problem/contract.dart';
-import 'package:pops/services/database.dart';
+import 'package:pops/services/services_base.dart';
 
 // control the database of the problem with problemsModel
-class ProblemsDatabase {
-  static Future<List<ProblemsModel>> queryAllProblems() async {
-    try {
-      List<ProblemsModel> result = [];
-      for (var item in await DB.getTable('problems')) {
-        result.add(ProblemsModel.fromMap(item));
-      }
-      return result;
-    } catch (e) {
-      rethrow;
-    }
-  }
+class ProblemsDatabase extends ServiceBase<ProblemsModel>
+    with QueryAll, Query, Update, Delete, Add {
+  static final ProblemsDatabase instance = ProblemsDatabase();
 
-  static Future<ProblemsModel> queryProblem(String problemId) async {
-    try {
-      final Map<String, dynamic> result =
-          await DB.getRow('problems', problemId);
-      return ProblemsModel.fromMap(result);
-    } catch (e) {
-      rethrow;
-    }
-  }
+  @override
+  String get tableName => 'problems';
 
-  static void updateProblem(ProblemsModel problem) async {
+  @override
+  Future<void> delete(String id) async {
     try {
-      await DB.updateRow('problems', problem.id, problem.toMap());
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  static void deleteProblem(String problemId) async {
-    try {
-      ProblemsModel problem = await queryProblem(problemId);
+      ProblemsModel problem = await query(id);
       try {
         await ContractsDatabase.deleteContract(problem.chooseSolveCommendId);
       } catch (e) {
@@ -60,7 +38,7 @@ class ProblemsDatabase {
       try {
         for (final tag in problem.tags) {
           TagsModel? tmp = TagsDatabase.queryTag(tag);
-          tmp!.problemsWithTag.remove(problemId);
+          tmp!.problemsWithTag.remove(id);
           await TagsDatabase.updateTag(tmp);
         }
       } catch (e) {
@@ -77,8 +55,8 @@ class ProblemsDatabase {
       user.chatRoomsIds.remove(problem.chatRoomId);
       user.askProblemIds.remove(problem.id);
       for (final folder in user.folders) {
-        if (folder.problemIds.contains(problemId)) {
-          folder.problemIds.remove(problemId);
+        if (folder.problemIds.contains(id)) {
+          folder.problemIds.remove(id);
         }
       }
       await UsersDatabase.instance.update(user);
@@ -88,18 +66,12 @@ class ProblemsDatabase {
         solver.chatRoomsIds.remove(problem.chatRoomId);
         await UsersDatabase.instance.update(solver);
       }
-      await DB.deleteRow('problems', problemId);
+      await DB.deleteRow('problems', id);
     } catch (e) {
       rethrow;
     }
   }
 
-  static Future<String> addProblem(ProblemsModel problem) async {
-    try {
-      String id = await DB.addRow('problems', problem.toMap());
-      return id;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  @override
+  ProblemsModel fromMap(Map<String, dynamic> map) => ProblemsModel.fromMap(map);
 }

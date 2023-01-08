@@ -196,13 +196,13 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
         ConfirmButtom(
             name: '確認',
             onPressed: () {
-              addProblem();
+              add();
             }),
       ],
     );
   }
 
-  void addProblem() {
+  void add() {
     final title = titleController.text;
     final description = descriptionController.text;
     final rewardToken = rewardTokenController.text == ''
@@ -239,7 +239,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
       } else {
         DialogManager.showInfoDialog(context, '上架成功', onOk: () async {
           Routes.back(context);
-          String id = await ProblemsDatabase.addProblem(problem);
+          String id = await ProblemsDatabase.instance.add(problem);
           user.askProblemIds.add(id);
           user.tokens -= 10 + rewardToken;
           for (final tag in tags) {

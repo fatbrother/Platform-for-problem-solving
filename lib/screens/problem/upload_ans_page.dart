@@ -284,7 +284,7 @@ class _UploadAnsPageBodyState extends State<UploadAnsPageBody> {
                 String chatRoomId =
                     await ChatRoomDatabase.addChatRoom(chatRoom);
                 widget.problem.chatRoomId = chatRoomId;
-                ProblemsDatabase.updateProblem(widget.problem);
+                ProblemsDatabase.instance.update(widget.problem);
                 var author =
                     await UsersDatabase.instance.query(widget.problem.authorId);
                 author.notices.add("${widget.problem.title}已解答");

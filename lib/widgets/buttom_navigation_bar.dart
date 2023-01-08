@@ -29,7 +29,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(AssetImage('assets/bottom_icon/edit.png')),
-            label: 'AddProblem',
+            label: 'add',
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(

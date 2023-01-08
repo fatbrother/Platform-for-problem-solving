@@ -113,7 +113,7 @@ class _SingleProblemPageBodyState extends State<SingleProblemPageBody> {
                         const Text('刪除後不會歸還上架金額！'),
                         () {
                           user.tokens += widget.problem.baseToken;
-                          ProblemsDatabase.deleteProblem(widget.problem.id);
+                          ProblemsDatabase.instance.delete(widget.problem.id);
                           Routes.back(context);
                         },
                       );
@@ -132,7 +132,7 @@ class _SingleProblemPageBodyState extends State<SingleProblemPageBody> {
                           user.tokens -= 15;
                           AccountManager.updateCurrentUser(user);
                           widget.problem.isUpvoted = true;
-                          ProblemsDatabase.updateProblem(widget.problem);
+                          ProblemsDatabase.instance.update(widget.problem);
                         },
                       );
                     },

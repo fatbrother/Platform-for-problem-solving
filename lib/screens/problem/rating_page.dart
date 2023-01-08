@@ -96,7 +96,7 @@ class _RatingPageState extends State<RatingPage> {
                       ratingUser.tokens += widget.problem.rewardToken;
                       UsersDatabase.instance.update(ratingUser);
                       widget.problem.isSolved = true;
-                      ProblemsDatabase.updateProblem(widget.problem);
+                      ProblemsDatabase.instance.update(widget.problem);
                       DialogManager.showInfoDialog(context, '感謝您的評分！');
                       Routes.pushReplacement(context, Routes.homePage);
                     },

@@ -48,7 +48,7 @@ class _FilesPage extends State<FilesPage> {
                   user.tokens += problem.rewardToken;
                   user.tokens += 10;
                   AccountManager.updateCurrentUser(user);
-                  ProblemsDatabase.deleteProblem(problem.id);
+                  ProblemsDatabase.instance.delete(problem.id);
                   Routes.pushReplacement(context, Routes.selfProblemPage);
                 },
               );
@@ -136,9 +136,9 @@ class _FilesPage extends State<FilesPage> {
     for (final id in user.askProblemIds) {
       // check if id in widget.folder.problemIds
       if (widget.folder.problemIds.contains(id)) {
-        problemInFolder.add(await ProblemsDatabase.queryProblem(id));
+        problemInFolder.add(await ProblemsDatabase.instance.query(id));
       } else {
-        problems.add(await ProblemsDatabase.queryProblem(id));
+        problems.add(await ProblemsDatabase.instance.query(id));
       }
     }
     setState(() {});

@@ -191,7 +191,7 @@ class _ApplicationProfilePageState extends State<ApplicationProfilePage> {
     widget.problem.solverId = widget.solver.id;
     widget.problem.solverName = widget.solver.name;
     widget.problem.deadline = widget.contract.deadline;
-    ProblemsDatabase.updateProblem(widget.problem);
+    ProblemsDatabase.instance.update(widget.problem);
     widget.solver.commandProblemIds.add(widget.problem.id); 
     widget.solver.notices.add(
         '應徵成功！請於${widget.contract.deadline.toLocal().toString()}前上傳「${widget.problem.title}」的答案。');

@@ -42,13 +42,13 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    var generalProblem = (await ProblemsDatabase.queryAllProblems())
+    var generalProblem = (await ProblemsDatabase.instance.queryAll())
         .where((ProblemsModel problem) =>
             problem.authorId != user.id &&
             problem.isSolved == false &&
             problem.chooseSolveCommendId == '')
         .toList();
-    var upVotedProblem = (await ProblemsDatabase.queryAllProblems())
+    var upVotedProblem = (await ProblemsDatabase.instance.queryAll())
         .where((ProblemsModel problem) =>
             problem.authorId != user.id &&
             problem.isSolved == false &&

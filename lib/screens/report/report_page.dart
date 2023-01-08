@@ -84,7 +84,7 @@ class _ReportPageState extends State<ReportPage> {
                           await ReportsDataBase.instance.add(newReport);
                       widget.problem.reportId = reportId;
                       widget.problem.isSolved = true;
-                      ProblemsDatabase.updateProblem(widget.problem);
+                      ProblemsDatabase.instance.update(widget.problem);
                       // ignore: use_build_context_synchronously
                       Routes.pushReplacement(context, Routes.reportWaitPage,
                           arguments: reportId);

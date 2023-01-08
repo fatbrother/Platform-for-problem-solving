@@ -39,7 +39,7 @@ class _ReportSuccessBodyState extends State<ReportSuccessBody> {
 
   void returnTocken() async {
     reporter = await UsersDatabase.instance.query(widget.report.reporterId);
-    problem = await ProblemsDatabase.queryProblem(widget.report.problemId);
+    problem = await ProblemsDatabase.instance.query(widget.report.problemId);
     beReporter = await UsersDatabase.instance.query(widget.report.beReporterId);
     reporter.tokens += 10 + problem.rewardToken;
     beReporter.reportNum += 1;
