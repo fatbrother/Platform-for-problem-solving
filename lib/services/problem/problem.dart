@@ -37,9 +37,9 @@ class ProblemsDatabase extends ServiceBase<ProblemsModel>
 
       try {
         for (final tag in problem.tags) {
-          TagsModel? tmp = TagsDatabase.queryTag(tag);
-          tmp!.problemsWithTag.remove(id);
-          await TagsDatabase.updateTag(tmp);
+          TagsModel? tmp = TagsDatabase.instance.query(tag);
+          tmp.problemsWithTag.remove(id);
+          await TagsDatabase.instance.update(tmp);
         }
       } catch (e) {
         // pass

@@ -130,7 +130,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
                     padding: const EdgeInsets.all(0),
                     icon: const Icon(Icons.add_box_outlined,
                         color: Colors.grey, size: 40),
-                    onPressed: addTag,
+                    onPressed: addLables,
                   ),
                 ],
               ),
@@ -196,13 +196,13 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
         ConfirmButtom(
             name: '確認',
             onPressed: () {
-              add();
+              addProblem();
             }),
       ],
     );
   }
 
-  void add() {
+  void addProblem() {
     final title = titleController.text;
     final description = descriptionController.text;
     final rewardToken = rewardTokenController.text == ''
@@ -243,17 +243,17 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
           user.askProblemIds.add(id);
           user.tokens -= 10 + rewardToken;
           for (final tag in tags) {
-            if (TagsDatabase.queryTag(tag) == null) {
+            try {
+              TagsModel tagModel = TagsDatabase.instance.query(tag);
+              tagModel.problemsWithTag.add(id);
+              TagsDatabase.instance.update(tagModel);
+            } catch (e) {
               TagsModel tagModel = TagsModel(
                 id: '',
                 name: tag,
                 problemsWithTag: [id],
               );
-              TagsDatabase.addTag(tagModel);
-            } else {
-              TagsModel? tagModel = TagsDatabase.queryTag(tag);
-              tagModel!.problemsWithTag.add(id);
-              TagsDatabase.updateTag(tagModel);
+              TagsDatabase.instance.add(tagModel);
             }
           }
           AccountManager.updateCurrentUser(user);
@@ -276,7 +276,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
     }
   }
 
-  void addTag() {
+  void addLables() {
     TextEditingController tagController = TextEditingController();
     DialogManager.showContentDialog(
         context,

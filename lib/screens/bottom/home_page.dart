@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
           if (text == '') {
             return [];
           } else {
-            return TagsDatabase.querySimilarTags(text)
+            return TagsDatabase.instance.querySimilar(text)
                 .map((e) => e.name)
                 .toList();
           }

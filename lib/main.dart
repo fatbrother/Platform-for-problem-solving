@@ -14,7 +14,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  TagsDatabase.init();
+  TagsDatabase.instance.init();
   runApp(const MyApp());
 }
 

@@ -61,7 +61,7 @@ class _SelfProblemPageState extends State<SelfProblemPage> {
           if (text == '') {
             return [];
           } else {
-            return TagsDatabase.querySimilarTags(text)
+            return TagsDatabase.instance.querySimilar(text)
                 .map((e) => e.name)
                 .toList();
           }

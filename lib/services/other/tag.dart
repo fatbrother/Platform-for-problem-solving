@@ -3,42 +3,43 @@ import 'package:pops/models/tag_model.dart';
 
 // control the database of the problem with problemsModels
 class TagsDatabase {
-  static TrieTree trieTree = TrieTree();
+  static final TrieTree _trieTree = TrieTree();
+  static final TagsDatabase instance = TagsDatabase();
 
-  static void init() async {
+  void init() async {
     try {
       final List<Map<String, dynamic>> tags =
           await DB.getTable('tags');
       
       for (final Map<String, dynamic> tag in tags) {
-        trieTree.insert(TagsModel.fromMap(tag));
+        _trieTree.insert(TagsModel.fromMap(tag));
       }
     } catch (e) {
       rethrow;
     }
   }
 
-  static List<TagsModel> queryAllTags() {
-    return trieTree.queryAll();
+  TagsModel query(String tag) {
+    var tmp = _trieTree.search(tag);
+    if (tmp == null) {
+      throw Exception('Tag not found');
+    }
+    return tmp;
   }
 
-  static TagsModel? queryTag(String tag) {
-    return trieTree.search(tag);
+  List<TagsModel> querySimilar(String tag) {
+    return _trieTree.startsWith(tag);
   }
 
-  static List<TagsModel> querySimilarTags(String tag) {
-    return trieTree.startsWith(tag);
-  }
-
-  static Future<void> updateTag(TagsModel tag) async {
+  Future<void> update(TagsModel tag) async {
     try {
       TagsModel tmp = TagsModel.fromMap(await DB.getRow('tags', tag.id));
       DB.updateRow('tags', tag.id, tag.toMap());
       if (tmp.id != tag.id) {
-        trieTree.insert(tag);
+        _trieTree.insert(tag);
       } else {
-        trieTree.delete(tmp.name);
-        trieTree.insert(tag);
+        _trieTree.delete(tmp.name);
+        _trieTree.insert(tag);
       }
     }
     catch (e) {
@@ -46,21 +47,11 @@ class TagsDatabase {
     }
   }
 
-  static void deleteTag(String tag) async {
-    TagsModel tmp = trieTree.search(tag)!;
-    try {
-      await DB.deleteRow('tags', tmp.id);
-    } catch (e) {
-      rethrow;
-    }
-    trieTree.delete(tmp.name);
-  }
-
-  static void addTag(TagsModel tag) async {
+  void add(TagsModel tag) async {
     try {
       String id = await DB.addRow('tags', tag.toMap());
       tag.id = id;
-      trieTree.insert(tag);
+      _trieTree.insert(tag);
     } catch (e) {
       rethrow;
     }
