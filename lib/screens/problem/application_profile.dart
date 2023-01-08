@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pops/models/contract_model.dart';
 import 'package:pops/models/problem_model.dart';
 import 'package:pops/models/user_model.dart';
 import 'package:pops/screens/bottom/self_information_page.dart';
@@ -183,7 +184,7 @@ class _ApplicationProfilePageState extends State<ApplicationProfilePage> {
     widget.problem.chooseSolveCommendId = widget.contract.id;
     for (final contractId in widget.problem.solveCommendIds) {
       if (contractId != widget.contract.id) {
-        ContractsDatabase.deleteContract(contractId);
+        ContractsDatabase.instance.delete(contractId);
       }
     }
     widget.problem.solveCommendIds = [];

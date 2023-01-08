@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
+import 'package:pops/models/contract_model.dart';
 import 'package:pops/models/problem_model.dart';
 import 'package:pops/models/user_model.dart';
 import 'package:pops/services/other/img.dart';
@@ -228,7 +229,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       deadline: deadline,
       solverId: userId,
     );
-    final contractId = await ContractsDatabase.addContract(contract);
+    final contractId = await ContractsDatabase.instance.add(contract);
     widget.problem.solveCommendIds.add(contractId);
     ProblemsDatabase.instance.update(widget.problem);
 

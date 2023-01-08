@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pops/models/chatroom_model.dart';
+import 'package:pops/models/contract_model.dart';
 import 'package:pops/models/problem_model.dart';
 import 'package:pops/services/other/chat_room.dart';
 import 'package:pops/services/other/img.dart';
@@ -26,7 +27,7 @@ class _UploadAnsPageState extends State<UploadAnsPage> {
   List<Image> images = [];
 
   Future<void> loadContracts() async {
-    contract = await ContractsDatabase.queryContract(
+    contract = await ContractsDatabase.instance.query(
         widget.problem.chooseSolveCommendId);
     setState(() {});
   }

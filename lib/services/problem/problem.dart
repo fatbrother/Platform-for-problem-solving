@@ -19,13 +19,13 @@ class ProblemsDatabase extends ServiceBase<ProblemsModel>
     try {
       ProblemsModel problem = await query(id);
       try {
-        await ContractsDatabase.deleteContract(problem.chooseSolveCommendId);
+        await ContractsDatabase.instance.delete(problem.chooseSolveCommendId);
       } catch (e) {
         // pass
       }
       try {
         for (final contractId in problem.solveCommendIds) {
-          await ContractsDatabase.deleteContract(contractId);
+          await ContractsDatabase.instance.delete(contractId);
         }
       } catch (e) {
         // pass

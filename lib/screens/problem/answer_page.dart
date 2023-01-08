@@ -175,7 +175,7 @@ class _AnswerBodyState extends State<AnswerBody> {
                                 const Text('進入檢舉流程後便無法取消'),
                                 () async {
                                   var solveCommand =
-                                      await ContractsDatabase.queryContract(
+                                      await ContractsDatabase.instance.query(
                                           widget.problem.chooseSolveCommendId);
 
                                   // ignore: use_build_context_synchronously

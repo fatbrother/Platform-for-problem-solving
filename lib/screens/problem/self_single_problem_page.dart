@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pops/models/contract_model.dart';
 import 'package:pops/models/problem_model.dart';
 import 'package:pops/models/user_model.dart';
 import 'package:pops/services/problem/contract.dart';
@@ -24,7 +25,7 @@ class _SelfSinglefProblemPage extends State<SelfSinglefProblemPage> {
 
   Future<void> loadApplications() async {
     for (final id in widget.problem.solveCommendIds) {
-      contracts.add(await ContractsDatabase.queryContract(id));
+      contracts.add(await ContractsDatabase.instance.query(id));
     }
     setState(() {});
   }

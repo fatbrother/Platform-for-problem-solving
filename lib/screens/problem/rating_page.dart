@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pops/models/contract_model.dart';
 import 'package:pops/models/problem_model.dart';
 import 'package:pops/models/user_model.dart';
 import 'package:pops/services/problem/contract.dart';
@@ -29,7 +30,7 @@ class _RatingPageState extends State<RatingPage> {
   ContractsModel contract = ContractsModel();
 
   Future<void> loadUser() async {
-    contract = await ContractsDatabase.queryContract(widget.problem.chooseSolveCommendId);
+    contract = await ContractsDatabase.instance.query(widget.problem.chooseSolveCommendId);
     ratingUser = await UsersDatabase.instance.query(contract.solverId);
     currentUser = await AccountManager.currentUser;
     setState(() {});
