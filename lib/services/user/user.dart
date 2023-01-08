@@ -3,18 +3,12 @@ import 'package:pops/services/services_base.dart';
 
 // control the database of the problem with problemsModels
 class UsersDatabase extends ServiceBase<UsersModel>
-    with
-        Query<UsersModel>,
-        Update<UsersModel>,
-        Delete<UsersModel>,
-        Add<UsersModel> {
+    with Query, Update, Delete, Add {
   @override
   String get tableName => 'users';
 
   @override
-  UsersModel fromMap(Map<String, dynamic> map) {
-    return UsersModel.fromMap(map);
-  }
+  UsersModel fromMap(Map<String, dynamic> map) => UsersModel.fromMap(map);
 
   static final UsersDatabase instance = UsersDatabase();
 }
