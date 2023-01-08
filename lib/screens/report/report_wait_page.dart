@@ -16,7 +16,7 @@ class _ReportWaitPageState extends State<ReportWaitPage> {
   ReportsModel report = ReportsModel();
 
   void loadReport() async {
-    report = await ReportsDataBase.queryReport(widget.reportId);
+    report = await ReportsDataBase.instance.query(widget.reportId);
     if (report.isVerified == true) {
       // ignore: use_build_context_synchronously
       Routes.pushReplacement(

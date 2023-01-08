@@ -1,49 +1,14 @@
-import 'package:pops/services/database.dart';
 import 'package:pops/models/report_model.dart';
+import 'package:pops/services/services_base.dart';
 
 // control the database of the problem with problemsModels
-class ReportsDataBase {
-  static Future<List> queryAllReports() async {
-    try {
-      final List result = await DB.getTable('reports');
-      return result;
-    } catch (e) {
-      rethrow;
-    }
-  }
+class ReportsDataBase extends ServiceBase<ReportsModel>
+    with Query, Add {
+  @override
+  String get tableName => 'reports';
 
-  static Future<ReportsModel> queryReport(String reportId) async {
-    try {
-      final Map<String, dynamic> result =
-          await DB.getRow('reports', reportId);
-      return ReportsModel.fromMap(result);
-    } catch (e) {
-      rethrow;
-    }
-  }
+  @override
+  ReportsModel fromMap(Map<String, dynamic> map) => ReportsModel.fromMap(map);
 
-  static void updateReport(ReportsModel report) async {
-    try {
-      await DB.updateRow('reports', report.id, report.toMap());
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  static void deleteReport(String reportId) async {
-    try {
-      await DB.deleteRow('reports', reportId);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  static Future<String> addReport(ReportsModel report) async {
-    try {
-      String id = await DB.addRow('reports', report.toMap());
-      return id;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  static final ReportsDataBase instance = ReportsDataBase();
 }

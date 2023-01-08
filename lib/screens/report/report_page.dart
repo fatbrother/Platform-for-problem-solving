@@ -81,7 +81,7 @@ class _ReportPageState extends State<ReportPage> {
                         problemId: widget.problem.id,
                       );
                       String reportId =
-                          await ReportsDataBase.addReport(newReport);
+                          await ReportsDataBase.instance.add(newReport);
                       widget.problem.reportId = reportId;
                       widget.problem.isSolved = true;
                       ProblemsDatabase.updateProblem(widget.problem);
