@@ -9,6 +9,7 @@ import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
 import 'package:pops/widgets/app_bar.dart';
 import 'package:pops/widgets/buttom_navigation_bar.dart';
+import 'package:pops/widgets/problem_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,7 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<ProblemsModel> problems = [];
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
 
   @override
   void initState() {
@@ -122,80 +123,6 @@ class HomePageBody extends StatelessWidget {
         padding: Design.spacing,
         children: children,
       ),
-    );
-  }
-}
-
-class ProblemCard extends StatelessWidget {
-  final ProblemsModel problem;
-  const ProblemCard({
-    super.key,
-    required this.problem,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
-          color: Design.insideColor,
-          borderRadius: Design.outsideBorderRadius,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Design.secondaryColor,
-                borderRadius: Design.outsideBorderRadius,
-              ),
-              child: Center(
-                child: Text(
-                  problem.title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                problem.description,
-                style: const TextStyle(
-                  fontSize: 15,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: Container(
-                  decoration: const BoxDecoration(
-                    color: Design.secondaryColor,
-                    borderRadius: Design.outsideBorderRadius,
-                  ),
-                  width: Design.getScreenWidth(context) * 0.5,
-                  child: Center(
-                    child: Text(
-                      '底價: ${problem.baseToken}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  )),
-            ),
-          ],
-        ),
-      ),
-      onTap: () {
-        Routes.push(context, Routes.questionApplyPage, arguments: problem);
-      },
     );
   }
 }

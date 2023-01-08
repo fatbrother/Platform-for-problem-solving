@@ -43,7 +43,6 @@ class ChatRoomPageState extends State<ChatRoomPage> {
     user = await AccountManager.currentUser;
     ChatRoomModel chatRoom =
         await ChatRoomDatabase.instance.query(widget.chatRoomId);
-    // merge messages
     if (chatRoom.messages.length > messages.length) {
       messages = chatRoom.messages;
     }

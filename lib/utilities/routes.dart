@@ -25,7 +25,6 @@ import 'package:pops/screens/setting/change_password_page.dart';
 import 'package:pops/screens/setting/general_labels_page.dart';
 import 'package:pops/screens/setting/system_labels_page.dart';
 import 'package:pops/screens/user/add_label_page.dart';
-import 'package:pops/screens/user/audit_failed_lables_page.dart';
 import 'package:pops/screens/user/chatroom_page.dart';
 import 'package:pops/screens/user/files_page.dart';
 import 'package:pops/screens/user/rate_page.dart';
@@ -95,7 +94,6 @@ class Routes {
   final Map<String, WidgetBuilder> _routes = {
     login: (context) => const LoginPage(),
     register: (context) => const RegisterPage(),
-    auditFailedTagsPage: (context) => const AuditFailedTagsPage(),
     selfProblemPage: (context) => const SelfProblemPage(),
     changePasswordPage: (context) => const ChangePasswordPage(),
     notificationPage: (context) => const NotificationPage(),

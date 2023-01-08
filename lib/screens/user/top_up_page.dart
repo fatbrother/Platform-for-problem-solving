@@ -16,36 +16,23 @@ class TopUpPage extends StatelessWidget {
     return const Scaffold(
       appBar: GoBackBar(),
       backgroundColor: Design.secondaryColor,
-      body: TopUpView(),
+      body: TopUpBody(),
     );
   }
 }
 
-class TopUpView extends StatefulWidget {
-  const TopUpView({super.key});
+class TopUpBody extends StatefulWidget {
+  const TopUpBody({super.key});
 
   @override
-  State<TopUpView> createState() => _TopUpView();
+  State<TopUpBody> createState() => _TopUpBody();
 }
 
-class _TopUpView extends State<TopUpView> {
+class _TopUpBody extends State<TopUpBody> {
   final TextEditingController _controller = TextEditingController();
-  bool seeMiddle = true;
-  bool seeDown = false;
-  int tapping = 1;
-  void _changed(int tapping) {
-    setState(() {
-      if (tapping == 1) {
-        seeMiddle = true;
-        seeDown = false;
-      } else if (tapping == 2) {
-        seeMiddle = false;
-        seeDown = true;
-      }
-    });
-  }
+  bool inMiddle = true;
 
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
 
   Future<void> loadUserInfo() async {
     user = await AccountManager.currentUser;
@@ -109,9 +96,9 @@ class _TopUpView extends State<TopUpView> {
               SizedBox(
                 //中部份
                 child: InkWell(
-                  onTap: () {
-                    _changed(1);
-                  },
+                  onTap: () => setState(() {
+                    inMiddle = true;
+                  }),
                   child: Stack(children: <Widget>[
                     SvgPicture.asset(
                       'assets/top_up/middle.svg',
@@ -119,7 +106,7 @@ class _TopUpView extends State<TopUpView> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 30, 10, 0),
                       child: Visibility(
-                        visible: seeMiddle,
+                        visible: inMiddle,
                         child: const Icon(
                           Icons.radio_button_checked,
                           color: Design.primaryColor,
@@ -132,9 +119,9 @@ class _TopUpView extends State<TopUpView> {
               SizedBox(
                 //下部分
                 child: InkWell(
-                  onTap: () {
-                    _changed(2);
-                  },
+                  onTap: () => setState(() {
+                    inMiddle = false;
+                  }),
                   child: Stack(children: <Widget>[
                     Container(
                       padding: const EdgeInsets.all(0),
@@ -145,7 +132,7 @@ class _TopUpView extends State<TopUpView> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 30, 10, 0),
                       child: Visibility(
-                        visible: seeDown,
+                        visible: !inMiddle,
                         child: const Icon(
                           Icons.radio_button_checked,
                           color: Design.primaryColor,

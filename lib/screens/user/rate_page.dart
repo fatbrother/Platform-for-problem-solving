@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pops/models/user_model.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/select_button.dart';
 
 class RatePage extends StatefulWidget {
   final UsersModel user;
@@ -43,13 +44,11 @@ class _RatePageState extends State<RatePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  LittleSwitch(
+                  SelectButton(
                     isOn: starNum == 6,
-                    onChanged: () {
-                      setState(() {
-                        starNum = 6;
-                      });
-                    },
+                    onChanged: () => setState(() {
+                      starNum = 6;
+                    }),
                     children: [
                       Text('全部',
                           style: TextStyle(
@@ -59,13 +58,11 @@ class _RatePageState extends State<RatePage> {
                     ],
                   ),
                   for (int i = 5; i > 0; i--)
-                    LittleSwitch(
+                    SelectButton(
                       isOn: i == starNum,
-                      onChanged: () {
-                        setState(() {
-                          starNum = i;
-                        });
-                      },
+                      onChanged: () => setState(() {
+                        starNum = i;
+                      }),
                       children: [
                         Text('$i',
                             style: TextStyle(
@@ -136,43 +133,6 @@ class RateBox extends StatelessWidget {
             style: const TextStyle(fontSize: 15, color: Colors.black),
           )
         ],
-      ),
-    );
-  }
-}
-
-class LittleSwitch extends StatelessWidget {
-  final bool isOn;
-  final Function() onChanged;
-  final List<Widget> children;
-
-  const LittleSwitch({
-    super.key,
-    required this.isOn,
-    required this.onChanged,
-    required this.children,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: Design.getScreenWidth(context) * 0.135,
-      height: Design.getScreenHeight(context) * 0.04,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.zero,
-          backgroundColor: isOn ? Design.primaryColor : Design.insideColor,
-          elevation: 0,
-          shape: const RoundedRectangleBorder(
-            borderRadius: Design.outsideBorderRadius,
-          ),
-        ),
-        onPressed: onChanged,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: children,
-        ),
       ),
     );
   }
