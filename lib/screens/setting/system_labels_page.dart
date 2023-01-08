@@ -209,7 +209,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
                     auditImages: imgIds,
                   );
 
-                  AuditCommandsDatabase.addAuditCommand(auditCommandsModel);
+                  AuditCommandsDatabase.instance.add(auditCommandsModel);
                   user.audittingTags = allTags['audittingTags']!;
                   AccountManager.updateCurrentUser(user);
                   setState(() {});

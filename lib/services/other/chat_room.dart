@@ -5,7 +5,7 @@ class ChatRoomDatabase extends ServiceBase<ChatRoomModel>
     with Query, Update, Delete, Add, GetStream {
   // use id to query database and return a listener
   @override
-  String get tableName => 'chatroom';
+  String get tableName => 'chatRooms';
 
   @override
   ChatRoomModel fromMap(Map<String, dynamic> map) {
