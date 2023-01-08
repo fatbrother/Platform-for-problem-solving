@@ -4,9 +4,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-import 'package:pops/backEnd/other/tag.dart';
-import 'backEnd/firebase_options.dart';
-import 'frontEnd/routes.dart';
+import 'package:pops/services/other/tag.dart';
+import 'utilities/firebase_options.dart';
+import 'utilities/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
