@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pops/services/user/account.dart';
+import 'package:pops/utilities/account.dart';
 import 'package:pops/models/user_model.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/routes.dart';

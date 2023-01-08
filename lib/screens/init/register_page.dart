@@ -3,7 +3,7 @@ import 'package:pops/utilities/design.dart';
 import 'package:pops/widgets/buttons.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/widgets/input_field.dart';
-import 'package:pops/services/user/account.dart';
+import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/routes.dart';
 
 class RegisterPage extends StatefulWidget {

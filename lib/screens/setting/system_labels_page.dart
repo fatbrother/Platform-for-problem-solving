@@ -3,7 +3,7 @@ import 'package:pops/models/audit_command_model.dart';
 import 'package:pops/models/user_model.dart';
 import 'package:pops/services/other/img.dart';
 import 'package:pops/services/other/lable_audit.dart';
-import 'package:pops/services/user/account.dart';
+import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';

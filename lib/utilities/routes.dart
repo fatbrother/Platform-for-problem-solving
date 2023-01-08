@@ -1,6 +1,6 @@
 // When we are adding a new page, we need to add it to the routes map.
 import 'package:flutter/cupertino.dart';
-import 'package:pops/services/user/account.dart';
+import 'package:pops/utilities/account.dart';
 import 'package:pops/screens/bottom/home_page.dart';
 import 'package:pops/screens/bottom/notification_page.dart';
 import 'package:pops/screens/bottom/self_information_page.dart';

@@ -4,7 +4,7 @@ import 'package:pops/models/user_model.dart';
 import 'package:pops/models/chatroom_model.dart';
 import 'package:pops/services/other/chat_room.dart';
 import 'package:pops/services/other/img.dart';
-import 'package:pops/services/user/account.dart';
+import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/widgets/app_bar.dart';

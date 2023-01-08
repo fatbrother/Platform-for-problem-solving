@@ -6,7 +6,7 @@ import 'package:pops/models/user_model.dart';
 import 'package:pops/services/other/img.dart';
 import 'package:pops/services/problem/contract.dart';
 import 'package:pops/services/problem/problem.dart';
-import 'package:pops/services/user/account.dart';
+import 'package:pops/utilities/account.dart';
 import 'package:pops/services/user/user.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
