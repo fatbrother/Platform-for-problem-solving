@@ -5,17 +5,12 @@ import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/buttom_navigation_bar.dart';
+import 'package:pops/widgets/main/buttom_navigation_bar.dart';
 import 'package:pops/widgets/setting_bar.dart';
-import 'package:pops/widgets/tag.dart';
+import 'package:pops/widgets/label/label.dart';
 
-class SelfInformationPage extends StatefulWidget {
+class SelfInformationPage extends StatelessWidget {
   const SelfInformationPage({super.key});
-  @override
-  State<SelfInformationPage> createState() => _SelfInformationState();
-}
-
-class _SelfInformationState extends State<SelfInformationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +38,11 @@ class _SelfInfoPageBodyState extends State<SelfInfoPageBody> {
   Future<void> loadUserInfo() async {
     user = await AccountManager.currentUser;
     if (user.headshotId != '') {
-      headshot = Image.network(await ImgManager.getImageUrl(user.headshotId));
+      try {
+        headshot = Image.network(await ImgManager.getImageUrl(user.headshotId));
+      } catch (e) {
+        // pass
+      }
     }
     setState(() {});
   }
@@ -124,16 +123,16 @@ class SelfTagBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
-    for (var tag in user.expertiseTags) {
+    for (var tag in user.expertiselabels) {
       children.add(
-        ShowLableWidget(
+        ShowLabelWidget(
           title: tag,
           isGeneral: true,
         ),
       );
     }
-    for (var tag in user.displaySystemTags) {
-      children.add(ShowLableWidget(
+    for (var tag in user.displaySystemlabels) {
+      children.add(ShowLabelWidget(
         title: tag,
         isGeneral: false,
       ));

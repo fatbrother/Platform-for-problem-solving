@@ -5,19 +5,15 @@ import 'package:pops/services/database.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/main/app_bar.dart';
 import 'package:pops/widgets/buttons.dart';
 import 'package:pops/widgets/suggest_field.dart';
 
 class ReportPage extends StatefulWidget {
-  final String reporterId;
-  final String beReporterId;
   final ProblemsModel problem;
 
   const ReportPage({
     super.key,
-    required this.reporterId,
-    required this.beReporterId,
     required this.problem,
   });
   @override
@@ -76,8 +72,8 @@ class _ReportPageState extends State<ReportPage> {
                         id: '',
                         reportType: ReportsModel.reportsTypes[check],
                         reportDescription: ratingController.text,
-                        reporterId: widget.reporterId,
-                        beReporterId: widget.beReporterId,
+                        reporterId: widget.problem.authorId,
+                        beReporterId: widget.problem.solverId,
                         problemId: widget.problem.id,
                       );
                       String reportId =

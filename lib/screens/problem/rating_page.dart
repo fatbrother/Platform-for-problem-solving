@@ -9,7 +9,7 @@ import 'package:pops/services/user/user.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/main/app_bar.dart';
 import 'package:pops/widgets/buttons.dart';
 import 'package:pops/widgets/star_plate.dart';
 import 'package:pops/widgets/suggest_field.dart';
@@ -25,13 +25,11 @@ class RatingPage extends StatefulWidget {
 class _RatingPageState extends State<RatingPage> {
   var numOfStars = 0;
   TextEditingController ratingController = TextEditingController();
-  UsersModel ratingUser = UsersModel(id: '', name: '', email: '');
-  UsersModel currentUser = UsersModel(id: '', name: '', email: '');
-  ContractsModel contract = ContractsModel();
+  UsersModel ratingUser = UsersModel();
+  UsersModel currentUser = UsersModel();
 
   Future<void> loadUser() async {
-    contract = await ContractsDatabase.instance.query(widget.problem.chooseSolveCommendId);
-    ratingUser = await UsersDatabase.instance.query(contract.solverId);
+    ratingUser = await UsersDatabase.instance.query(widget.problem.solverId);
     currentUser = await AccountManager.currentUser;
     setState(() {});
   }

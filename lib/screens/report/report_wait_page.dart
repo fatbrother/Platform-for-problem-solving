@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pops/services/database.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/main/app_bar.dart';
 import 'package:pops/models/report_model.dart';
 
 class ReportWaitPage extends StatefulWidget {

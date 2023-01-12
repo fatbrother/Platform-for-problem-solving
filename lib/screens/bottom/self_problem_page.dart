@@ -8,9 +8,9 @@ import 'package:pops/services/user/user.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
-import 'package:pops/widgets/buttom_navigation_bar.dart';
-import 'package:pops/widgets/problem_box.dart';
+import 'package:pops/widgets/main/app_bar.dart';
+import 'package:pops/widgets/main/buttom_navigation_bar.dart';
+import 'package:pops/widgets/problem/problem_box.dart';
 
 class SelfProblemPage extends StatefulWidget {
   const SelfProblemPage({super.key});
@@ -21,7 +21,7 @@ class SelfProblemPage extends StatefulWidget {
 
 class _SelfProblemPageState extends State<SelfProblemPage> {
   List<ProblemsModel> problems = [];
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
   String tag = '';
 
   @override

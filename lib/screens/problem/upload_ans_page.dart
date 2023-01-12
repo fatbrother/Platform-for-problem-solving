@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pops/models/chatroom_model.dart';
-import 'package:pops/models/contract_model.dart';
 import 'package:pops/models/problem_model.dart';
 import 'package:pops/services/other/chat_room.dart';
 import 'package:pops/services/other/img.dart';
-import 'package:pops/services/problem/contract.dart';
 import 'package:pops/services/problem/problem.dart';
 import 'package:pops/services/user/user.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/add_img_row.dart';
+import 'package:pops/widgets/main/app_bar.dart';
 import 'package:pops/widgets/buttons.dart';
 
 class UploadAnsPage extends StatefulWidget {
@@ -23,14 +22,7 @@ class UploadAnsPage extends StatefulWidget {
 }
 
 class _UploadAnsPageState extends State<UploadAnsPage> {
-  ContractsModel contract = ContractsModel();
   List<Image> images = [];
-
-  Future<void> loadContracts() async {
-    contract = await ContractsDatabase.instance.query(
-        widget.problem.chooseSolveCommendId);
-    setState(() {});
-  }
 
   void loadImages() async {
     for (final id in widget.problem.imgIds) {
@@ -45,7 +37,6 @@ class _UploadAnsPageState extends State<UploadAnsPage> {
   @override
   void initState() {
     super.initState();
-    loadContracts();
     loadImages();
   }
 
@@ -57,7 +48,6 @@ class _UploadAnsPageState extends State<UploadAnsPage> {
       backgroundColor: Design.backgroundColor,
       body: UploadAnsPageBody(
         problem: widget.problem,
-        contract: contract,
         images: images,
       ),
     );
@@ -66,13 +56,11 @@ class _UploadAnsPageState extends State<UploadAnsPage> {
 
 class UploadAnsPageBody extends StatefulWidget {
   final ProblemsModel problem;
-  final ContractsModel contract;
   final List<Image> images;
 
   const UploadAnsPageBody({
     super.key,
     required this.problem,
-    required this.contract,
     required this.images,
   });
 
@@ -103,8 +91,7 @@ class _UploadAnsPageBodyState extends State<UploadAnsPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    // cal the time from now to the deadline
-    final time = widget.contract.deadline.difference(DateTime.now());
+    final time = widget.problem.deadline.difference(DateTime.now());
     final days = time.inDays;
     final hours = time.inHours;
     final minutes = time.inMinutes;
@@ -225,36 +212,7 @@ class _UploadAnsPageBodyState extends State<UploadAnsPageBody> {
                         ),
                       ),
                       for (final img in answerImages) img,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: const [
-                              Icon(Icons.image, color: Colors.grey, size: 50),
-                              Icon(Icons.image, color: Colors.grey, size: 50),
-                              Icon(Icons.image, color: Colors.grey, size: 50),
-                            ],
-                          ),
-                          IconButton(
-                            padding: const EdgeInsets.all(0),
-                            icon: const Icon(Icons.add_box_outlined,
-                                color: Colors.grey, size: 40),
-                            onPressed: () async {
-                              try {
-                                String id = await ImgManager.uploadImage();
-                                imgList.add(id);
-                                answerImages.add(Image.network(
-                                  await ImgManager.getImageUrl(id),
-                                  width: double.infinity,
-                                ));
-                                setState(() {});
-                              } catch (e) {
-                                DialogManager.showInfoDialog(context, '上傳失敗');
-                              }
-                            },
-                          ),
-                        ],
-                      ),
+                      AddImgRow(onPressed: addImg),
                     ],
                   ),
                 ),
@@ -266,36 +224,47 @@ class _UploadAnsPageBodyState extends State<UploadAnsPageBody> {
             width: double.infinity,
             height: 50,
             child: ConfirmButtom(
-              onPressed: () async {
-                if (controller.text.isEmpty) {
-                  DialogManager.showInfoDialog(context, '請輸入解答');
-                  return;
-                }
-                Routes.back(context);
-                widget.problem.answer = controller.text;
-                widget.problem.answerImgIds = imgList;
-                ChatRoomModel chatRoom = ChatRoomModel(
-                  id: '',
-                  memberIds: [
-                    widget.problem.authorId,
-                    widget.contract.solverId
-                  ],
-                  messages: [],
-                );
-                String chatRoomId =
-                    await ChatRoomDatabase.instance.add(chatRoom);
-                widget.problem.chatRoomId = chatRoomId;
-                ProblemsDatabase.instance.update(widget.problem);
-                var author =
-                    await UsersDatabase.instance.query(widget.problem.authorId);
-                author.notices.add("${widget.problem.title}已解答");
-                UsersDatabase.instance.update(author);
-              },
+              onPressed: upLoad,
               name: '上傳',
             ),
           )
         ],
       ),
     );
+  }
+
+  void addImg() async {
+    try {
+      String id = await ImgManager.uploadImage();
+      imgList.add(id);
+      answerImages.add(Image.network(
+        await ImgManager.getImageUrl(id),
+        width: double.infinity,
+      ));
+      setState(() {});
+    } catch (e) {
+      DialogManager.showInfoDialog(context, '上傳失敗');
+    }
+  }
+
+  void upLoad() async {
+    if (controller.text.isEmpty) {
+      DialogManager.showInfoDialog(context, '請輸入解答');
+      return;
+    }
+    Routes.back(context);
+    widget.problem.answer = controller.text;
+    widget.problem.answerImgIds = imgList;
+    ChatRoomModel chatRoom = ChatRoomModel(
+      id: '',
+      memberIds: [widget.problem.authorId, widget.problem.solverId],
+      messages: [],
+    );
+    String chatRoomId = await ChatRoomDatabase.instance.add(chatRoom);
+    widget.problem.chatRoomId = chatRoomId;
+    ProblemsDatabase.instance.update(widget.problem);
+    var author = await UsersDatabase.instance.query(widget.problem.authorId);
+    author.notices.add("${widget.problem.title}已解答");
+    UsersDatabase.instance.update(author);
   }
 }

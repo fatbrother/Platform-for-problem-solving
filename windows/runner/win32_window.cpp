@@ -21,7 +21,7 @@ int Scale(int source, double scale_factor) {
 
 // Dynamically loads the |EnableNonClientDpiScaling| from the User32 module.
 // This API is only needed for PerMonitor V1 awareness mode.
-void EnableFullDpiSupportIfAvailable(HWND hwnd) {
+void EnableFullDpiSupportIfAvailabel(HWND hwnd) {
   HMODULE user32_module = LoadLibraryA("User32.dll");
   if (!user32_module) {
     return;
@@ -140,7 +140,7 @@ LRESULT CALLBACK Win32Window::WndProc(HWND const window,
                      reinterpret_cast<LONG_PTR>(window_struct->lpCreateParams));
 
     auto that = static_cast<Win32Window*>(window_struct->lpCreateParams);
-    EnableFullDpiSupportIfAvailable(window);
+    EnableFullDpiSupportIfAvailabel(window);
     that->window_handle_ = window;
   } else if (Win32Window* that = GetThisFromHandle(window)) {
     return that->MessageHandler(window, message, wparam, lparam);

@@ -7,9 +7,9 @@ import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
-import 'package:pops/widgets/buttom_navigation_bar.dart';
-import 'package:pops/widgets/problem_card.dart';
+import 'package:pops/widgets/main/app_bar.dart';
+import 'package:pops/widgets/main/buttom_navigation_bar.dart';
+import 'package:pops/widgets/problem/problem_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

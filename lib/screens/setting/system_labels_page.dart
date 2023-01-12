@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:pops/models/audit_command_model.dart';
 import 'package:pops/models/user_model.dart';
 import 'package:pops/services/other/img.dart';
-import 'package:pops/services/other/lable_audit.dart';
+import 'package:pops/services/other/label_audit.dart';
 import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/buttons.dart';
-import 'package:pops/widgets/scaffold.dart';
-import 'package:pops/widgets/tag.dart';
+import 'package:pops/widgets/label/show_label_box.dart';
+import 'package:pops/widgets/label/show_label_column.dart';
+import 'package:pops/widgets/label/show_labels.dart';
+import 'package:pops/widgets/main/scaffold.dart';
 
 class SystemLabelsPage extends StatelessWidget {
   const SystemLabelsPage({
@@ -35,20 +36,16 @@ class SystemLabelsView extends StatefulWidget {
 }
 
 class _SystemLabelsViewState extends State<SystemLabelsView> {
-  Map<String, List<String>> allTags = <String, List<String>>{
-    'audittingTags': <String>[],
-    'auditFailedTags': <String>[],
-    'notShowingTags': <String>[],
-  };
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  Map<String, List<String>> alllabels = <String, List<String>>{};
+  UsersModel user = UsersModel();
   List<String> imgIds = <String>[];
 
-  Future<void> loadAllTags() async {
+  Future<void> loadAlllabels() async {
     user = await AccountManager.currentUser;
-    allTags = <String, List<String>>{};
-    allTags['audittingTags'] = user.audittingTags;
-    allTags['auditFailedTags'] = user.auditFailedTags;
-    allTags['showingTags'] = user.displaySystemTags;
+    alllabels = <String, List<String>>{};
+    alllabels['audittinglabels'] = user.audittinglabels;
+    alllabels['auditFailedlabels'] = user.auditFailedlabels;
+    alllabels['displaySystemlabels'] = user.displaySystemlabels;
 
     setState(() {});
   }
@@ -56,7 +53,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
   @override
   void initState() {
     super.initState();
-    loadAllTags();
+    loadAlllabels();
   }
 
   @override
@@ -65,21 +62,9 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
       padding: Design.spacing,
       child: Column(
         children: <Widget>[
-          ShowLablesWidget(
-              onLongPress: (String tag) {
-                DialogManager.showContentDialog(
-                  context,
-                  const Text('確定刪除標籤?'),
-                  () async {
-                    allTags['showingTags']!.remove(tag);
-                    setState(() {});
-                    var user = await AccountManager.currentUser;
-                    user.displaySystemTags = allTags['showingTags']!;
-                    AccountManager.updateCurrentUser(user);
-                  },
-                );
-              },
-              tags: allTags['showingTags'] ?? <String>[],
+          ShowlabelsWidget(
+              onLongPress: deleteShowinglabel,
+              labels: alllabels['displaySystemlabels'] ?? <String>[],
               isGeneral: false,
               title: '目前顯示的系統標籤'),
           const SizedBox(height: 10),
@@ -91,50 +76,35 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
             padding: Design.spacing,
             child: Column(
               children: <Widget>[
-                ShowLableColumn(title: '審核失敗的標籤', children: [
+                ShowLabelColumn(title: '審核失敗的標籤', children: [
                   //審核失敗的標籤
-                  for (final tag in allTags['auditFailedTags']!)
-                    ShowSystemTableBoxWidget(
-                      tag: tag,
+                  for (final label in alllabels['auditFailedlabels']!)
+                    ShowLabelBoxWidget(
+                      label: label,
                       leftButtonTitle: '查看',
                       leftButtonOnPressed: () {
                         DialogManager.showInfoDialog(
                           context,
-                          "標籤名稱：$tag 審核失敗",
+                          "標籤名稱：$label 審核失敗",
                         );
                       },
                       rightButtonTitle: '刪除',
-                      rightButtonOnPressed: () async {
-                        allTags['auditFailedTags']!.remove(tag);
-                        setState(() {});
-                        var user = await AccountManager.currentUser;
-                        user.auditFailedTags = allTags['auditFailedTags']!;
-                        AccountManager.updateCurrentUser(user);
-                      },
-                    ), //顯示所有該分類tags
+                      rightButtonOnPressed: () => deleteAuditFailedlabel(label),
+                    ), //顯示所有該分類labels
                 ]),
                 SizedBox(height: Design.getScreenHeight(context) * 0.02),
-                ShowLableColumn(title: '審核中的標籤', children: [
+                ShowLabelColumn(title: '審核中的標籤', children: [
                   //審核中的標籤
-                  for (final tag in allTags['audittingTags']!)
-                    ShowSystemTableBoxWidget(
-                      tag: tag,
+                  for (final label in alllabels['audittinglabels']!)
+                    ShowLabelBoxWidget(
+                      label: label,
                       leftButtonTitle: '查看',
                       leftButtonOnPressed: () {
                         DialogManager.showInfoDialog(
                             context, "標籤需經由人工審核，可能花費較長時間，請耐心等候。");
                       },
                       rightButtonTitle: '刪除',
-                      rightButtonOnPressed: () {
-                        DialogManager.showContentDialog(
-                            context, const Text('確定刪除?'), () async {
-                          allTags['audittingTags']!.remove(tag);
-                          setState(() {});
-                          var user = await AccountManager.currentUser;
-                          user.audittingTags = allTags['audittingTags']!;
-                          AccountManager.updateCurrentUser(user);
-                        });
-                      },
+                      rightButtonOnPressed: () => deleteAudittinglabel(label),
                     ),
                 ]),
               ],
@@ -142,80 +112,7 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
           ),
           const SizedBox(height: 10),
           GestureDetector(
-            onTap: () {
-              TextEditingController titleController = TextEditingController();
-              DialogManager.showContentDialog(
-                context,
-                SizedBox(
-                  width: Design.getScreenWidth(context) * 0.6,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: Design.getScreenWidth(context) * 0.3,
-                        child: TextField(
-                          controller: titleController,
-                          decoration: const InputDecoration(
-                            hintText: '請輸入標籤名稱',
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.zero,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        padding: const EdgeInsets.all(0),
-                        onPressed: () async {
-                          try {
-                            String id = await ImgManager.uploadImage();
-                            imgIds.add(id);
-                          } catch (e) {
-                            DialogManager.showInfoDialog(context, '上傳失敗');
-                          }
-                        },
-                        icon: const Icon(Icons.image_outlined),
-                      ),
-                    ],
-                  ),
-                ),
-                () {
-                  if (titleController.text == '') {
-                    DialogManager.showInfoDialog(
-                      context,
-                      '標籤名稱不可為空',
-                    );
-                    return;
-                  }
-                  if (titleController.text.length > 10) {
-                    DialogManager.showInfoDialog(
-                      context,
-                      '標籤名稱過長',
-                    );
-                    return;
-                  }
-                  if (allTags['audittingTags']!
-                      .contains(titleController.text)) {
-                    DialogManager.showInfoDialog(
-                      context,
-                      '標籤名稱重複',
-                    );
-                    return;
-                  }
-
-                  allTags['audittingTags']!.add(titleController.text);
-                  AuditCommandsModel auditCommandsModel = AuditCommandsModel(
-                    id: '',
-                    name: titleController.text,
-                    commanderId: user.id,
-                    auditImages: imgIds,
-                  );
-
-                  AuditCommandsDatabase.instance.add(auditCommandsModel);
-                  user.audittingTags = allTags['audittingTags']!;
-                  AccountManager.updateCurrentUser(user);
-                  setState(() {});
-                },
-              );
-            },
+            onTap: submitAudit,
             child: Container(
               padding: const EdgeInsets.all(10),
               width: double.infinity,
@@ -235,183 +132,112 @@ class _SystemLabelsViewState extends State<SystemLabelsView> {
       ),
     );
   }
-}
 
-class ShowLablesWidget extends StatelessWidget {
-  final String title;
-  final List<String> tags;
-  final bool isGeneral;
-  final Function(String) onLongPress;
-
-  const ShowLablesWidget({
-    super.key,
-    required this.title,
-    required this.tags,
-    required this.isGeneral,
-    required this.onLongPress,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25), color: Design.insideColor),
-      width: double.infinity,
-      constraints: BoxConstraints(
-        minHeight: Design.getScreenHeight(context) * 0.15,
-      ),
-      child: Column(
-        children: [
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20),
-          ),
-          SizedBox(height: Design.getScreenHeight(context) * 0.01),
-          Wrap(
-              spacing: 5,
-              runSpacing: 5,
-              direction: Axis.horizontal,
-              children: [
-                for (final tag in tags)
-                  GestureDetector(
-                    onLongPress: () => onLongPress(tag),
-                    child: ShowLableWidget(
-                      title: tag,
-                      isGeneral: isGeneral,
-                    ),
-                  ),
-              ]),
-          SizedBox(height: Design.getScreenHeight(context) * 0.01),
-        ],
-      ),
+  void deleteShowinglabel(String labels) {
+    DialogManager.showContentDialog(
+      context,
+      const Text('確定刪除標籤?'),
+      () async {
+        alllabels['displaySystemlabels']!.remove(labels);
+        setState(() {});
+        var user = await AccountManager.currentUser;
+        user.displaySystemlabels = alllabels['displaySystemlabels']!;
+        AccountManager.updateCurrentUser(user);
+      },
     );
   }
-}
 
-class ShowLableColumn extends StatelessWidget {
-  const ShowLableColumn({
-    Key? key,
-    required this.title,
-    required this.children,
-  }) : super(key: key);
+  void deleteAuditFailedlabel(String labels) async {
+    alllabels['auditFailedlabels']!.remove(labels);
+    setState(() {});
+    var user = await AccountManager.currentUser;
+    user.auditFailedlabels = alllabels['auditFailedlabels']!;
+    AccountManager.updateCurrentUser(user);
+  }
 
-  final List<Widget> children;
-  final String title;
+  void deleteAudittinglabel(String label) {
+    DialogManager.showContentDialog(context, const Text('確定刪除?'), () async {
+      alllabels['audittinglabels']!.remove(label);
+      setState(() {});
+      var user = await AccountManager.currentUser;
+      user.audittinglabels = alllabels['audittinglabels']!;
+      AccountManager.updateCurrentUser(user);
+    });
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    // add sizebox between child of children
-    List<Widget> childrenWithSizeBox = <Widget>[];
-    for (int i = 0; i < children.length; i++) {
-      childrenWithSizeBox.add(children[i]);
-      if (i != children.length - 1) {
-        childrenWithSizeBox
-            .add(SizedBox(height: Design.getScreenHeight(context) * 0.02));
-      }
+  void uploadImg() async {
+    try {
+      String id = await ImgManager.uploadImage();
+      imgIds.add(id);
+    } catch (e) {
+      DialogManager.showInfoDialog(context, '上傳失敗');
     }
-
-    return Container(
-      width: double.infinity,
-      constraints: BoxConstraints(
-        minHeight: Design.getScreenHeight(context) * 0.1,
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: const BoxDecoration(
-        borderRadius: Design.outsideBorderRadius,
-        color: Color.fromARGB(136, 160, 182, 195),
-      ),
-      child: Column(
-        children: [
-          //標題
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20,
-              color: Design.primaryTextColor,
-            ),
-          ),
-          SizedBox(height: Design.getScreenHeight(context) * 0.01),
-          for (final child in childrenWithSizeBox) child,
-          SizedBox(height: Design.getScreenHeight(context) * 0.01),
-        ],
-      ),
-    );
   }
-}
 
-class ShowSystemTableBoxWidget extends StatefulWidget {
-  final String tag;
-  final String leftButtonTitle;
-  final void Function() leftButtonOnPressed;
-  final String rightButtonTitle;
-  final void Function() rightButtonOnPressed;
-
-  const ShowSystemTableBoxWidget({
-    super.key,
-    required this.tag,
-    required this.leftButtonTitle,
-    required this.leftButtonOnPressed,
-    required this.rightButtonTitle,
-    required this.rightButtonOnPressed,
-  });
-
-  @override
-  State<ShowSystemTableBoxWidget> createState() =>
-      _ShowSystemTableBoxWidgetState();
-}
-
-class _ShowSystemTableBoxWidgetState extends State<ShowSystemTableBoxWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: Design.getScreenHeight(context) * 0.05,
-          decoration: const BoxDecoration(
-            color: Design.insideColor,
-          ),
-          child: Stack(
-            children: [
-              Container(
-                alignment: const Alignment(-1, 0),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                child: Text(
-                  widget.tag,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    color: Design.primaryTextColor,
-                  ),
+  void submitAudit() {
+    TextEditingController titleController = TextEditingController();
+    DialogManager.showContentDialog(
+      context,
+      SizedBox(
+        width: Design.getScreenWidth(context) * 0.6,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: Design.getScreenWidth(context) * 0.3,
+              child: TextField(
+                controller: titleController,
+                decoration: const InputDecoration(
+                  hintText: '請輸入標籤名稱',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.zero,
                 ),
               ),
-              Container(
-                alignment: const Alignment(0.4, 0),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                child: ColorButton(
-                  title: widget.leftButtonTitle,
-                  backgroundColor: const Color.fromARGB(136, 160, 182, 195),
-                  onPressed: widget.leftButtonOnPressed,
-                ),
-              ),
-              Container(
-                alignment: const Alignment(1, 0),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                child: ColorButton(
-                  title: widget.rightButtonTitle,
-                  backgroundColor: const Color.fromARGB(255, 212, 199, 198),
-                  onPressed: widget.rightButtonOnPressed,
-                ),
-              ),
-            ],
-          ),
+            ),
+            IconButton(
+              padding: const EdgeInsets.all(0),
+              onPressed: uploadImg,
+              icon: const Icon(Icons.image_outlined),
+            ),
+          ],
         ),
-      ],
+      ),
+      () {
+        if (titleController.text == '') {
+          DialogManager.showInfoDialog(
+            context,
+            '標籤名稱不可為空',
+          );
+          return;
+        }
+        if (titleController.text.length > 10) {
+          DialogManager.showInfoDialog(
+            context,
+            '標籤名稱過長',
+          );
+          return;
+        }
+        if (alllabels['audittinglabels']!.contains(titleController.text)) {
+          DialogManager.showInfoDialog(
+            context,
+            '標籤名稱重複',
+          );
+          return;
+        }
+
+        alllabels['audittinglabels']!.add(titleController.text);
+        AuditCommandsModel auditCommandsModel = AuditCommandsModel(
+          id: '',
+          name: titleController.text,
+          commanderId: user.id,
+          auditImages: imgIds,
+        );
+
+        AuditCommandsDatabase.instance.add(auditCommandsModel);
+        user.audittinglabels = alllabels['audittinglabels']!;
+        AccountManager.updateCurrentUser(user);
+        setState(() {});
+      },
     );
   }
 }

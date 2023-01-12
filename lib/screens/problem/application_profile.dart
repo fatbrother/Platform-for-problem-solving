@@ -10,7 +10,7 @@ import 'package:pops/services/user/user.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/main/app_bar.dart';
 
 class ApplicationProfilePage extends StatefulWidget {
   final UsersModel solver;
@@ -29,7 +29,7 @@ class ApplicationProfilePage extends StatefulWidget {
 }
 
 class _ApplicationProfilePageState extends State<ApplicationProfilePage> {
-  UsersModel currentUser = UsersModel(id: '', name: '', email: '');
+  UsersModel currentUser = UsersModel();
 
   Future<void> loadCurrentUser() async {
     currentUser = await AccountManager.currentUser;

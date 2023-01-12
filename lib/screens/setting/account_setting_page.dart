@@ -4,7 +4,7 @@ import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/scaffold.dart';
+import 'package:pops/widgets/main/scaffold.dart';
 import 'package:pops/widgets/setting_bar.dart';
 
 class AccountSettingPage extends StatefulWidget {
@@ -15,7 +15,7 @@ class AccountSettingPage extends StatefulWidget {
 }
 
 class _AccountSettingPageState extends State<AccountSettingPage> {
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
 
   void loadUserInfo() async {
     user = await AccountManager.currentUser;

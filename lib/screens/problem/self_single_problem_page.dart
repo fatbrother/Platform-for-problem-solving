@@ -9,8 +9,8 @@ import 'package:pops/services/user/user.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
-import 'package:pops/widgets/tag.dart';
+import 'package:pops/widgets/main/app_bar.dart';
+import 'package:pops/widgets/label/label.dart';
 
 class SelfSinglefProblemPage extends StatefulWidget {
   final ProblemsModel problem;
@@ -63,7 +63,7 @@ class SingleProblemPageBody extends StatefulWidget {
 }
 
 class _SingleProblemPageBodyState extends State<SingleProblemPageBody> {
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
 
   Future<void> loadUser() async {
     user = await AccountManager.currentUser;
@@ -108,41 +108,47 @@ class _SingleProblemPageBodyState extends State<SingleProblemPageBody> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
-                    onPressed: () {
-                      DialogManager.showContentDialog(
-                        context,
-                        const Text('刪除後不會歸還上架金額！'),
-                        () {
-                          user.tokens += widget.problem.baseToken;
-                          ProblemsDatabase.instance.delete(widget.problem.id);
-                          Routes.back(context);
-                        },
-                      );
-                    },
-                    icon: const Icon(Icons.delete)),
+                  onPressed: deleteProblem,
+                  icon: const Icon(Icons.delete),
+                ),
                 IconButton(
-                    onPressed: () {
-                      if (widget.problem.isUpvoted) {
-                        DialogManager.showInfoDialog(context, '已經加價過了');
-                        return;
-                      }
-                      DialogManager.showContentDialog(
-                        context,
-                        const Text('加價15代幣以增加平台推廣'),
-                        () {
-                          user.tokens -= 15;
-                          AccountManager.updateCurrentUser(user);
-                          widget.problem.isUpvoted = true;
-                          ProblemsDatabase.instance.update(widget.problem);
-                        },
-                      );
-                    },
-                    icon: const Icon(Icons.monetization_on_outlined)),
+                  onPressed: upVote,
+                  icon: const Icon(Icons.monetization_on_outlined),
+                ),
               ],
             ),
           )
         ],
       ),
+    );
+  }
+
+  void deleteProblem() {
+    DialogManager.showContentDialog(
+      context,
+      const Text('刪除後不會歸還上架金額！'),
+      () {
+        user.tokens += widget.problem.baseToken;
+        ProblemsDatabase.instance.delete(widget.problem.id);
+        Routes.back(context);
+      },
+    );
+  }
+
+  void upVote() {
+    if (widget.problem.isUpvoted) {
+      DialogManager.showInfoDialog(context, '已經加價過了');
+      return;
+    }
+    DialogManager.showContentDialog(
+      context,
+      const Text('加價15代幣以增加平台推廣'),
+      () {
+        user.tokens -= 15;
+        AccountManager.updateCurrentUser(user);
+        widget.problem.isUpvoted = true;
+        ProblemsDatabase.instance.update(widget.problem);
+      },
     );
   }
 }
@@ -162,7 +168,7 @@ class ApplicationBox extends StatefulWidget {
 }
 
 class _ApplicationBoxState extends State<ApplicationBox> {
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
 
   Future<void> loadUser() async {
     user = await UsersDatabase.instance.query(widget.contract.solverId);
@@ -226,10 +232,10 @@ class _ApplicationBoxState extends State<ApplicationBox> {
                   spacing: 10,
                   children: [
                     const Icon(Icons.discount_outlined),
-                    for (final tag in user.displaySystemTags)
-                      ShowLableWidget(title: tag, isGeneral: false),
-                    for (final tag in user.expertiseTags)
-                      ShowLableWidget(title: tag, isGeneral: true),
+                    for (final tag in user.displaySystemlabels)
+                      ShowLabelWidget(title: tag, isGeneral: false),
+                    for (final tag in user.expertiselabels)
+                      ShowLabelWidget(title: tag, isGeneral: true),
                   ],
                 )
               ],

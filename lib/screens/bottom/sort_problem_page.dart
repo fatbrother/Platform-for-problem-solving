@@ -5,8 +5,8 @@ import 'package:pops/services/user/user.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
-import 'package:pops/widgets/buttom_navigation_bar.dart';
+import 'package:pops/widgets/main/app_bar.dart';
+import 'package:pops/widgets/main/buttom_navigation_bar.dart';
 
 class SortProblemPage extends StatefulWidget {
   const SortProblemPage({super.key});
@@ -16,7 +16,7 @@ class SortProblemPage extends StatefulWidget {
 }
 
 class _SortProblemPage extends State<SortProblemPage> {
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
   List<FolderModel> folderList = [];
   String folderName = '';
 
@@ -42,39 +42,7 @@ class _SortProblemPage extends State<SortProblemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          TextEditingController titleController = TextEditingController();
-          DialogManager.showContentDialog(
-            context,
-            TextField(
-              controller: titleController,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: '請輸入資料夾名稱',
-              ),
-            ),
-            () => setState(() {
-              FolderModel newFolder = FolderModel(
-                  name: titleController.text, problemIds: <String>[]);
-              // check if the folder name already exists
-              if (newFolder.name.length > 15) {
-                DialogManager.showInfoDialog(context, '資料夾名稱過長');
-                return;
-              }
-              if (folderList
-                  .any((FolderModel folder) => folder.name == newFolder.name)) {
-                DialogManager.showInfoDialog(context, '資料夾名稱已存在');
-                return;
-              }
-              if (newFolder.name == "") {
-                newFolder.name = "未命名資料夾${folderList.length + 1}";
-              }
-              folderList.add(newFolder);
-              user.folders = folderList;
-              UsersDatabase.instance.update(user);
-            }),
-          );
-        },
+        onPressed: addFolder,
         backgroundColor: Design.primaryColor,
         child: const ImageIcon(
           AssetImage('assets/icon/folderadd.png'),
@@ -84,19 +52,7 @@ class _SortProblemPage extends State<SortProblemPage> {
       backgroundColor: Design.secondaryColor,
       appBar: SearchBar(
         onSelected: loadFolder,
-        getSuggestions: (String text) {
-          if (text == '') {
-            return [];
-          } else {
-            List<String> res = [];
-            for (final folder in folderList) {
-              if (folder.name.contains(text)) {
-                res.add(folder.name);
-              }
-            }
-            return res;
-          }
-        },
+        getSuggestions: getSuggesttions,
       ),
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex:
@@ -116,15 +72,7 @@ class _SortProblemPage extends State<SortProblemPage> {
                         folder: folder,
                         onTap: () => Routes.push(context, Routes.folderPage,
                             arguments: folder),
-                        onLongPress: () {
-                          DialogManager.showContentDialog(
-                              context, Text('確定要刪除 ${folder.name} 嗎？'), () {
-                            folderList.remove(folder);
-                            user.folders = folderList;
-                            UsersDatabase.instance.update(user);
-                            setState(() {});
-                          });
-                        },
+                        onLongPress: () => deleteFolder(folder),
                       ),
                   ],
                 ),
@@ -134,6 +82,64 @@ class _SortProblemPage extends State<SortProblemPage> {
         ],
       ),
     );
+  }
+
+  List<String> getSuggesttions(String text) {
+        if (text == '') {
+          return [];
+        } else {
+          List<String> res = [];
+          for (final folder in folderList) {
+            if (folder.name.contains(text)) {
+              res.add(folder.name);
+            }
+          }
+          return res;
+        }
+      }
+
+  void addFolder() {
+    TextEditingController titleController = TextEditingController();
+    DialogManager.showContentDialog(
+      context,
+      TextField(
+        controller: titleController,
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+          hintText: '請輸入資料夾名稱',
+        ),
+      ),
+      () => setState(() {
+        FolderModel newFolder =
+            FolderModel(name: titleController.text, problemIds: <String>[]);
+        // check if the folder name already exists
+        if (newFolder.name.length > 15) {
+          DialogManager.showInfoDialog(context, '資料夾名稱過長');
+          return;
+        }
+        if (folderList
+            .any((FolderModel folder) => folder.name == newFolder.name)) {
+          DialogManager.showInfoDialog(context, '資料夾名稱已存在');
+          return;
+        }
+        if (newFolder.name == "") {
+          newFolder.name = "未命名資料夾${folderList.length + 1}";
+        }
+        folderList.add(newFolder);
+        user.folders = folderList;
+        UsersDatabase.instance.update(user);
+      }),
+    );
+  }
+
+  void deleteFolder(FolderModel folder) {
+    DialogManager.showContentDialog(context, Text('確定要刪除 ${folder.name} 嗎？'),
+        () {
+      folderList.remove(folder);
+      user.folders = folderList;
+      UsersDatabase.instance.update(user);
+      setState(() {});
+    });
   }
 }
 

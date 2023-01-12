@@ -38,10 +38,8 @@ class Routes {
   static const String login = '/login';
   static const String register = '/register';
   static const String verifyPhone = '/verifyPhone';
-
   static const String selfProblemPage = '/selfProblemPage';
   static const String selfSingleProblemPage = '/selfSingleProblemPage';
-
   static const String selfInformationPage = '/selfInformationPage';
   static const String topUpPage = '/topUpPage';
   static const String commonProblemPage = '/commonProblemPage';
@@ -50,23 +48,18 @@ class Routes {
   static const String notificationPage = '/notificationPage';
   static const String sortProblemPage = '/sortProblemPage';
   static const String folderPage = '/folderPage';
-
   static const String accountSettingPage = '/accountSettingPage';
   static const String generalLabelsPage = '/generalLabelsPage';
   static const String systemLabelsPage = '/systemLabelsPage';
-
   static const String changePasswordPage = '/changePasswordPage';
-  static const String auditFailedTagsPage = '/auditFailedTagsPage';
-
+  static const String auditFailedlabelsPage = '/auditFailedlabelsPage';
   static const String ratingPage = '/ratingPage';
   static const String reportPage = '/reportPage';
   static const String reportWaitPage = '/reportWaitPage';
   static const String reportFailPage = '/reportFailPage';
   static const String reportSuccessPage = '/reportSuccessPage';
-
   static const String ratePage = '/ratePage';
   static const String applicationProfilePage = '/applicationProfilePage';
-
   static const String homePage = '/homePage';
   static const String questionApplyPage = '/questionApplyPage';
   static const String addProblemPage = '/addProblemPage';
@@ -74,7 +67,7 @@ class Routes {
   static const String unsolvedPage = '/unsolnedPage';
   static const String uploadAnsPage = '/uploadAnsPage';
   static const String answerPage = '/answerPage';
-  static List<String> bottomNavigationRoutes = [
+  static const List<String> bottomNavigationRoutes = [
     homePage,
     unsolvedPage,
     selfProblemPage,
@@ -111,40 +104,34 @@ class Routes {
     selfInformationPage: (context) => const SelfInformationPage(),
     ratePage: (context) {
       final args = ModalRoute.of(context)!.settings.arguments as UsersModel;
-      return RatePage(
-        user: args,
-      );
+      return RatePage(user: args);
     },
     reportSuccessPage: (context) {
-      final report = ModalRoute.of(context)!.settings.arguments as ReportsModel;
-      return ReportSuccessPage(report: report);
+      final args = ModalRoute.of(context)!.settings.arguments as ReportsModel;
+      return ReportSuccessPage(report: args);
     },
     reportWaitPage: (context) {
-      final reportId = ModalRoute.of(context)!.settings.arguments as String;
-      return ReportWaitPage(reportId: reportId);
+      final args = ModalRoute.of(context)!.settings.arguments as String;
+      return ReportWaitPage(reportId: args);
     },
     reportPage: (context) {
-      final args = ModalRoute.of(context)!.settings.arguments as Map;
-      return ReportPage(
-        problem: args['problem'] as ProblemsModel,
-        reporterId: args['reporterId'] as String,
-        beReporterId: args['beReporterId'] as String,
-      );
+      final args = ModalRoute.of(context)!.settings.arguments as ProblemsModel;
+      return ReportPage(problem: args);
     },
     ratingPage: (context) {
-      final ProblemsModel problem =
+      final ProblemsModel args =
           ModalRoute.of(context)!.settings.arguments as ProblemsModel;
-      return RatingPage(problem: problem);
+      return RatingPage(problem: args);
     },
     answerPage: (context) {
-      final ProblemsModel problem =
+      final ProblemsModel args =
           ModalRoute.of(context)!.settings.arguments as ProblemsModel;
-      return AnswerPage(problem: problem);
+      return AnswerPage(problem: args);
     },
     uploadAnsPage: (context) {
-      final ProblemsModel problem =
+      final ProblemsModel args =
           ModalRoute.of(context)!.settings.arguments as ProblemsModel;
-      return UploadAnsPage(problem: problem);
+      return UploadAnsPage(problem: args);
     },
     applicationProfilePage: (context) {
       final args = ModalRoute.of(context)!.settings.arguments as Map;
@@ -155,9 +142,9 @@ class Routes {
       );
     },
     folderPage: (context) {
-      final FolderModel folder =
+      final FolderModel args =
           ModalRoute.of(context)!.settings.arguments as FolderModel;
-      return FilesPage(folder: folder);
+      return FilesPage(folder: args);
     },
     chatRoomPage: (context) {
       Map args = ModalRoute.of(context)!.settings.arguments as Map;
@@ -167,14 +154,14 @@ class Routes {
       );
     },
     selfSingleProblemPage: (context) {
-      final ProblemsModel problem =
+      final ProblemsModel args =
           ModalRoute.of(context)!.settings.arguments as ProblemsModel;
-      return SelfSinglefProblemPage(problem: problem);
+      return SelfSinglefProblemPage(problem: args);
     },
     questionApplyPage: (context) {
-      final ProblemsModel problem =
+      final ProblemsModel args =
           ModalRoute.of(context)!.settings.arguments as ProblemsModel;
-      return QuestionApplyPage(problem: problem);
+      return QuestionApplyPage(problem: args);
     },
   };
 

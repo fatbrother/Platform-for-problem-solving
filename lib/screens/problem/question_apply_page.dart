@@ -13,7 +13,7 @@ import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
 import 'package:pops/widgets/buttons.dart';
-import 'package:pops/widgets/scaffold.dart';
+import 'package:pops/widgets/main/scaffold.dart';
 
 class QuestionApplyPage extends StatelessWidget {
   final ProblemsModel problem;
@@ -54,7 +54,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   TextEditingController partialAnsController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   List<Image> images = [];
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
 
   void loadImages() async {
     for (final id in widget.problem.imgIds) {

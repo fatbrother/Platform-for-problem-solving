@@ -5,7 +5,7 @@ import 'package:pops/models/user_model.dart';
 import 'package:pops/services/database.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/main/app_bar.dart';
 
 class ReportSuccessPage extends StatelessWidget {
   final ReportsModel report;
@@ -33,8 +33,8 @@ class ReportSuccessBody extends StatefulWidget {
 }
 
 class _ReportSuccessBodyState extends State<ReportSuccessBody> {
-  UsersModel reporter = UsersModel(id: '', name: '', email: '');
-  UsersModel beReporter = UsersModel(id: '', name: '', email: '');
+  UsersModel reporter = UsersModel();
+  UsersModel beReporter = UsersModel();
   ProblemsModel problem = ProblemsModel();
 
   void returnTocken() async {

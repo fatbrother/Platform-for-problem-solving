@@ -6,8 +6,8 @@ import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
-import 'package:pops/widgets/problem_box.dart';
+import 'package:pops/widgets/main/app_bar.dart';
+import 'package:pops/widgets/problem/problem_box.dart';
 
 class FilesPage extends StatefulWidget {
   final FolderModel folder;
@@ -21,7 +21,7 @@ class FilesPage extends StatefulWidget {
 class _FilesPage extends State<FilesPage> {
   bool _isSnackBarActive = false;
 
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
   List<ProblemsModel> problemInFolder = [];
   List<ProblemsModel> problems = [];
 
@@ -32,51 +32,8 @@ class _FilesPage extends State<FilesPage> {
       children.add(
         ProbelmBoxIcon(
           problem: problem,
-          onTap: () {
-            if (problem.reportId != '') {
-              Routes.push(context, Routes.reportWaitPage,
-                  arguments: problem.reportId);
-              return;
-            }
-            if (problem.deadline != DateTime(0) &&
-                problem.isOverDeadline &&
-                problem.answer == '') {
-              DialogManager.showContentDialog(
-                context,
-                const Text('回答者超過時間未上傳答案\n代幣以全數退回'),
-                () {
-                  user.tokens += problem.rewardToken;
-                  user.tokens += 10;
-                  AccountManager.updateCurrentUser(user);
-                  ProblemsDatabase.instance.delete(problem.id);
-                  Routes.pushReplacement(context, Routes.selfProblemPage);
-                },
-              );
-              return;
-            }
-            if (problem.chooseSolveCommendId == '') {
-              Routes.push(context, Routes.selfSingleProblemPage,
-                  arguments: problem);
-            } else {
-              Routes.push(context, Routes.answerPage, arguments: problem);
-            }
-          },
-          onLongPress: () {
-            DialogManager.showContentDialog(
-                context, Text('確定從資料夾中移除${problem.title}?'), () {
-              widget.folder.problemIds.remove(problem.id);
-              for (final folder in user.folders) {
-                if (folder.name == widget.folder.name) {
-                  folder.problemIds = widget.folder.problemIds;
-                  break;
-                }
-              }
-              AccountManager.updateCurrentUser(user);
-              problemInFolder.remove(problem);
-              problems.add(problem);
-              setState(() {});
-            });
-          },
+          onTap: () => goToProblemPage(problem),
+          onLongPress: () => deleteProblem(problem),
         ),
       );
       children.add(const SizedBox(height: 10));
@@ -84,11 +41,7 @@ class _FilesPage extends State<FilesPage> {
 
     return WillPopScope(
       child: Scaffold(
-        appBar: GoBackBar(onPop: () {
-          if (_isSnackBarActive) {
-            closeSnackBar();
-          }
-        }),
+        appBar: GoBackBar(onPop: () => closeSnackBar()),
         backgroundColor: Design.secondaryColor,
         body: Column(
           children: [
@@ -187,5 +140,50 @@ class _FilesPage extends State<FilesPage> {
         ),
       ),
     );
+  }
+
+  void goToProblemPage(ProblemsModel problem) {
+    if (problem.reportId != '') {
+      Routes.push(context, Routes.reportWaitPage, arguments: problem.reportId);
+      return;
+    }
+    if (problem.deadline != DateTime(0) &&
+        problem.isOverDeadline &&
+        problem.answer == '') {
+      DialogManager.showContentDialog(
+        context,
+        const Text('回答者超過時間未上傳答案\n代幣以全數退回'),
+        () {
+          user.tokens += problem.rewardToken;
+          user.tokens += 10;
+          AccountManager.updateCurrentUser(user);
+          ProblemsDatabase.instance.delete(problem.id);
+          Routes.pushReplacement(context, Routes.selfProblemPage);
+        },
+      );
+      return;
+    }
+    if (problem.chooseSolveCommendId == '') {
+      Routes.push(context, Routes.selfSingleProblemPage, arguments: problem);
+    } else {
+      Routes.push(context, Routes.answerPage, arguments: problem);
+    }
+  }
+
+  void deleteProblem(ProblemsModel problem) {
+    DialogManager.showContentDialog(context, Text('確定從資料夾中移除${problem.title}?'),
+        () {
+      widget.folder.problemIds.remove(problem.id);
+      for (final folder in user.folders) {
+        if (folder.name == widget.folder.name) {
+          folder.problemIds = widget.folder.problemIds;
+          break;
+        }
+      }
+      AccountManager.updateCurrentUser(user);
+      problemInFolder.remove(problem);
+      problems.add(problem);
+      setState(() {});
+    });
   }
 }

@@ -5,9 +5,9 @@ import 'package:pops/services/problem/problem.dart';
 import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
-import 'package:pops/widgets/buttom_navigation_bar.dart';
-import 'package:pops/widgets/problem_box.dart';
+import 'package:pops/widgets/main/app_bar.dart';
+import 'package:pops/widgets/main/buttom_navigation_bar.dart';
+import 'package:pops/widgets/problem/problem_box.dart';
 
 class UnsolvedPage extends StatefulWidget {
   const UnsolvedPage({super.key});

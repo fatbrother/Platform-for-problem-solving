@@ -7,7 +7,7 @@ import 'package:pops/services/other/img.dart';
 import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
-import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/main/app_bar.dart';
 
 class ChatRoomPage extends StatefulWidget {
   final String chatRoomId;
@@ -25,7 +25,7 @@ class ChatRoomPage extends StatefulWidget {
 
 class ChatRoomPageState extends State<ChatRoomPage> {
   final TextEditingController chatController = TextEditingController();
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
   List<Message> messages = [];
 
   Future<void> submitText(Message message) async {
@@ -90,28 +90,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
                         child: Row(
                           children: <Widget>[
                             IconButton(
-                              onPressed: () async {
-                                String url = "";
-                                try {
-                                  url = await ImgManager.uploadImage();
-                                } catch (e) {
-                                  if (e
-                                      .toString()
-                                      .contains('No image selected')) {
-                                    DialogManager.showInfoDialog(
-                                      context,
-                                      '未選擇圖片',
-                                    );
-                                    return;
-                                  }
-                                }
-                                Message message = Message(
-                                  id: user.id,
-                                  message: url,
-                                  type: 1,
-                                );
-                                submitText(message);
-                              },
+                              onPressed: selectImg,
                               icon: const Icon(Icons.image),
                             ),
                             Flexible(
@@ -124,11 +103,7 @@ class ChatRoomPageState extends State<ChatRoomPage> {
                                 ),
                                 controller: chatController,
                                 onSubmitted: (value) => submitText(
-                                  Message(
-                                    id: user.id,
-                                    message: value,
-                                    type: 0,
-                                  ),
+                                  Message(id: user.id, message: value, type: 0),
                                 ),
                               ),
                             ),
@@ -152,6 +127,27 @@ class ChatRoomPageState extends State<ChatRoomPage> {
         );
       },
     );
+  }
+
+  void selectImg() async {
+    String url = "";
+    try {
+      url = await ImgManager.uploadImage();
+    } catch (e) {
+      if (e.toString().contains('No image selected')) {
+        DialogManager.showInfoDialog(
+          context,
+          '未選擇圖片',
+        );
+        return;
+      }
+    }
+    Message message = Message(
+      id: user.id,
+      message: url,
+      type: 1,
+    );
+    submitText(message);
   }
 }
 

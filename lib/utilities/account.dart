@@ -115,7 +115,6 @@ class AccountManager {
       var user = await AccountManager.currentUser;
       if (_auth.currentUser!.phoneNumber != null) {
         user.phone = _auth.currentUser!.phoneNumber!;
-        user.isPhoneVerified = true;
       }
     } catch (e) {
       rethrow;
@@ -170,9 +169,5 @@ class AccountManager {
 
   static bool isLoggedIn() {
     return _auth.currentUser != null;
-  }
-
-  static bool isPhoneVerified() {
-    return _auth.currentUser!.phoneNumber != "";
   }
 }

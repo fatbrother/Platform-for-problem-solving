@@ -10,7 +10,7 @@ include(${EPHEMERAL_DIR}/generated_config.cmake)
 # https://github.com/flutter/flutter/issues/57146.
 
 # Serves the same purpose as list(TRANSFORM ... PREPEND ...),
-# which isn't available in 3.10.
+# which isn't availabel in 3.10.
 function(list_prepend LIST_NAME PREFIX)
     set(NEW_LIST "")
     foreach(element ${${LIST_NAME}})

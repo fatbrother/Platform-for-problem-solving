@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/main/app_bar.dart';
 
 class ReportFailPage extends StatelessWidget {
   const ReportFailPage({super.key});

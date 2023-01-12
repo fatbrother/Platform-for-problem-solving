@@ -3,7 +3,7 @@ import 'package:pops/models/user_model.dart';
 import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/buttom_navigation_bar.dart';
+import 'package:pops/widgets/main/buttom_navigation_bar.dart';
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
@@ -11,14 +11,12 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Design.backgroundColor,
-      ),
+      appBar: AppBar(backgroundColor: Design.backgroundColor),
       backgroundColor: Design.secondaryColor,
       body: const NotificationPageBody(),
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex:
-            Routes.bottomNavigationRoutes.indexOf(Routes.notificationPage),
+            Routes.bottomNavigationRoutes.indexOf(Routes.notificationPage)
       ),
     );
   }
@@ -34,7 +32,7 @@ class NotificationPageBody extends StatefulWidget {
 }
 
 class _NotificationPageBodyState extends State<NotificationPageBody> {
-  var user = UsersModel(id: '', name: '', email: '');
+  var user = UsersModel();
 
   Future<void> loadUserInfo() async {
     user = await AccountManager.currentUser;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/scaffold.dart';
+import 'package:pops/widgets/main/scaffold.dart';
 import 'package:pops/widgets/setting_bar.dart';
 
 class SettingPage extends StatelessWidget {

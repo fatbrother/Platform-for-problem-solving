@@ -4,7 +4,7 @@ import 'package:pops/models/user_model.dart';
 import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
-import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/main/app_bar.dart';
 
 class TopUpPage extends StatelessWidget {
   const TopUpPage({
@@ -117,7 +117,6 @@ class _TopUpBody extends State<TopUpBody> {
                 ),
               ),
               SizedBox(
-                //下部分
                 child: InkWell(
                   onTap: () => setState(() {
                     inMiddle = false;
@@ -145,46 +144,48 @@ class _TopUpBody extends State<TopUpBody> {
             ],
           ),
           SizedBox(height: Design.getScreenHeight(context) * 0.03),
-          //確認儲值按鈕
           SizedBox(
             height: Design.getScreenHeight(context) * 0.07,
             child: InkWell(
-              onTap: () async {
-                try {
-                  int money = int.parse(_controller.text);
-                  _controller.clear();
-
-                  if (money <= 0) {
-                    DialogManager.showInfoDialog(context, '請輸入正確金額');
-                  } else {
-                    DialogManager.showInfoDialog(context, '儲值成功');
-                    user.tokens += money;
-                    await AccountManager.updateCurrentUser(user);
-                    loadUserInfo();
-                  }
-                } catch (e) {
-                  DialogManager.showInfoDialog(context, '請輸入正確金額');
-                  return;
-                }
-              },
+              onTap: topUp,
               child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Design.insideColor,
-                  ),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    '確認儲值',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 0, 0, 0)),
-                  )),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Design.insideColor,
+                ),
+                alignment: Alignment.center,
+                child: const Text(
+                  '確認儲值',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 0, 0, 0)),
+                ),
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void topUp() async {
+    try {
+      int money = int.parse(_controller.text);
+      _controller.clear();
+
+      if (money <= 0) {
+        DialogManager.showInfoDialog(context, '請輸入正確金額');
+      } else {
+        DialogManager.showInfoDialog(context, '儲值成功');
+        user.tokens += money;
+        await AccountManager.updateCurrentUser(user);
+        loadUserInfo();
+      }
+    } catch (e) {
+      DialogManager.showInfoDialog(context, '請輸入正確金額');
+      return;
+    }
   }
 }

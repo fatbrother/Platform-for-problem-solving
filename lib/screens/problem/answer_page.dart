@@ -5,7 +5,7 @@ import 'package:pops/services/problem/contract.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/app_bar.dart';
+import 'package:pops/widgets/main/app_bar.dart';
 
 class AnswerPage extends StatelessWidget {
   final ProblemsModel problem;
@@ -173,18 +173,9 @@ class _AnswerBodyState extends State<AnswerBody> {
                               DialogManager.showContentDialog(
                                 context,
                                 const Text('進入檢舉流程後便無法取消'),
-                                () async {
-                                  var solveCommand =
-                                      await ContractsDatabase.instance.query(
-                                          widget.problem.chooseSolveCommendId);
-
-                                  // ignore: use_build_context_synchronously
+                                () {
                                   Routes.push(context, Routes.reportPage,
-                                      arguments: {
-                                        'problem': widget.problem,
-                                        'reporterId': widget.problem.authorId,
-                                        'beReporterId': solveCommand.solverId,
-                                      });
+                                      arguments: widget.problem);
                                 },
                               );
                             },

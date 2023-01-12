@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pops/utilities/design.dart';
 
-class ShowLableWidget extends StatelessWidget {
+class ShowLabelWidget extends StatelessWidget {
   final String title;
   final bool isGeneral;
-  const ShowLableWidget({
+  const ShowLabelWidget({
     super.key,
     required this.title,
     required this.isGeneral,

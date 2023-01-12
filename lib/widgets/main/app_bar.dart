@@ -40,6 +40,28 @@ class GoBackBar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
+class TitleBar extends StatelessWidget with PreferredSizeWidget {
+  final String title;
+
+  const TitleBar({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      toolbarHeight: 0.1 * Design.getScreenHeight(context),
+      titleTextStyle: const TextStyle(
+        fontSize: 30.0,
+        fontWeight: FontWeight.bold,
+      ),
+      backgroundColor: Design.primaryColor,
+      title: Text(title),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
 class SearchBar extends StatelessWidget with PreferredSizeWidget {
   final void Function(String text) onSelected;
   final List<String> Function(String text) getSuggestions;

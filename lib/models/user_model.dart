@@ -11,12 +11,10 @@ class UsersModel extends ModelBase {
   int reportNum;
   List<String> commandProblemIds;
   List<String> askProblemIds;
-  List<String> pastExpertiseTags;
-  List<String> expertiseTags;
-  List<String> displaySystemTags;
-  List<String> hideSystemTags;
-  List<String> auditFailedTags;
-  List<String> audittingTags;
+  List<String> expertiselabels;
+  List<String> displaySystemlabels;
+  List<String> auditFailedlabels;
+  List<String> audittinglabels;
   List<String> notices;
   List<FeedbacksModel> feedbacks;
   List<FolderModel> folders;
@@ -24,7 +22,6 @@ class UsersModel extends ModelBase {
   int tokens;
   double score;
   int numberOfScores;
-  bool isPhoneVerified;
 
   UsersModel({
     this.id = '',
@@ -35,12 +32,10 @@ class UsersModel extends ModelBase {
     this.phone = '',
     this.commandProblemIds = const [],
     this.selfIntroduction = '',
-    this.expertiseTags = const [],
-    this.pastExpertiseTags = const [],
-    this.displaySystemTags = const [],
-    this.hideSystemTags = const [],
-    this.auditFailedTags = const [],
-    this.audittingTags = const [],
+    this.expertiselabels = const [],
+    this.displaySystemlabels = const [],
+    this.auditFailedlabels = const [],
+    this.audittinglabels = const [],
     this.askProblemIds = const [],
     this.chatRoomsIds = const [],
     this.feedbacks = const [],
@@ -49,7 +44,6 @@ class UsersModel extends ModelBase {
     this.tokens = 0,
     this.score = 0,
     this.numberOfScores = 0,
-    this.isPhoneVerified = false,
   });
 
   factory UsersModel.fromMap(Map<String, dynamic> data) {
@@ -80,24 +74,18 @@ class UsersModel extends ModelBase {
       askProblemIds: data['askProblemIds'] == null
           ? []
           : data['askProblemIds'].cast<String>(),
-      expertiseTags: data['expertiseTags'] == null
+      expertiselabels: data['expertiselabels'] == null
           ? []
-          : data['expertiseTags'].cast<String>(),
-      pastExpertiseTags: data['pastExpertiseTags'] == null
+          : data['expertiselabels'].cast<String>(),
+      displaySystemlabels: data['displaySystemlabels'] == null
           ? []
-          : data['pastExpertiseTags'].cast<String>(),
-      displaySystemTags: data['displaySystemTags'] == null
+          : data['displaySystemlabels'].cast<String>(),
+      auditFailedlabels: data['auditFailedlabels'] == null
           ? []
-          : data['displaySystemTags'].cast<String>(),
-      hideSystemTags: data['hideSystemTags'] == null
+          : data['auditFailedlabels'].cast<String>(),
+      audittinglabels: data['audittinglabels'] == null
           ? []
-          : data['hideSystemTags'].cast<String>(),
-      auditFailedTags: data['auditFailedTags'] == null
-          ? []
-          : data['auditFailedTags'].cast<String>(),
-      audittingTags: data['audittingTags'] == null
-          ? []
-          : data['audittingTags'].cast<String>(),
+          : data['audittinglabels'].cast<String>(),
       chatRoomsIds: data['chatRoomsIds'] == null
           ? []
           : data['chatRoomsIds'].cast<String>(),
@@ -107,7 +95,6 @@ class UsersModel extends ModelBase {
       feedbacks: feedbacks,
       folders: folders,
       notices: data['notices'] == null ? [] : data['notices'].cast<String>(),
-      isPhoneVerified: data['isPhoneVerified'] ?? false,
     );
   }
 
@@ -123,12 +110,10 @@ class UsersModel extends ModelBase {
       'selfIntroduction': selfIntroduction,
       'commandProblemIds': commandProblemIds,
       'askProblemIds': askProblemIds,
-      'expertiseTags': expertiseTags,
-      'pastExpertiseTags': pastExpertiseTags,
-      'displaySystemTags': displaySystemTags,
-      'hideSystemTags': hideSystemTags,
-      'auditFailedTags': auditFailedTags,
-      'audittingTags': audittingTags,
+      'expertiselabels': expertiselabels,
+      'displaySystemlabels': displaySystemlabels,
+      'auditFailedlabels': auditFailedlabels,
+      'audittinglabels': audittinglabels,
       'chatRoomsIds': chatRoomsIds,
       'tokens': tokens,
       'score': score,
@@ -136,7 +121,6 @@ class UsersModel extends ModelBase {
       'feedbacks': feedbacks.map((e) => e.toMap()).toList(),
       'folders': folders.map((e) => e.toMap()).toList(),
       'notices': notices,
-      'isPhoneVerified': isPhoneVerified,
     };
   }
 }

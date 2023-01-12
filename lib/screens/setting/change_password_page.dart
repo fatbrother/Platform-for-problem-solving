@@ -4,7 +4,7 @@ import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/routes.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/widgets/input_field.dart';
-import 'package:pops/widgets/scaffold.dart';
+import 'package:pops/widgets/main/scaffold.dart';
 
 class ChangePasswordPage extends StatelessWidget {
   const ChangePasswordPage({

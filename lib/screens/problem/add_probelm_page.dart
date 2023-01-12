@@ -9,8 +9,9 @@ import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
+import 'package:pops/widgets/add_img_row.dart';
 import 'package:pops/widgets/buttons.dart';
-import 'package:pops/widgets/scaffold.dart';
+import 'package:pops/widgets/main/scaffold.dart';
 
 class AddProblemPage extends StatelessWidget {
   const AddProblemPage({super.key});
@@ -39,7 +40,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController rewardTokenController = TextEditingController();
-  UsersModel user = UsersModel(id: '', name: '', email: '');
+  UsersModel user = UsersModel();
   List<String> imageIdList = [];
   List<Image> imageList = [];
   List<String> tags = [];
@@ -79,8 +80,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
                 decoration: const InputDecoration(
                   hintText: '題目描述、圖片',
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 17),
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                  contentPadding: EdgeInsets.all(0),
                   focusedBorder: InputBorder.none,
                   border: InputBorder.none,
                 ),
@@ -90,24 +90,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
                   width: double.infinity,
                   child: image,
                 ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: const [
-                      Icon(Icons.image, color: Colors.grey, size: 50),
-                      Icon(Icons.image, color: Colors.grey, size: 50),
-                      Icon(Icons.image, color: Colors.grey, size: 50),
-                    ],
-                  ),
-                  IconButton(
-                    padding: const EdgeInsets.all(0),
-                    icon: const Icon(Icons.add_box_outlined,
-                        color: Colors.grey, size: 40),
-                    onPressed: addImage,
-                  ),
-                ],
-              )
+              AddImgRow(onPressed: addImage),
             ],
           ),
         ),
@@ -130,7 +113,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
                     padding: const EdgeInsets.all(0),
                     icon: const Icon(Icons.add_box_outlined,
                         color: Colors.grey, size: 40),
-                    onPressed: addLables,
+                    onPressed: addtag,
                   ),
                 ],
               ),
@@ -142,16 +125,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
                 children: [
                   for (final tag in tags)
                     GestureDetector(
-                      onLongPress: () {
-                        DialogManager.showContentDialog(
-                          context,
-                          const Text('確定刪除標籤?'),
-                          () {
-                            tags.remove(tag);
-                            setState(() {});
-                          },
-                        );
-                      },
+                      onLongPress: () => deleteTag(tag),
                       child: Container(
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
@@ -276,7 +250,7 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
     }
   }
 
-  void addLables() {
+  void addtag() {
     TextEditingController tagController = TextEditingController();
     DialogManager.showContentDialog(
         context,
@@ -320,6 +294,17 @@ class _AddProblemPageBodyState extends State<AddProblemPageBody> {
         tags.add(tagController.text);
       });
     });
+  }
+
+  void deleteTag(String tag) {
+    DialogManager.showContentDialog(
+      context,
+      const Text('確定刪除標籤?'),
+      () {
+        tags.remove(tag);
+        setState(() {});
+      },
+    );
   }
 }
 
