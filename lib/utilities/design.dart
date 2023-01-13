@@ -18,10 +18,13 @@ class Design {
   static const Color systemTagColor = Color.fromARGB(255, 240, 235, 116);
 
   static const spacing = EdgeInsets.all(10.0);
-  static const outsideBorderRadius =
-      BorderRadius.all(Radius.circular(20.0));
-  static const insideBorderRadius =
-      BorderRadius.all(Radius.circular(10.0));
+  static const outsideBorderRadius = BorderRadius.all(Radius.circular(20.0));
+  static const insideBorderRadius = BorderRadius.all(Radius.circular(10.0));
+
+  static const TextStyle size30 = TextStyle(
+    fontSize: 30,
+    fontWeight: FontWeight.bold,
+  );
 
   static double getScreenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
@@ -29,13 +32,5 @@ class Design {
 
   static double getScreenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
-  }
-
-  static Alignment angleToAlignment(double angle) {
-    var radius = 1.0;
-    var x = radius * cos(angle);
-    var y = radius * sin(angle);
-
-    return Alignment(x, y);
   }
 }

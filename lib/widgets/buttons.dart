@@ -23,7 +23,7 @@ class MainButton extends StatelessWidget {
           vertical: 0.02 * Design.getScreenHeight(context),
         ),
         textStyle: const TextStyle(
-          fontSize: 32.0,
+          fontSize: 30.0,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -196,7 +196,7 @@ class LinkButton extends StatelessWidget {
             fit: FlexFit.tight,
             child: Text(
               text,
-              style: const TextStyle(fontSize: 22),
+              style: const TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
           ),

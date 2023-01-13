@@ -82,15 +82,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: SearchBar(
         onSelected: loadProblems,
-        getSuggestions: (String text) {
-          if (text == '') {
-            return [];
-          } else {
-            return TagsDatabase.instance.querySimilar(text)
-                .map((e) => e.name)
-                .toList();
-          }
-        },
+        getSuggestions: getSuggestions,
       ),
       backgroundColor: Design.backgroundColor,
       body: HomePageBody(problems: problems),
@@ -99,6 +91,16 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  List<String> getSuggestions(String text) {
+        if (text == '') {
+          return [];
+        } else {
+          return TagsDatabase.instance.querySimilar(text)
+              .map((e) => e.name)
+              .toList();
+        }
+      }
 }
 
 class HomePageBody extends StatelessWidget {

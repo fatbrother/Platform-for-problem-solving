@@ -90,8 +90,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 borderRadius: Design.outsideBorderRadius,
               ),
               child: Text(widget.problem.title,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.normal),
+                  style: const TextStyle(fontSize: 20),
                   textAlign: TextAlign.center)),
           const SizedBox(height: 10),
           Container(
@@ -106,7 +105,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 const Center(
                     child: Text('題目文字內容', style: TextStyle(fontSize: 20))),
                 Text(widget.problem.description,
-                    style: const TextStyle(fontSize: 17)),
+                    style: const TextStyle(fontSize: 18)),
                 for (final image in images)
                   Container(padding: const EdgeInsets.all(10), child: image),
               ],
@@ -170,7 +169,9 @@ class MyCustomFormState extends State<MyCustomForm> {
             ),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
-              if (value == null || value.isEmpty || int.parse(value) < widget.problem.baseToken) {
+              if (value == null ||
+                  value.isEmpty ||
+                  int.parse(value) < widget.problem.baseToken) {
                 return "請輸入比底價高的價格";
               }
               return null;

@@ -33,8 +33,7 @@ class _StarPlateState extends State<StarPlate> {
             children: <Widget>[
               for (int i = 0; i < 5; i++)
                 Align(
-                  alignment:
-                      Design.angleToAlignment((pi / 2) * 3 + 2 * pi / 5 * i),
+                  alignment: angleToAlignment((pi / 2) * 3 + 2 * pi / 5 * i),
                   child: Icon(
                     Icons.star,
                     size: widget.radius * 0.7,
@@ -48,5 +47,13 @@ class _StarPlateState extends State<StarPlate> {
         ),
       ),
     );
+  }
+
+  static Alignment angleToAlignment(double angle) {
+    var radius = 1.0;
+    var x = radius * cos(angle);
+    var y = radius * sin(angle);
+
+    return Alignment(x, y);
   }
 }

@@ -93,7 +93,7 @@ class NotificationCard extends StatelessWidget {
             child: Text(
               notice,
               style: const TextStyle(
-                  color: Design.secondaryTextColor, fontSize: 16),
+                  color: Design.secondaryTextColor, fontSize: 15),
               maxLines: 3,
             ),
           ),

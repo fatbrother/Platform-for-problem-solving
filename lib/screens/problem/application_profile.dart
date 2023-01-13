@@ -172,7 +172,7 @@ class _ApplicationProfilePageState extends State<ApplicationProfilePage> {
                         borderRadius: Design.outsideBorderRadius)),
                 child: const Text(
                   '確認選擇',
-                  style: TextStyle(color: Colors.black, fontSize: 20),
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
             ),
