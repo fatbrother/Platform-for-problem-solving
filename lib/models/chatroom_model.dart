@@ -38,9 +38,9 @@ class ChatRoomModel extends ModelBase {
   List<Message> messages;
 
   ChatRoomModel({
-    required this.id,
-    required this.memberIds,
-    required this.messages,
+    this.id = '',
+    this.memberIds = const [],
+    this.messages = const [],
   });
 
   @override

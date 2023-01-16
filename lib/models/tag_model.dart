@@ -7,8 +7,8 @@ class TagsModel extends ModelBase {
   List<String> problemsWithTag;
 
   TagsModel({
-    required this.id,
-    required this.name,
+    this.id = '',
+    this.name = '',
     this.problemsWithTag = const [],
   });
 
