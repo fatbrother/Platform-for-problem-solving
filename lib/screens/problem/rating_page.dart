@@ -10,7 +10,7 @@ import 'package:pops/utilities/routes.dart';
 import 'package:pops/widgets/button/send_button.dart';
 import 'package:pops/widgets/main/app_bar.dart';
 import 'package:pops/widgets/main/suggest_field.dart';
-import 'package:pops/widgets/star_plate.dart';
+import 'package:pops/widgets/other/star_plate.dart';
 
 class RatingPage extends StatefulWidget {
   final ProblemsModel problem;

@@ -9,7 +9,7 @@ import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/add_img_row.dart';
+import 'package:pops/widgets/other/add_img_row.dart';
 import 'package:pops/widgets/button/confirm_button.dart';
 import 'package:pops/widgets/main/scaffold.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utilities/design.dart';
+import '../../utilities/design.dart';
 
 class InputField extends StatefulWidget {
   final String hintText;

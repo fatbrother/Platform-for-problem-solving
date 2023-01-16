@@ -1,5 +1,6 @@
 // When we are adding a new page, we need to add it to the routes map.
 import 'package:flutter/cupertino.dart';
+import 'package:pops/screens/bottom/base.dart';
 import 'package:pops/utilities/account.dart';
 import 'package:pops/screens/bottom/home_page.dart';
 import 'package:pops/screens/bottom/notification_page.dart';
@@ -35,6 +36,7 @@ import 'package:pops/models/report_model.dart';
 import 'package:pops/models/user_model.dart';
 
 class Routes {
+  static const String baseMainPage = '/baseMainPage';
   static const String login = '/login';
   static const String register = '/register';
   static const String verifyPhone = '/verifyPhone';
@@ -80,11 +82,12 @@ class Routes {
       Routes()._routes[homeRouteName];
 
   static String get homeRouteName =>
-      AccountManager.isLoggedIn() ? homePage : login;
+      AccountManager.isLoggedIn() ? baseMainPage : login;
 
   static Map<String, WidgetBuilder> get routes => Routes()._routes;
 
   final Map<String, WidgetBuilder> _routes = {
+    baseMainPage: (context) => const BaseMainPage(),
     login: (context) => const LoginPage(),
     register: (context) => const RegisterPage(),
     selfProblemPage: (context) => const SelfProblemPage(),

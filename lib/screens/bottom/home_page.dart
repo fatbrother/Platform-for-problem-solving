@@ -8,7 +8,6 @@ import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
 import 'package:pops/widgets/main/app_bar.dart';
-import 'package:pops/widgets/main/buttom_navigation_bar.dart';
 import 'package:pops/widgets/problem/problem_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -86,21 +85,19 @@ class _HomePageState extends State<HomePage> {
       ),
       backgroundColor: Design.backgroundColor,
       body: HomePageBody(problems: problems),
-      bottomNavigationBar: MyBottomNavigationBar(
-        currentIndex: Routes.bottomNavigationRoutes.indexOf(Routes.homePage),
-      ),
     );
   }
 
   List<String> getSuggestions(String text) {
-        if (text == '') {
-          return [];
-        } else {
-          return TagsDatabase.instance.querySimilar(text)
-              .map((e) => e.name)
-              .toList();
-        }
-      }
+    if (text == '') {
+      return [];
+    } else {
+      return TagsDatabase.instance
+          .querySimilar(text)
+          .map((e) => e.name)
+          .toList();
+    }
+  }
 }
 
 class HomePageBody extends StatelessWidget {

@@ -5,21 +5,16 @@ import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/main/buttom_navigation_bar.dart';
-import 'package:pops/widgets/setting_bar.dart';
+import 'package:pops/widgets/other/setting_bar.dart';
 import 'package:pops/widgets/label/label.dart';
 
 class SelfInformationPage extends StatelessWidget {
   const SelfInformationPage({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Design.secondaryColor,
-      body: const SelfInfoPageBody(),
-      bottomNavigationBar: MyBottomNavigationBar(
-        currentIndex:
-            Routes.bottomNavigationRoutes.indexOf(Routes.selfInformationPage),
-      ),
+      body: SelfInfoPageBody(),
     );
   }
 }

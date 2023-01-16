@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pops/widgets/main/app_bar.dart';
-import 'package:pops/widgets/main/buttom_navigation_bar.dart';
 
 class MainScaffold extends StatefulWidget {
   const MainScaffold({
@@ -32,9 +31,6 @@ class _MainScaffoldState extends State<MainScaffold> {
               child: widget.body,
             ),
           ],
-        ),
-        bottomNavigationBar: MyBottomNavigationBar(
-          currentIndex: widget.currentIndex,
         ),
       ),
     );

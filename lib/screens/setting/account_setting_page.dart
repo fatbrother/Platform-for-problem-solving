@@ -5,7 +5,7 @@ import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
 import 'package:pops/widgets/main/scaffold.dart';
-import 'package:pops/widgets/setting_bar.dart';
+import 'package:pops/widgets/other/setting_bar.dart';
 
 class AccountSettingPage extends StatefulWidget {
   const AccountSettingPage({super.key});

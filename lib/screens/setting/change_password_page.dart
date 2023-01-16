@@ -3,7 +3,7 @@ import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/routes.dart';
 import 'package:pops/utilities/dialog.dart';
-import 'package:pops/widgets/input_field.dart';
+import 'package:pops/widgets/other/input_field.dart';
 import 'package:pops/widgets/main/scaffold.dart';
 
 class ChangePasswordPage extends StatelessWidget {

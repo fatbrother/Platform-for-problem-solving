@@ -54,10 +54,6 @@ class _SortProblemPage extends State<SortProblemPage> {
         onSelected: loadFolder,
         getSuggestions: getSuggesttions,
       ),
-      bottomNavigationBar: MyBottomNavigationBar(
-        currentIndex:
-            Routes.bottomNavigationRoutes.indexOf(Routes.sortProblemPage),
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

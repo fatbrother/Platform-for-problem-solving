@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pops/models/user_model.dart';
 import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
-import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/main/buttom_navigation_bar.dart';
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
@@ -14,10 +12,6 @@ class NotificationPage extends StatelessWidget {
       appBar: AppBar(backgroundColor: Design.backgroundColor),
       backgroundColor: Design.secondaryColor,
       body: const NotificationPageBody(),
-      bottomNavigationBar: MyBottomNavigationBar(
-        currentIndex:
-            Routes.bottomNavigationRoutes.indexOf(Routes.notificationPage)
-      ),
     );
   }
 }

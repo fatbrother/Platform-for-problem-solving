@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/routes.dart';
 import 'package:pops/widgets/main/scaffold.dart';
-import 'package:pops/widgets/setting_bar.dart';
+import 'package:pops/widgets/other/setting_bar.dart';
 
 class AddLabelPage extends StatelessWidget {
   const AddLabelPage({super.key});

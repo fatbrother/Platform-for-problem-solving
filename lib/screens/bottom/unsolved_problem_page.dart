@@ -60,10 +60,6 @@ class _UnsolvedPageState extends State<UnsolvedPage> {
       ),
       backgroundColor: Design.secondaryColor,
       body: UnsolvedPageBody(problems: problems),
-      bottomNavigationBar: MyBottomNavigationBar(
-        currentIndex:
-            Routes.bottomNavigationRoutes.indexOf(Routes.unsolvedPage),
-      ),
     );
   }
 }
