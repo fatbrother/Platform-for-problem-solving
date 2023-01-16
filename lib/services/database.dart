@@ -13,6 +13,9 @@ class DB {
 
   // get the table of the database
   static Future<List<Map<String, dynamic>>> getTable(String tableName) async {
+    if (tableName == '') {
+      throw Exception('Invalid parameters');
+    }
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await db.collection(tableName).get();
@@ -30,6 +33,9 @@ class DB {
   // get the row of the database
   static Future<Map<String, dynamic>> getRow(
       String tableName, String rowId) async {
+    if (tableName == '' || rowId == '') {
+      throw Exception('Invalid parameters');
+    }
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await db.collection(tableName).get();
@@ -46,6 +52,9 @@ class DB {
   // update the row of the database
   static Future<void> updateRow(
       String tableName, String rowId, Map<String, dynamic> row) async {
+    if (tableName == '' || rowId == '' || row.isEmpty) {
+      throw Exception('Invalid parameters');
+    }
     try {
       await db.collection(tableName).doc(rowId).set(row);
     } catch (e) {
@@ -55,6 +64,9 @@ class DB {
 
   // delete the row of the database
   static Future<void> deleteRow(String tableName, String rowId) async {
+    if (tableName == '' || rowId == '') {
+      throw Exception('Invalid parameters');
+    }
     try {
       await db.collection(tableName).doc(rowId).delete();
     } catch (e) {
@@ -65,6 +77,9 @@ class DB {
   // add the row of the databases
   static Future<String> addRow(
       String tableName, Map<String, dynamic> row) async {
+    if (tableName == '' || row.isEmpty) {
+      throw Exception('Invalid parameters');
+    }
     try {
       // if the row has an id, use it
       if (row.containsKey('id') && row['id'] != null && row['id'] != '') {
@@ -84,6 +99,9 @@ class DB {
 
   static Stream<DocumentSnapshot> getStream(
       String tableName, String rowId) {
+    if (tableName == '' || rowId == '') {
+      throw Exception('Invalid parameters');
+    }
     return db.collection(tableName).doc(rowId).snapshots();
   }
 }
