@@ -12,7 +12,7 @@ import 'package:pops/services/user/user.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
-import 'package:pops/widgets/buttons.dart';
+import 'package:pops/widgets/button/confirm_button.dart';
 import 'package:pops/widgets/main/scaffold.dart';
 
 class QuestionApplyPage extends StatelessWidget {

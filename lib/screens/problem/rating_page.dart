@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:pops/models/contract_model.dart';
 import 'package:pops/models/problem_model.dart';
 import 'package:pops/models/user_model.dart';
-import 'package:pops/services/problem/contract.dart';
 import 'package:pops/services/problem/problem.dart';
 import 'package:pops/utilities/account.dart';
 import 'package:pops/services/user/user.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
+import 'package:pops/widgets/button/send_button.dart';
 import 'package:pops/widgets/main/app_bar.dart';
-import 'package:pops/widgets/buttons.dart';
+import 'package:pops/widgets/main/suggest_field.dart';
 import 'package:pops/widgets/star_plate.dart';
-import 'package:pops/widgets/suggest_field.dart';
 
 class RatingPage extends StatefulWidget {
   final ProblemsModel problem;

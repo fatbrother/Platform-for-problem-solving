@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pops/models/problem_model.dart';
 import 'package:pops/services/other/img.dart';
-import 'package:pops/services/problem/contract.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';

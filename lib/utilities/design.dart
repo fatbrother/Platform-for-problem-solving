@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 // this class is store the information of our design
@@ -20,11 +18,6 @@ class Design {
   static const spacing = EdgeInsets.all(10.0);
   static const outsideBorderRadius = BorderRadius.all(Radius.circular(20.0));
   static const insideBorderRadius = BorderRadius.all(Radius.circular(10.0));
-
-  static const TextStyle size30 = TextStyle(
-    fontSize: 30,
-    fontWeight: FontWeight.bold,
-  );
 
   static double getScreenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;

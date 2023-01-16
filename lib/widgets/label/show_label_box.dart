@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pops/utilities/design.dart';
-import 'package:pops/widgets/buttons.dart';
+import 'package:pops/widgets/button/color_button.dart';
 
 class ShowLabelBoxWidget extends StatelessWidget {
   final String label;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pops/utilities/design.dart';
+import 'package:pops/widgets/button/login_button.dart';
 import 'package:pops/widgets/main/app_bar.dart';
-import 'package:pops/widgets/buttons.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/widgets/input_field.dart';
 import 'package:pops/utilities/account.dart';
@@ -78,7 +78,7 @@ class _RegisterBodyState extends State<RegisterBody> {
                   obscureText: true,
                 ),
                 SizedBox(height: Design.getScreenHeight(context) * 0.03),
-                MainButton(
+                LoginButton(
                   onPressed: () => signUp(),
                   text: '註冊',
                 ),

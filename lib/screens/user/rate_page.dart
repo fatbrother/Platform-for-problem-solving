@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pops/models/user_model.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/widgets/main/app_bar.dart';
-import 'package:pops/widgets/select_button.dart';
+import 'package:pops/widgets/button/select_button.dart';
 
 class RatePage extends StatelessWidget {
   final UsersModel user;

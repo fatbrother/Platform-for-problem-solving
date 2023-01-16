@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../utilities/design.dart';
+import 'package:pops/utilities/design.dart';
 
 class SuggestField extends StatefulWidget {
   final String hintTextFloating;

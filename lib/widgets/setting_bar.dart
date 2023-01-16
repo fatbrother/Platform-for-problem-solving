@@ -17,11 +17,10 @@ class SettingBar extends StatelessWidget {
       onPointerDown: (_) => onPressed(),
       child: Container(
         width: double.infinity,
-        height: Design.getScreenHeight(context) * 0.048,
+        height: 40,
         decoration: BoxDecoration(
           color: Design.insideColor,
-          borderRadius:
-              BorderRadius.circular(Design.getScreenHeight(context) * 0.05),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Stack(
           children: [
@@ -29,8 +28,7 @@ class SettingBar extends StatelessWidget {
               child: Center(
                 child: Text(
                   name,
-                  style: TextStyle(
-                      fontSize: Design.getScreenWidth(context) * 0.05),
+                  style: const TextStyle(fontSize: 20),
                 ),
               ),
             ),

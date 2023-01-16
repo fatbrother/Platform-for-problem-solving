@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pops/utilities/dialog.dart';
+import 'package:pops/widgets/button/login_button.dart';
+import 'package:pops/widgets/button/register_text_button.dart';
 import 'package:pops/widgets/main/app_bar.dart';
 import 'package:pops/widgets/input_field.dart';
-import 'package:pops/widgets/buttons.dart';
 import 'package:pops/utilities/account.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/routes.dart';
@@ -68,19 +69,19 @@ class _LoginBodyState extends State<LoginBody> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SecondaryButton(
+                      RegisterTextButton(
                           onPressed: () {
                             Routes.push(context, Routes.register);
                           },
                           text: '註冊'),
                       const Text('/', textScaleFactor: 1.5),
-                      SecondaryButton(
+                      RegisterTextButton(
                         onPressed: () => forgotPassword(),
                         text: '忘記密碼',
                       ),
                     ],
                   ),
-                  MainButton(
+                  LoginButton(
                     onPressed: () => signIn(),
                     text: '登入',
                   ),

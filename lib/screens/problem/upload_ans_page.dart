@@ -10,7 +10,7 @@ import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
 import 'package:pops/widgets/add_img_row.dart';
 import 'package:pops/widgets/main/app_bar.dart';
-import 'package:pops/widgets/buttons.dart';
+import 'package:pops/widgets/button/confirm_button.dart';
 
 class UploadAnsPage extends StatefulWidget {
   final ProblemsModel problem;

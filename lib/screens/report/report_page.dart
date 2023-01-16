@@ -5,9 +5,10 @@ import 'package:pops/services/database.dart';
 import 'package:pops/utilities/design.dart';
 import 'package:pops/utilities/dialog.dart';
 import 'package:pops/utilities/routes.dart';
+import 'package:pops/widgets/button/check_button.dart';
+import 'package:pops/widgets/button/send_button.dart';
 import 'package:pops/widgets/main/app_bar.dart';
-import 'package:pops/widgets/buttons.dart';
-import 'package:pops/widgets/suggest_field.dart';
+import 'package:pops/widgets/main/suggest_field.dart';
 
 class ReportPage extends StatefulWidget {
   final ProblemsModel problem;
